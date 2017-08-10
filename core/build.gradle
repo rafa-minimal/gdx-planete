@@ -5,6 +5,7 @@ sourceCompatibility = 1.6
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.test.java.srcDirs = [ "test/" ]
 
 
 eclipse.project {
@@ -24,4 +25,9 @@ repositories {
 }
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile group: 'io.github.libktx', name: 'ktx-app', version: '1.9.6-b6'
+    compile group: 'io.github.libktx', name: 'ktx-math', version: '1.9.6-b6'
+    compile group: 'io.github.libktx', name: 'ktx-box2d', version: '1.9.6-b6'
+    compile group: 'io.github.libktx', name: 'ktx-collections', version: '1.9.6-b6'
+    testCompile 'io.kotlintest:kotlintest:2.0.4'
 }
