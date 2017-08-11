@@ -6,10 +6,8 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.KinematicBody
-import com.minimal.ecs.Family1
 import com.minimal.ecs.Family2
-import ktx.box2d.body
-import ktx.box2d.filter
+import ktx.box2d.*
 import ktx.math.plus
 import ktx.math.vec2
 import kotlin.experimental.xor
@@ -21,40 +19,10 @@ private val planetCat = 8.toShort()
 
 private val all = 65535.toShort()
 
-fun rocket(ctx: Context, pos: Vector2) {
-    val e = entity {
-        body(
-                ctx.world.body(DynamicBody) {
-                    position.set(pos)
-                    polygon(vec2(0f, -0.5f), vec2(-1f, -1f), vec2(0f, 1f)) {
-                        density = 1f
-                        restitution = 0f
-                        friction = 0.8f
-                        filter {
-                            categoryBits = rocketCat
-                        }
-                    }
-                    polygon(vec2(0f, -0.5f), vec2(1f, -1f), vec2(0f, 1f)) {
-                        density = 1f
-                        restitution = 0f
-                        friction = 0.8f
-                        filter {
-                            categoryBits = rocketCat
-                        }
-                    }
-                }
-        )
-        rocket()
-        crash(1f, 1f)
-        cameraMagnet(1f)
-    }
-    ctx.engine.add(e)
-}
-
 private val asterVel = vec2()
 
 fun asteroid(ctx: Context, level: Int) {
-    val pos = randomSafePosition(ctx, ctx.engine.family(rocket, body))
+    val pos = randomSafePosition(ctx, ctx.engine.family(tank, body))
     asterVel.rnd(5f)
     val e = entity {
         body(
@@ -77,14 +45,14 @@ fun asteroid(ctx: Context, level: Int) {
 }
 
 val verticesArrays: Array<Array<Vector2>> = arrayOf(
-        Array<Vector2>(5, {i -> vec2()}),
-        Array<Vector2>(7, {i -> vec2()}),
-        Array<Vector2>(9, {i -> vec2()}))
+        Array<Vector2>(5, { i -> vec2() }),
+        Array<Vector2>(7, { i -> vec2() }),
+        Array<Vector2>(9, { i -> vec2() }))
 
 val verticesFloatArrays: Array<FloatArray> = arrayOf(
-        FloatArray(5*2),
-        FloatArray(7*2),
-        FloatArray(9*2))
+        FloatArray(5 * 2),
+        FloatArray(7 * 2),
+        FloatArray(9 * 2))
 
 val asterSize: FloatArray = floatArrayOf(1f, 1.5f, 2f)
 
@@ -93,11 +61,11 @@ fun vertices(level: Int): FloatArray {
     val step = MathUtils.PI2 / verticesArray.size
     var angle = 0f
     val vec = vec2()
-    for (i in 0.rangeTo(verticesArray.size/2 - 2)) {
-        vec.set(0f, MathUtils.random(asterSize[level]*0.8f, asterSize[level]*1.2f))
+    for (i in 0.rangeTo(verticesArray.size / 2 - 2)) {
+        vec.set(0f, MathUtils.random(asterSize[level] * 0.8f, asterSize[level] * 1.2f))
         vec.rotateRad(angle)
-        verticesArray[i*2] = vec.x
-        verticesArray[i*2+1] = vec.y
+        verticesArray[i * 2] = vec.x
+        verticesArray[i * 2 + 1] = vec.y
         angle += step
     }
     return verticesArray
@@ -105,8 +73,8 @@ fun vertices(level: Int): FloatArray {
 
 private val safePosition = vec2()
 
-fun randomSafePosition(ctx: Context, family: Family2<MyEntity, RocketControl, Body>): Vector2? {
-    val safeRadius2 = 5f*5f
+fun randomSafePosition(ctx: Context, family: Family2<MyEntity, TankControl, Body>): Vector2? {
+    val safeRadius2 = 5f * 5f
 
     val tryPosition: (Vector2) -> Boolean = {
         position: Vector2 ->
@@ -121,11 +89,11 @@ fun randomSafePosition(ctx: Context, family: Family2<MyEntity, RocketControl, Bo
     do {
         val repeat = tryPosition(safePosition.rnd(ctx.level.worldRadius))
         tryCount++
-        if(tryCount > 10) {
+        if (tryCount > 10) {
             Gdx.app.error("Planet", "Try count reached 10, could not find safe position")
             return safePosition
         }
-    } while(repeat)
+    } while (repeat)
     return safePosition
 }
 
@@ -168,5 +136,141 @@ fun planet(ctx: Context, radius: Float, pos: Vector2, omega: Float) {
         )
         gravity(10f)
     }
+    ctx.engine.add(e)
+}
+
+fun tank(ctx: Context, pos: Vector2) {
+    val trunk = ctx.world.body(DynamicBody) {
+        position.set(pos)
+        gravityScale = -0.1f
+        box(width = 2f, height = 0.2f) {
+            density = 0.1f
+            restitution = 0f
+        }
+    }
+
+    val leftWheel = entity {
+        body(
+                ctx.world.body(DynamicBody) {
+                    position.set(vec2(-1f, 0f) + pos)
+                    circle(radius = 0.5f) {
+                        density = 1f
+                        restitution = 0f
+                        friction = 1f
+                    }
+                }
+        )
+    }
+    ctx.engine.add(leftWheel)
+
+    val rightWheel = entity {
+        body(
+                ctx.world.body(DynamicBody) {
+                    position.set(vec2(1f, 0f) + pos)
+                    circle(radius = 0.5f) {
+                        density = 1f
+                        restitution = 0f
+                        friction = 1f
+                    }
+                }
+        )
+    }
+    ctx.engine.add(rightWheel)
+
+    val turret = entity {
+        body(
+                ctx.world.body(DynamicBody) {
+                    position.set(pos)
+                    gravityScale = -0.1f
+                    circle(radius = 0.5f) {
+                        density = 1f
+                        restitution = 0f
+                    }
+                }
+        )
+    }
+    ctx.engine.add(turret)
+
+    val leftWheelJoint = trunk.wheelJointWith(leftWheel[body]) {
+        frequencyHz = 4f
+        dampingRatio = 0.9f
+        maxMotorTorque = 800f
+        localAxisA.set(0f, 1f)
+        localAnchorA.set(-1f, 0f)
+    }
+
+    val leftWheelLimit = trunk.ropeJointWith(leftWheel[body]) {
+        maxLength = 0.5f
+        localAnchorA.set(-1f, 0f)
+    }
+
+    val rightWheelJoint = trunk.wheelJointWith(rightWheel[body]) {
+        frequencyHz = 4f
+        dampingRatio = 0.9f
+        maxMotorTorque = 800f
+        localAxisA.set(0f, 1f)
+        localAnchorA.set(1f, 0f)
+    }
+
+    val rightWheelLimit = trunk.ropeJointWith(rightWheel[body]) {
+        maxLength = 0.5f
+        localAnchorA.set(1f, 0f)
+    }
+
+    val turretJoint = trunk.prismaticJointWith(turret[body]) {
+        lowerTranslation = -0.5f
+        upperTranslation = 0.5f
+        enableLimit = true
+        localAnchorA.set(0f, 0f)
+        localAxisA.set(0f, 1f)
+    }
+
+    val turretSpring = trunk.distanceJointWith(turret[body]) {
+        frequencyHz = 2f
+        dampingRatio = 0.9f
+        length = 0.5f
+    }
+
+    val lufa = entity {
+        body(
+                ctx.world.body(DynamicBody) {
+                    position.set(vec2(0.5f, 0f) + pos)
+                    gravityScale = -0.1f
+                    box(width = 1f, height = 0.1f) {
+                        restitution = 0f
+                        density = 0.1f
+                    }
+                }
+        )
+    }
+    ctx.engine.add(lufa)
+
+    val tank = entity {
+        body(trunk)
+        cameraMagnet(1f)
+        tank(leftWheelJoint, rightWheelJoint, lufa[body])
+    }
+    ctx.engine.add(tank)
+
+    val lufaJoint = turret[body].revoluteJointWith(lufa[body]) {
+        localAnchorB.set(-0.5f, 0f)
+        enableLimit = true
+        lowerAngle = -15.deg()
+        upperAngle = 15.deg()
+    }
+}
+
+fun edge(ctx: Context, from: Vector2, to: Vector2) {
+    val e = entity {
+        body(
+                ctx.world.body {
+                    edge(from, to) {
+                        restitution = 0.1f
+                        friction = 0.9f
+                    }
+                }
+        )
+    }
+
     ctx.engine.add(e)
 }

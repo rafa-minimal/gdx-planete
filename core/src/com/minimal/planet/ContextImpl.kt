@@ -3,12 +3,9 @@ package com.minimal.planet
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.World
 import com.minimal.ecs.Engine
-import ktx.box2d.body
 import ktx.math.vec2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 
@@ -27,7 +24,7 @@ interface Context {
 class ContextImpl : Context {
     override var timeMs = 0
 
-    override val world = World(vec2(), true)
+    override val world = World(vec2(0f, -10f), true)
     override val engine = MyEngine()
     override val level = Level()
 
@@ -39,10 +36,10 @@ class ContextImpl : Context {
     init {
         engine.add(WorldSystem(this),
                 EnergySystem(engine),
-                RocketControlSystem(this),
-                GravitySystem(this),
+                TankControlSystem(this),
+                //GravitySystem(this),
                 LifetimeSystem(engine),
-                AsteroidSpawnSystem(this),
+                //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
                 CameraSystem(this),
                 WorldRenderSystem(this),
@@ -58,13 +55,31 @@ class ContextImpl : Context {
 }
 
 class Level {
-    val worldRadius = 20f
+    val worldRadius = 10f
     fun start(ctx: Context) {
-        rocket(ctx, vec2(0f, 8f))
-        planet(ctx, 7f, vec2(), 3f.deg())
+        //tank(ctx, vec2(0f, 8f))
+        tank(ctx, vec2(0f, 8f))
+        bullet(ctx, vec2(-5f, 8f), vec2(1f, 0f))
+
+        val from = vec2(0f, 0f)
+        val to = vec2()
+        for (i in (1).rangeTo(10)) {
+            to.set(i * 10f, from.y + MathUtils.random(-3f, 3f))
+            edge(ctx, from, to)
+            from.set(to)
+        }
+        for (i in (-1).downTo(-10)) {
+            to.set(i * 10f, from.y + MathUtils.random(-3f, 3f))
+            edge(ctx, from, to)
+            from.set(to)
+        }
     }
 }
 
-private fun Float.deg(): Float {
+fun Float.deg(): Float {
+    return this * 2f * MathUtils.PI / 360f
+}
+
+fun Int.deg(): Float {
     return this * 2f * MathUtils.PI / 360f
 }

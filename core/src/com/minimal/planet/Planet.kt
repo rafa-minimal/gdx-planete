@@ -12,6 +12,8 @@ class Planet : ApplicationAdapter() {
         ctx = ContextImpl()
     }
 
+    private var running = false
+
     override fun render() {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -19,8 +21,19 @@ class Planet : ApplicationAdapter() {
         if(Keys.ESCAPE.pressed()) {
             Gdx.app.exit()
         }
-
-        ctx.engine.update(Gdx.graphics.rawDeltaTime)
+        if(Keys.R.justPressed()) {
+            ctx.dispose()
+            ctx = ContextImpl()
+            resize(Gdx.graphics.width, Gdx.graphics.height)
+        }
+        var step = 0f
+        if(running || Keys.S.justPressed()) {
+            step = Gdx.graphics.rawDeltaTime
+        }
+        if(Keys.SPACE.justPressed()) {
+            running = !running
+        }
+        ctx.engine.update(step)
     }
 
     override fun dispose() {

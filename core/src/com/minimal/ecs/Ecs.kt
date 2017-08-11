@@ -109,9 +109,9 @@ class Family2<E: Entity, C1, C2>(val engine: Engine<E>, val c1: CT<C1>, val c2: 
 
 /*fun main(args: Array<String>) {
 
-    val rocket = Entity()
-    rocket.add(energy, Energy(10f))
-    rocket.add(bullet, Bullet(10f))
+    val tank = Entity()
+    tank.add(energy, Energy(10f))
+    tank.add(bullet, Bullet(10f))
 
     val world = World(vec2(), true)
 
@@ -132,7 +132,7 @@ class Family2<E: Entity, C1, C2>(val engine: Engine<E>, val c1: CT<C1>, val c2: 
 
     engine.add(bullet)
     engine.update(1/60f)
-    rocket[energy] -= 10f
+    tank[energy] -= 10f
     bullet.dead = true
 
     *//*val entity = Entity()

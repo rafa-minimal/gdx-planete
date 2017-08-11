@@ -147,33 +147,37 @@ fun Int.justPressed(): Boolean {
     return Gdx.input.isKeyJustPressed(this)
 }
 
-class RocketControlSystem(val ctx: Context) : System {
-    val family = ctx.engine.family(rocket, body)
+class TankControlSystem(val ctx: Context) : System {
+    val family = ctx.engine.family(tank, body)
     override fun update(timeStepSec: Float) {
         family.foreach {
-            rocket, body ->
-            val nominalAngDamping = 1f / rocket.angularTau
-            val maxTorque = rocket.maxAngularVel * nominalAngDamping * body.getInertia()
-            val left = rocket.left.pressed()
-            val right = rocket.right.pressed()
-            if (rocket.up.pressed()) {
+            tank, body ->
+            val left = tank.left.pressed()
+            val right = tank.right.pressed()
+            /*if (tank.up.pressed()) {
                 body.applyForceToCenter(body.getWorldVector(vec2(0f, 10f)), true)
-            }
+            }*/
             if (left && !right) {
-                body.setAngularDamping(nominalAngDamping)
-                body.applyTorque(maxTorque, true)
+                tank.leftWheel.motorSpeed = 6f
+                tank.rightWheel.motorSpeed = 6f
+                tank.leftWheel.enableMotor(true)
+                tank.rightWheel.enableMotor(true)
             } else if (!left && right) {
-                body.setAngularDamping(nominalAngDamping)
-                body.applyTorque(-maxTorque, true)
+                tank.leftWheel.motorSpeed = -6f
+                tank.rightWheel.motorSpeed = -6f
+                tank.leftWheel.enableMotor(true)
+                tank.rightWheel.enableMotor(true)
             } else {
-                body.setAngularDamping(nominalAngDamping * 3)
+                tank.leftWheel.enableMotor(false)
+                tank.rightWheel.enableMotor(false)
             }
-            rocket.nextBullet -= timeStepSec
-            if (rocket.fire.pressed() && rocket.nextBullet <= 0f) {
-                rocket.nextBullet = fireInterval
+            tank.nextBullet -= timeStepSec
+            if (tank.fire.pressed() && tank.nextBullet <= 0f) {
+                tank.nextBullet = fireInterval
                 bullet(ctx,
-                        pos = body.position + body.getWorldVector(vec2(0f, 1f)),
-                        vel = body.linearVelocity + body.getWorldVector(vec2(0f, 10f)))
+                        pos = tank.bulletStartPos(),
+                        vel = tank.bulletStartVel())
+                tank.lufa.applyForceToCenter(-tank.bulletStartVel(), true)
             }
         }
     }

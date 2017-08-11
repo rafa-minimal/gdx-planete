@@ -1,14 +1,12 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import ktx.box2d.body
 import ktx.math.vec2
-import org.junit.Assert.*
 
 class TestContext : Context {
     override val world = World(vec2(), true)
@@ -21,7 +19,7 @@ class TestContext : Context {
     init {
         engine.add(WorldSystem(this),
                 EnergySystem(engine),
-                RocketControlSystem(this),
+                TankControlSystem(this),
                 LifetimeSystem(engine),
                 AsteroidSpawnSystem(this),
                 ActionsSystem(this),

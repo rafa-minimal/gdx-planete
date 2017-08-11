@@ -3,6 +3,7 @@ package com.minimal.planet
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.joints.WheelJoint
 import com.minimal.ecs.Entity
 
 interface Script {
@@ -56,8 +57,8 @@ class EntityBuilder() {
     fun lifetime(lifeSec: Float) {
         e.add(lifetime, Lifetime(lifeSec))
     }
-    fun rocket() {
-        e.add(rocket, RocketControl())
+    fun tank(leftWheel: WheelJoint, rightWheel: WheelJoint, lufa: Body) {
+        e.add(tank, TankControl(leftWheel = leftWheel, rightWheel = rightWheel, lufa = lufa))
     }
     fun gravity(value: Float) {
         e.add(gravity, value)
