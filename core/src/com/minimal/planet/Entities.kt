@@ -146,6 +146,9 @@ fun tank(ctx: Context, pos: Vector2) {
         box(width = 2f, height = 0.2f) {
             density = 0.1f
             restitution = 0f
+            filter {
+                groupIndex = -1
+            }
         }
     }
 
@@ -157,6 +160,9 @@ fun tank(ctx: Context, pos: Vector2) {
                         density = 1f
                         restitution = 0f
                         friction = 1f
+                        filter {
+                            groupIndex = -1
+                        }
                     }
                 }
         )
@@ -171,6 +177,9 @@ fun tank(ctx: Context, pos: Vector2) {
                         density = 1f
                         restitution = 0f
                         friction = 1f
+                        filter {
+                            groupIndex = -1
+                        }
                     }
                 }
         )
@@ -185,16 +194,52 @@ fun tank(ctx: Context, pos: Vector2) {
                     circle(radius = 0.5f) {
                         density = 1f
                         restitution = 0f
+                        filter {
+                            groupIndex = -1
+                        }
                     }
                 }
         )
     }
     ctx.engine.add(turret)
 
+    val lufaMount = entity {
+        body(
+                ctx.world.body(DynamicBody) {
+                    position.set(pos)
+                    box(width = 0.1f, height = 0.1f) {
+                        restitution = 0f
+                        density = 1f
+                        filter {
+                            groupIndex = -1
+                        }
+                    }
+                }
+        )
+    }
+    ctx.engine.add(lufaMount)
+
+    val lufa = entity {
+        body(
+                ctx.world.body(DynamicBody) {
+                    position.set(vec2(0.5f, 0f) + pos)
+                    gravityScale = -0.1f
+                    box(width = 1f, height = 0.1f) {
+                        restitution = 0f
+                        density = 0.01f
+                        filter {
+                            groupIndex = -1
+                        }
+                    }
+                }
+        )
+    }
+    ctx.engine.add(lufaMount)
+
     val leftWheelJoint = trunk.wheelJointWith(leftWheel[body]) {
-        frequencyHz = 4f
+        frequencyHz = 8f
         dampingRatio = 0.9f
-        maxMotorTorque = 800f
+        maxMotorTorque = 8f
         localAxisA.set(0f, 1f)
         localAnchorA.set(-1f, 0f)
     }
@@ -205,9 +250,9 @@ fun tank(ctx: Context, pos: Vector2) {
     }
 
     val rightWheelJoint = trunk.wheelJointWith(rightWheel[body]) {
-        frequencyHz = 4f
+        frequencyHz = 8f
         dampingRatio = 0.9f
-        maxMotorTorque = 800f
+        maxMotorTorque = 8f
         localAxisA.set(0f, 1f)
         localAnchorA.set(1f, 0f)
     }
@@ -231,33 +276,28 @@ fun tank(ctx: Context, pos: Vector2) {
         length = 0.5f
     }
 
-    val lufa = entity {
-        body(
-                ctx.world.body(DynamicBody) {
-                    position.set(vec2(0.5f, 0f) + pos)
-                    gravityScale = -0.1f
-                    box(width = 1f, height = 0.1f) {
-                        restitution = 0f
-                        density = 0.1f
-                    }
-                }
-        )
-    }
-    ctx.engine.add(lufa)
-
-    val tank = entity {
-        body(trunk)
-        cameraMagnet(1f)
-        tank(leftWheelJoint, rightWheelJoint, lufa[body])
-    }
-    ctx.engine.add(tank)
-
-    val lufaJoint = turret[body].revoluteJointWith(lufa[body]) {
-        localAnchorB.set(-0.5f, 0f)
+    val lufaRevoluteJoint = turret[body].revoluteJointWith(lufaMount[body]) {
         enableLimit = true
         lowerAngle = -15.deg()
         upperAngle = 15.deg()
     }
+
+    val lufaPrismaticJoint = lufaMount[body].prismaticJointWith(lufa[body]) {
+        enableLimit = true
+        lowerTranslation = -0.5f
+        upperTranslation = 0.5f
+        localAxisA.set(1f, 0f)
+        enableMotor = true
+        maxMotorForce = 10f
+        motorSpeed = 1f
+    }
+
+    val tank = entity {
+        body(trunk)
+        cameraMagnet(1f)
+        tank(leftWheelJoint, rightWheelJoint, lufa[body], lufaPrismaticJoint)
+    }
+    ctx.engine.add(tank)
 }
 
 fun edge(ctx: Context, from: Vector2, to: Vector2) {

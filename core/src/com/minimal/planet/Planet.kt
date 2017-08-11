@@ -12,7 +12,7 @@ class Planet : ApplicationAdapter() {
         ctx = ContextImpl()
     }
 
-    private var running = false
+    private var running = true
 
     override fun render() {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
@@ -32,6 +32,12 @@ class Planet : ApplicationAdapter() {
         }
         if(Keys.SPACE.justPressed()) {
             running = !running
+        }
+        if(Keys.P.justPressed()) {
+            ctx.worldCamera.zoom *= 2f
+        }
+        if(Keys.O.justPressed()) {
+            ctx.worldCamera.zoom /= 2f
         }
         ctx.engine.update(step)
     }

@@ -158,13 +158,19 @@ class TankControlSystem(val ctx: Context) : System {
                 body.applyForceToCenter(body.getWorldVector(vec2(0f, 10f)), true)
             }*/
             if (left && !right) {
-                tank.leftWheel.motorSpeed = 6f
-                tank.rightWheel.motorSpeed = 6f
+                if(tank.side == 1) {
+                    tank.flip()
+                }
+                tank.leftWheel.motorSpeed = 20f
+                tank.rightWheel.motorSpeed = 20f
                 tank.leftWheel.enableMotor(true)
                 tank.rightWheel.enableMotor(true)
             } else if (!left && right) {
-                tank.leftWheel.motorSpeed = -6f
-                tank.rightWheel.motorSpeed = -6f
+                if(tank.side == -1) {
+                    tank.flip()
+                }
+                tank.leftWheel.motorSpeed = -20f
+                tank.rightWheel.motorSpeed = -20f
                 tank.leftWheel.enableMotor(true)
                 tank.rightWheel.enableMotor(true)
             } else {
@@ -177,7 +183,7 @@ class TankControlSystem(val ctx: Context) : System {
                 bullet(ctx,
                         pos = tank.bulletStartPos(),
                         vel = tank.bulletStartVel())
-                tank.lufa.applyForceToCenter(-tank.bulletStartVel(), true)
+                tank.lufa.applyForceToCenter(tank.shotForce(), true)
             }
         }
     }

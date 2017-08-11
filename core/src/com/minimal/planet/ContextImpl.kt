@@ -58,7 +58,7 @@ class Level {
     val worldRadius = 10f
     fun start(ctx: Context) {
         //tank(ctx, vec2(0f, 8f))
-        tank(ctx, vec2(0f, 8f))
+        tank(ctx, vec2(0f, 1f))
         bullet(ctx, vec2(-5f, 8f), vec2(1f, 0f))
 
         val from = vec2(0f, 0f)
@@ -68,6 +68,7 @@ class Level {
             edge(ctx, from, to)
             from.set(to)
         }
+        from.setZero()
         for (i in (-1).downTo(-10)) {
             to.set(i * 10f, from.y + MathUtils.random(-3f, 3f))
             edge(ctx, from, to)
