@@ -20,34 +20,6 @@ class Bullet(val hitPoints: Float)
 
 val fireInterval = 0.12f
 
-class TankControl(val up: Int = Keys.UP,
-                  val left: Int = Keys.LEFT,
-                  val right: Int = Keys.RIGHT,
-                  val fire: Int = Keys.A,
-                  val leftWheel: WheelJoint,
-                  val rightWheel: WheelJoint,
-                  val lufa: Body,
-                  val lufaPrismaticJoint: PrismaticJoint) {
-    var nextBullet: Float = fireInterval
-    val lufaEnd = vec2(0.5f, 0f)
-    val bulletStart = vec2(20f, 0f)
-    val shotForce = vec2(-11f, 0f)
-    var side = 1
-    fun bulletStartPos(): Vector2 =
-            lufa.getWorldPoint(lufaEnd)
-    fun bulletStartVel(): Vector2 =
-            //lufa.getWorldVector(bulletStart) + lufa.getLinearVelocityFromLocalPoint(bulletStart)
-            lufa.getWorldVector(bulletStart) + lufa.getLinearVelocity()
-    fun shotForce(): Vector2 =
-            lufa.getWorldVector(shotForce)
-    fun flip() {
-        lufaPrismaticJoint.motorSpeed = -lufaPrismaticJoint.motorSpeed
-        lufaEnd.scl(-1f)
-        bulletStart.scl(-1f)
-        shotForce.scl(-1f)
-        side *= -1
-    }
-}
 
 
 class Lifetime(var lifetime: Float)

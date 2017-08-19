@@ -147,48 +147,6 @@ fun Int.justPressed(): Boolean {
     return Gdx.input.isKeyJustPressed(this)
 }
 
-class TankControlSystem(val ctx: Context) : System {
-    val family = ctx.engine.family(tank, body)
-    override fun update(timeStepSec: Float) {
-        family.foreach {
-            tank, body ->
-            val left = tank.left.pressed()
-            val right = tank.right.pressed()
-            /*if (tank.up.pressed()) {
-                body.applyForceToCenter(body.getWorldVector(vec2(0f, 10f)), true)
-            }*/
-            if (left && !right) {
-                if(tank.side == 1) {
-                    tank.flip()
-                }
-                tank.leftWheel.motorSpeed = 20f
-                tank.rightWheel.motorSpeed = 20f
-                tank.leftWheel.enableMotor(true)
-                tank.rightWheel.enableMotor(true)
-            } else if (!left && right) {
-                if(tank.side == -1) {
-                    tank.flip()
-                }
-                tank.leftWheel.motorSpeed = -20f
-                tank.rightWheel.motorSpeed = -20f
-                tank.leftWheel.enableMotor(true)
-                tank.rightWheel.enableMotor(true)
-            } else {
-                tank.leftWheel.enableMotor(false)
-                tank.rightWheel.enableMotor(false)
-            }
-            tank.nextBullet -= timeStepSec
-            if (tank.fire.pressed() && tank.nextBullet <= 0f) {
-                tank.nextBullet = fireInterval
-                bullet(ctx,
-                        pos = tank.bulletStartPos(),
-                        vel = tank.bulletStartVel())
-                tank.lufa.applyForceToCenter(tank.shotForce(), true)
-            }
-        }
-    }
-}
-
 class EdgeForceSystem(val ctx: Context) : System {
     val factor = 1f
     val family = ctx.engine.family(body)
