@@ -1,13 +1,7 @@
 package com.minimal.planet
 
-import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
-import com.badlogic.gdx.physics.box2d.joints.WheelJoint
 import com.minimal.ecs.ComponentTag
-import ktx.math.plus
-import ktx.math.vec2
 
 class Energy(var total: Float,
              var energy: Float = total) {
@@ -35,3 +29,5 @@ val gravity = ComponentTag<Float>(5)
 val crash = ComponentTag<Crash>(6)
 val cameraMagnet = ComponentTag<Float>(7)
 val asteroid = ComponentTag<Int>(8)
+val lemingo = ComponentTag<Lemingo>(9)
+val leader = ComponentTag<LemingoLeader>(10)

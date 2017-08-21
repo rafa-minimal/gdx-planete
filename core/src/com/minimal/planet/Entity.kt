@@ -1,8 +1,10 @@
 package com.minimal.planet
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
 import com.badlogic.gdx.physics.box2d.joints.WheelJoint
 import com.minimal.ecs.Entity
@@ -10,7 +12,9 @@ import com.minimal.ecs.Entity
 interface Script {
     fun update(timeStepSec: Float) {}
     fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {}
+    fun endContact(me: MyEntity, other: MyEntity, contact: Contact) {}
     fun postSolve(me: MyEntity, other: MyEntity, contact: Contact, impulse: ContactImpulse) {}
+    fun debugDraw(me: MyEntity, renderer: ShapeRenderer) {}
 }
 
 object bulletScript : Script {
@@ -73,6 +77,9 @@ class EntityBuilder() {
     }
     fun asteroid(level: Int) {
         e.add(asteroid, level)
+    }
+    fun lemingo(canJump: Fixture) {
+        e.add(lemingo, Lemingo(canJump))
     }
 }
 

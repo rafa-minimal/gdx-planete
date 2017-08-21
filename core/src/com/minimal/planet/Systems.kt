@@ -2,19 +2,32 @@ package com.minimal.planet
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.physics.box2d.*
+import com.badlogic.gdx.physics.box2d.Contact
+import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.ContactListener
+import com.badlogic.gdx.physics.box2d.Manifold
 import com.minimal.ecs.ComponentTag
 import com.minimal.ecs.System
 import ktx.math.minus
-import ktx.math.plus
 import ktx.math.unaryMinus
 import ktx.math.vec2
 
 class WorldSystem(val ctx: Context) : System, ContactListener {
     override fun endContact(contact: Contact?) {
+        if (contact != null) {
+            val firstEntity = contact.fixtureA.body.userData as MyEntity
+            val secondEntity = contact.fixtureB.body.userData as MyEntity
+            firstEntity.scripts.forEach {
+                it.endContact(firstEntity, secondEntity, contact)
+            }
+            secondEntity.scripts.forEach {
+                it.endContact(secondEntity, firstEntity, contact)
+            }
+        }
     }
 
     override fun beginContact(contact: Contact?) {
@@ -229,4 +242,17 @@ class CameraSystem(val ctx: Context) : System {
 
 private fun Vector3.set(vec: Vector2) {
     this.set(vec.x, vec.y, 0f)
+}
+
+class DebugRenderSystem(val ctx: Context) : System {
+    override fun update(timeStepSec: Float) {
+        ctx.renderer.setProjectionMatrix(ctx.worldCamera.combined)
+        ctx.renderer.begin(ShapeType.Line)
+        ctx.engine.ents.forEach {
+            e -> e.scripts.forEach {
+                it.debugDraw(e, ctx.renderer)
+            }
+        }
+        ctx.renderer.end()
+    }
 }

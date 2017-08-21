@@ -1,13 +1,5 @@
 package com.minimal.ecs
 
-import com.badlogic.gdx.math.Circle
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
-import com.badlogic.gdx.physics.box2d.World
-import ktx.box2d.body
-import ktx.math.vec2
-
 class ComponentTag<T>(val index: Int)
 private typealias CT<T> = ComponentTag<T>
 object NoComp
@@ -98,6 +90,14 @@ class Family2<E: Entity, C1, C2>(val engine: Engine<E>, val c1: CT<C1>, val c2: 
         engine.ents.forEach {
             if (it.contains(c1) && it.contains(c2)) {
                 action(it, it[c1], it[c2])
+            }
+        }
+    }
+    fun first(action: (E, C1, C2) -> Unit) {
+        engine.ents.forEach {
+            if (it.contains(c1) && it.contains(c2)) {
+                action(it, it[c1], it[c2])
+                return
             }
         }
     }

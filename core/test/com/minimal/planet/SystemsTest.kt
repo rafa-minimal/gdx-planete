@@ -1,6 +1,7 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import io.kotlintest.matchers.shouldBe
@@ -14,6 +15,8 @@ class TestContext : Context {
     override val level = Level()
     override val worldCamera = OrthographicCamera()
     override val debugRenderer = Box2DDebugRenderer()
+    override val renderer = ShapeRenderer()
+
     override var timeMs = 0
 
     init {

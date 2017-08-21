@@ -35,9 +35,11 @@ class Planet : ApplicationAdapter() {
         }
         if(Keys.P.justPressed()) {
             ctx.worldCamera.zoom *= 2f
+            ctx.worldCamera.update()
         }
         if(Keys.O.justPressed()) {
             ctx.worldCamera.zoom /= 2f
+            ctx.worldCamera.update()
         }
         ctx.engine.update(step)
     }
