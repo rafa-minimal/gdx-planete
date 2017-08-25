@@ -62,11 +62,24 @@ class ContextImpl : Context {
 
 class Level {
     val worldRadius = 10f
+    var ctx : Context? = null
+
+
+    /*val createLemingo: () -> Unit = {
+        lemingo(ctx!!, vec2(MathUtils.random(-100f, 100f), 5f))
+    }*/
+
     fun start(ctx: Context) {
         //tank(ctx, vec2(0f, 8f))
         lemingo(ctx, vec2(0f, 4f))
         lemingo(ctx, vec2(-5f, 4f))
         lemingo(ctx, vec2(5f, 4f))
+
+        this.ctx = ctx
+
+        Actions.every(5f) {
+            lemingo(ctx, vec2(MathUtils.random(-100f, 100f), 5f))
+        }
 
         val from = vec2(0f, 0f)
         val to = vec2()

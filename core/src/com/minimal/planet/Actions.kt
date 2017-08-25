@@ -3,7 +3,7 @@ package com.minimal.planet
 import java.util.PriorityQueue
 import com.minimal.ecs.System
 
-class Action(val time: Int, val action: () -> Unit)
+class Action(var time: Int, val action: () -> Unit, val repeat: (() -> Int)? = null)
 
 object actionOrder : Comparator<Action> {
     override fun compare(o1: Action?, o2: Action?): Int {
@@ -25,10 +25,24 @@ object Actions {
         schedule((delay * 1000).toInt(), action)
     }
 
+    fun every(interval: Int, action: () -> Unit) {
+        queue.add(Action(currentTime + interval, action) {interval})
+    }
+
+    fun every(interval: Float, action: () -> Unit) {
+        every((interval * 1000).toInt(), action)
+    }
+
     fun update(currentTime: Int) {
         this.currentTime = currentTime
         while (queue.peek() != null && queue.peek().time <= currentTime) {
-            val ac = queue.poll().action()
+            val action = queue.poll()
+            action.action()
+            val repeat = action.repeat
+            if(repeat != null) {
+                action.time = currentTime + repeat()
+                queue.add(action)
+            }
         }
     }
 }

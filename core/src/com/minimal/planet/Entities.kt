@@ -12,12 +12,12 @@ import ktx.math.plus
 import ktx.math.vec2
 import kotlin.experimental.xor
 
-private val rocketCat = 1.toShort()
-private val bulletCat = 2.toShort()
-private val asteroidCat = 4.toShort()
-private val planetCat = 8.toShort()
+val lemingoCat = 1.toShort()
+val bulletCat = 2.toShort()
+val asteroidCat = 4.toShort()
+val planetCat = 8.toShort()
 
-private val all = 65535.toShort()
+val all = 65535.toShort()
 
 private val asterVel = vec2()
 
@@ -108,7 +108,7 @@ fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
                         restitution = 1f
                         filter {
                             categoryBits = bulletCat
-                            maskBits = all.xor(bulletCat).xor(rocketCat)
+                            maskBits = all.xor(bulletCat)
                         }
                     }
                 }

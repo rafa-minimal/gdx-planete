@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Fixture
 import com.minimal.ecs.System
 import ktx.box2d.body
 import ktx.box2d.box
+import ktx.box2d.filter
 import ktx.math.plus
 import ktx.math.vec2
 
@@ -55,6 +56,8 @@ class LemingoLeaderSystem(val ctx: Context) : System {
     val family = ctx.engine.family(leader, body)
     val lemingos = ctx.engine.family(lemingo, body)
 
+    private val vmax = 20f
+    private var pidProportional = 5f
 
     override fun update(timeStepSec: Float) {
         var leaderFound = false
@@ -73,7 +76,7 @@ class LemingoLeaderSystem(val ctx: Context) : System {
                 }
                 if (!leader.fire.pressed()) {
                     leader.fireMode = false
-                    bullet(ctx, body.position + vec2(0f, 0.5f).rotateRad(leader.angle),
+                    bullet(ctx, body.position + vec2(0f, 0.61f).rotateRad(leader.angle),
                             body.linearVelocity + vec2(0f, 30f).rotateRad(leader.angle))
                 }
             }
@@ -121,6 +124,9 @@ class LemingoSystem(val ctx: Context) : System {
     val leaders = ctx.engine.family(leader, body)
     val lemingos = ctx.engine.family(lemingo, body)
 
+    private val vmax = 10f
+    private var pidProportional = 3f
+
     fun getLeader(): Body? {
         var leaderBody: Body? = null
         leaders.first {
@@ -157,8 +163,7 @@ class LemingoSystem(val ctx: Context) : System {
     }
 }
 
-private val vmax = 20f
-private var pidProportional = 5f
+
 
 fun lemingo(ctx: Context, pos: Vector2) {
     val body = ctx.world.body(DynamicBody) {
@@ -167,6 +172,10 @@ fun lemingo(ctx: Context, pos: Vector2) {
         circle(radius = 0.5f) {
             density = 1f
             restitution = 0.1f
+            filter {
+                categoryBits = lemingoCat
+                maskBits = all
+            }
         }
     }
 
@@ -177,6 +186,7 @@ fun lemingo(ctx: Context, pos: Vector2) {
     val e = entity {
         body(body)
         lemingo(canJump)
+        energy(5f)
     }
     e.scripts.add(canJumpSensorScript)
     ctx.engine.add(e)
