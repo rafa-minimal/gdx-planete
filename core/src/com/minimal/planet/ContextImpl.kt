@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.minimal.ecs.Engine
+import com.minimal.planet.level.Level
 import ktx.math.vec2
 
 
@@ -26,7 +27,7 @@ interface Context {
 class ContextImpl : Context {
     override var timeMs = 0
 
-    override val world = World(vec2(0f, -30f), true)
+    override val world = World(vec2(0f, 0f), true)
     override val engine = MyEngine()
     override val level = Level()
 
@@ -37,9 +38,10 @@ class ContextImpl : Context {
     override val renderer = ShapeRenderer()
 
     init {
-        engine.add(WorldSystem(this),
+        engine.add(
+                GravitySystem(this),
+                WorldSystem(this),
                 EnergySystem(engine),
-                TankControlSystem(this),
                 LemingoLeaderSystem(this),
                 LemingoSystem(this),
                 //GravitySystem(this),
@@ -49,6 +51,7 @@ class ContextImpl : Context {
                 CameraSystem(this),
                 WorldRenderSystem(this),
                 DebugRenderSystem(this),
+                ScriptSystem(this),
                 BodyDisposeSystem(engine))
         //engine.add()
 
@@ -57,43 +60,6 @@ class ContextImpl : Context {
 
     fun dispose() {
 
-    }
-}
-
-class Level {
-    val worldRadius = 10f
-    var ctx : Context? = null
-
-
-    /*val createLemingo: () -> Unit = {
-        lemingo(ctx!!, vec2(MathUtils.random(-100f, 100f), 5f))
-    }*/
-
-    fun start(ctx: Context) {
-        //tank(ctx, vec2(0f, 8f))
-        lemingo(ctx, vec2(0f, 4f))
-        lemingo(ctx, vec2(-5f, 4f))
-        lemingo(ctx, vec2(5f, 4f))
-
-        this.ctx = ctx
-
-        Actions.every(5f) {
-            lemingo(ctx, vec2(MathUtils.random(-100f, 100f), 5f))
-        }
-
-        val from = vec2(0f, 0f)
-        val to = vec2()
-        for (i in (1).rangeTo(10)) {
-            to.set(i * 10f, from.y + MathUtils.random(-3f, 3f))
-            edge(ctx, from, to)
-            from.set(to)
-        }
-        from.setZero()
-        for (i in (-1).downTo(-10)) {
-            to.set(i * 10f, from.y + MathUtils.random(-3f, 3f))
-            edge(ctx, from, to)
-            from.set(to)
-        }
     }
 }
 

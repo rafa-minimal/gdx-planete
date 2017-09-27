@@ -7,10 +7,11 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
 import com.badlogic.gdx.physics.box2d.joints.WheelJoint
+import com.minimal.ecs.Engine
 import com.minimal.ecs.Entity
 
 interface Script {
-    fun update(timeStepSec: Float) {}
+    fun update(me: MyEntity, timeStepSec: Float) {}
     fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {}
     fun endContact(me: MyEntity, other: MyEntity, contact: Contact) {}
     fun postSolve(me: MyEntity, other: MyEntity, contact: Contact, impulse: ContactImpulse) {}
@@ -21,6 +22,7 @@ object bulletScript : Script {
     override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
         if(other.contains(energy))
             other[energy] -= me[bullet].hitPoints
+        me.dead = true
     }
 }
 
@@ -62,9 +64,6 @@ class EntityBuilder() {
     fun lifetime(lifeSec: Float) {
         e.add(lifetime, Lifetime(lifeSec))
     }
-    fun tank(leftWheel: WheelJoint, rightWheel: WheelJoint, lufa: Body, lufaPrismaticJoint: PrismaticJoint) {
-        e.add(tank, TankControl(leftWheel = leftWheel, rightWheel = rightWheel, lufa = lufa, lufaPrismaticJoint = lufaPrismaticJoint))
-    }
     fun gravity(value: Float) {
         e.add(gravity, value)
     }
@@ -78,13 +77,15 @@ class EntityBuilder() {
     fun asteroid(level: Int) {
         e.add(asteroid, level)
     }
-    fun lemingo(canJump: Fixture) {
-        e.add(lemingo, Lemingo(canJump))
+    fun lemingo() {
+        e.add(lemingo, Lemingo())
     }
 }
 
-fun entity(init: EntityBuilder.() -> Unit): MyEntity {
+fun MyEngine.entity(init: EntityBuilder.() -> Unit): MyEntity {
     val builder = EntityBuilder()
     builder.init()
-    return builder.build()
+    val e = builder.build()
+    this.add(e)
+    return e
 }

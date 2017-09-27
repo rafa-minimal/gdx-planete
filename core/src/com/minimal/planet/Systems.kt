@@ -179,11 +179,11 @@ class GravitySystem(val ctx: Context) : System {
     val planets = ctx.engine.family(body, gravity)
     val bodies = ctx.engine.family(body)
     override fun update(timeStepSec: Float) {
-        bodies.foreach { body ->
-            planets.foreach { planet, gravity ->
+        planets.foreach { planet, gravity ->
+            bodies.foreach { body ->
                 val vec = planet.position - body.position
                 val len = vec.len()
-                body.applyForceToCenter(vec.nor().scl(gravity/len),true)
+                body.applyForceToCenter(vec.nor().scl(body.gravityScale * gravity / len), false)
             }
         }
     }
@@ -201,31 +201,6 @@ fun Vector2.rnd(radius: Float): Vector2 {
     return set(rad * MathUtils.cos(phi), rad * MathUtils.sin(phi))
 }
 
-class AsteroidSpawnSystem(val ctx: Context) : System {
-    val pos = vec2()
-    lateinit var createAsteroid: () -> Unit
-
-    init {
-        createAsteroid = {
-            asteroid(ctx, level = MathUtils.random(2));
-            Actions.schedule(MathUtils.random(5f, 10f), createAsteroid)
-        }
-        Actions.schedule(MathUtils.random(5f, 10f), createAsteroid)
-    }
-
-    override fun update(timeStepSec: Float) {
-        if(Keys.NUM_0.justPressed()) {
-            asteroid(ctx, level = 0);
-        }
-        if(Keys.NUM_1.justPressed()) {
-            asteroid(ctx, level = 1);
-        }
-        if(Keys.NUM_2.justPressed()) {
-            asteroid(ctx, level = 2);
-        }
-    }
-}
-
 class CameraSystem(val ctx: Context) : System {
     val family = ctx.engine.family(body, cameraMagnet)
     val pos = vec2()
@@ -235,6 +210,8 @@ class CameraSystem(val ctx: Context) : System {
         family.foreach { body, magnet ->
             // todo: średnia ważona
             ctx.worldCamera.position.set(body.position)
+            ctx.worldCamera.up.x = body.position.x
+            ctx.worldCamera.up.y = body.position.y
             ctx.worldCamera.update()
         }
     }
@@ -249,10 +226,22 @@ class DebugRenderSystem(val ctx: Context) : System {
         ctx.renderer.setProjectionMatrix(ctx.worldCamera.combined)
         ctx.renderer.begin(ShapeType.Line)
         ctx.engine.ents.forEach {
-            e -> e.scripts.forEach {
+            e ->
+            e.scripts.forEach {
                 it.debugDraw(e, ctx.renderer)
             }
         }
         ctx.renderer.end()
+    }
+}
+
+class ScriptSystem(val ctx: Context) : System {
+    override fun update(timeStepSec: Float) {
+        ctx.engine.ents.forEach {
+            e ->
+            e.scripts.forEach {
+                s -> s.update(e, timeStepSec)
+            }
+        }
     }
 }

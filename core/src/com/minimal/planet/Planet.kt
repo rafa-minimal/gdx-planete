@@ -49,7 +49,9 @@ class Planet : ApplicationAdapter() {
     }
 
     override fun resize(width: Int, height: Int) {
-        val refworldRadius = ctx.level.worldRadius
+        ctx.worldCamera.position.y = ctx.level.worldRadius
+
+        val refworldRadius = ctx.level.worldRadius/2
         val xScale = refworldRadius * 2f / width
         val yScale = refworldRadius * 2f / height
         if (xScale < yScale) {

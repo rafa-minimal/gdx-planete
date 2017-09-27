@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
+import com.minimal.planet.level.Level
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import ktx.box2d.body
@@ -22,9 +23,7 @@ class TestContext : Context {
     init {
         engine.add(WorldSystem(this),
                 EnergySystem(engine),
-                TankControlSystem(this),
                 LifetimeSystem(engine),
-                AsteroidSpawnSystem(this),
                 ActionsSystem(this),
                 BodyDisposeSystem(engine))
     }
@@ -35,9 +34,9 @@ class SystemsTest : StringSpec() {
         "LifeTimeSystem should work" {
             val engine = MyEngine()
             engine.add(LifetimeSystem(engine))
-            engine.add(entity{
+            engine.entity{
                 lifetime(1f)
-            })
+            }
             engine.ents.size shouldBe 1
             engine.update(1f)
             engine.ents.size shouldBe 0
@@ -45,7 +44,7 @@ class SystemsTest : StringSpec() {
 
         "Full engine should work" {
             val ctx = TestContext()
-            ctx.engine.add(entity{
+            ctx.engine.entity{
                 lifetime(1f)
                 body(
                         ctx.world.body {
@@ -54,7 +53,7 @@ class SystemsTest : StringSpec() {
                             }
                         }
                 )
-            })
+            }
 
             ctx.engine.ents.size shouldBe 1
             ctx.engine.update(1f)

@@ -8,26 +8,25 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
+import com.minimal.boxang
 import com.minimal.ecs.System
+import com.minimal.minus
+import com.minimal.norm
+import com.minimal.times
 import ktx.box2d.body
 import ktx.box2d.box
 import ktx.box2d.filter
 import ktx.math.plus
 import ktx.math.vec2
+import kotlin.experimental.xor
 
-class Lemingo(val canJumpSensor: Fixture) {
-    var canJump = 0
+class Lemingo() {
 }
 
-object canJumpSensorScript : Script {
-    override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
-        if (contact.fixtureA == me[lemingo].canJumpSensor || contact.fixtureB == me[lemingo].canJumpSensor)
-            me[lemingo].canJump++
-    }
-
-    override fun endContact(me: MyEntity, other: MyEntity, contact: Contact) {
-        if (contact.fixtureA == me[lemingo].canJumpSensor || contact.fixtureB == me[lemingo].canJumpSensor)
-            me[lemingo].canJump--
+object angleControlScript : Script {
+    override fun update(me: MyEntity, timeStepSec: Float) {
+        val error = me[body].position.boxang() - me[body].angle
+        me[body].applyTorque(error * 10f, false)
     }
 }
 
@@ -81,30 +80,36 @@ class LemingoLeaderSystem(val ctx: Context) : System {
                 }
             }
             if (!leader.fireMode || leader.running) {
+                if (left || right) {
+                    body.linearDamping = 0.1f
+                }
                 if (left) {
                     /*if (leader.side == 1) {
                         leader.flip()
                     }*/
                     leader.running = true
-                    val f = (-vmax - body.linearVelocity.x) * pidProportional
-                    body.applyForceToCenter(f, 0f, true)
+                    val f = (-vmax - body.tangentVelocity()) * pidProportional
+                    val force = body.tangentVector().scl(f)
+                    body.applyForceToCenter(force, true)
                 } else if (right) {
                     /*if (leader.side == -1) {
                         leader.flip()
                     }*/
                     leader.running = true
-                    val f = (vmax - body.linearVelocity.x) * pidProportional
-                    body.applyForceToCenter(f, 0f, true)
+                    val f = (vmax - body.tangentVelocity()) * pidProportional
+                    val force = body.tangentVector().scl(f)
+                    body.applyForceToCenter(force, true)
                 } else {
                     leader.running = false
+                    body.linearDamping = 0.5f
                 }
             }
 
-            if (e[lemingo].canJump > 0) {
-                if (leader.up.justPressed()) {
-                    //body.linearVelocity.set(body.linearVelocity.x, 50f)
-                    body.applyForceToCenter(0f, 400f, true)
-                    //body.applyLinearImpulse(0f, 100f, 0f, 0f, true)
+            if (leader.up.justPressed()) {
+                val normal = body.position.norm()
+                if (ctx.world.querySquare(body.position - normal * 1f, 0.2f, all xor hero)) {
+
+                    body.applyForceToCenter(body.position.norm().scl(400f), true)
                 }
             }
             leaderFound = true
@@ -163,31 +168,25 @@ class LemingoSystem(val ctx: Context) : System {
     }
 }
 
-
-
 fun lemingo(ctx: Context, pos: Vector2) {
     val body = ctx.world.body(DynamicBody) {
         position.set(pos)
+        gravityScale = 10f
         fixedRotation = true
         circle(radius = 0.5f) {
             density = 1f
-            restitution = 0.1f
+            restitution = 0f
+            friction = 0.1f
             filter {
-                categoryBits = lemingoCat
-                maskBits = all
+                categoryBits = hero
             }
         }
     }
 
-    val canJump = body.box(width = 0.5f, height = 0.2f, position = vec2(0f, -0.5f)) {
-        isSensor = true
-    }
-
-    val e = entity {
+    val e = ctx.engine.entity {
         body(body)
-        lemingo(canJump)
+        lemingo()
         energy(5f)
     }
-    e.scripts.add(canJumpSensorScript)
-    ctx.engine.add(e)
+    //e.scripts.add(angleControlScript)
 }

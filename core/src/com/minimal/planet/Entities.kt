@@ -12,37 +12,8 @@ import ktx.math.plus
 import ktx.math.vec2
 import kotlin.experimental.xor
 
-val lemingoCat = 1.toShort()
-val bulletCat = 2.toShort()
-val asteroidCat = 4.toShort()
-val planetCat = 8.toShort()
-
-val all = 65535.toShort()
-
 private val asterVel = vec2()
 
-fun asteroid(ctx: Context, level: Int) {
-    val pos = randomSafePosition(ctx, ctx.engine.family(tank, body))
-    asterVel.rnd(5f)
-    val e = entity {
-        body(
-                ctx.world.body(DynamicBody) {
-                    position.set(pos)
-                    linearVelocity.set(asterVel)
-                    polygon(vertices(level)) {
-                        density = 1f
-                        restitution = 0.1f
-                        filter {
-                            categoryBits = asteroidCat
-                            maskBits = all
-                        }
-                    }
-                }
-        )
-        asteroid(level)
-    }
-    ctx.engine.add(e)
-}
 
 val verticesArrays: Array<Array<Vector2>> = arrayOf(
         Array<Vector2>(5, { i -> vec2() }),
@@ -73,32 +44,8 @@ fun vertices(level: Int): FloatArray {
 
 private val safePosition = vec2()
 
-fun randomSafePosition(ctx: Context, family: Family2<MyEntity, TankControl, Body>): Vector2? {
-    val safeRadius2 = 5f * 5f
-
-    val tryPosition: (Vector2) -> Boolean = {
-        position: Vector2 ->
-        family.foreach { rocketControl, body ->
-            if (body.position.dst2(safePosition) < safeRadius2) {
-                false
-            }
-        }
-        true
-    }
-    var tryCount = 0
-    do {
-        val repeat = tryPosition(safePosition.rnd(ctx.level.worldRadius))
-        tryCount++
-        if (tryCount > 10) {
-            Gdx.app.error("Planet", "Try count reached 10, could not find safe position")
-            return safePosition
-        }
-    } while (repeat)
-    return safePosition
-}
-
 fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
-    val e = entity {
+    val e = ctx.engine.entity {
         body(
                 ctx.world.body(DynamicBody) {
                     position.set(pos)
@@ -107,8 +54,8 @@ fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
                         density = 2f
                         restitution = 1f
                         filter {
-                            categoryBits = bulletCat
-                            maskBits = all.xor(bulletCat)
+                            categoryBits = ziemia
+                            groupIndex = -2
                         }
                     }
                 }
@@ -116,11 +63,10 @@ fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
         bullet(1f)
         lifetime(5f)
     }
-    ctx.engine.add(e)
 }
 
 fun planet(ctx: Context, radius: Float, pos: Vector2, omega: Float) {
-    val e = entity {
+    val e = ctx.engine.entity {
         body(
                 ctx.world.body(KinematicBody) {
                     position.set(pos)
@@ -136,11 +82,10 @@ fun planet(ctx: Context, radius: Float, pos: Vector2, omega: Float) {
         )
         gravity(10f)
     }
-    ctx.engine.add(e)
 }
 
 fun edge(ctx: Context, from: Vector2, to: Vector2) {
-    val e = entity {
+    val e = ctx.engine.entity {
         body(
                 ctx.world.body {
                     edge(from, to) {
@@ -150,6 +95,4 @@ fun edge(ctx: Context, from: Vector2, to: Vector2) {
                 }
         )
     }
-
-    ctx.engine.add(e)
 }
