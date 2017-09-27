@@ -103,6 +103,9 @@ fun createBall(ctx: Context) {
         body(ctx.world.body(DynamicBody) {
             //position.set(ctx.level.width/2, ctx.level.height/6 + 3)
             position.set(ctx.level.width/2, ctx.level.height/5 + 3)
+            linearVelocity.set(10f, 10f)
+            linearDamping = 0f
+            gravityScale = 0.5f
             circle(0.5f) {
                 density = 1f
                 restitution = 1f
@@ -114,5 +117,14 @@ fun createBall(ctx: Context) {
         ball()
         bullet(5f)
         script(RespawnScript(ctx))
+        script(BallSpeedLimit)
+    }
+}
+
+object BallSpeedLimit : Script {
+    override fun update(me: MyEntity, timeStepSec: Float) {
+        if (me[body].linearVelocity.y < -20f) {
+            me[body].linearVelocity.y = -20f
+        }
     }
 }

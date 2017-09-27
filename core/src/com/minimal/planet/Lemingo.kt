@@ -56,8 +56,8 @@ class PlayerSystem(val ctx: Context) : System {
             if (player.fire.justPressed() and player.entsInRange.isNotEmpty()) {
                 val otherBody = player.entsInRange[0][body]
                 player.joint = b.distanceJointWith(otherBody) {
-                    frequencyHz = 2f
-                    dampingRatio = 0f
+                    frequencyHz = 4f
+                    dampingRatio = 0.3f
                     length = b.position.dst(otherBody.position)
                 }
                 player.firePressed = true
