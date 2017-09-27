@@ -49,18 +49,19 @@ class Planet : ApplicationAdapter() {
     }
 
     override fun resize(width: Int, height: Int) {
-        ctx.worldCamera.position.y = ctx.level.worldRadius
-
-        val refworldRadius = ctx.level.worldRadius/2
+        val refworldRadius = ctx.level.height/2
         val xScale = refworldRadius * 2f / width
         val yScale = refworldRadius * 2f / height
-        if (xScale < yScale) {
+        if (yScale < xScale) {
             ctx.worldCamera.viewportWidth = width * xScale
             ctx.worldCamera.viewportHeight = height * xScale
         } else {
             ctx.worldCamera.viewportWidth = width * yScale
             ctx.worldCamera.viewportHeight = height * yScale
         }
+
+        ctx.worldCamera.position.set(ctx.level.width/2, ctx.level.height/2, 0f)
+
         ctx.worldCamera.update()
     }
 }

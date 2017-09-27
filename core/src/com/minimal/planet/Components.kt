@@ -14,7 +14,7 @@ class Bullet(val hitPoints: Float)
 
 val fireInterval = 0.12f
 
-
+object Ball
 
 class Lifetime(var lifetime: Float)
 
@@ -29,4 +29,5 @@ val crash = ComponentTag<Crash>(6)
 val cameraMagnet = ComponentTag<Float>(7)
 val asteroid = ComponentTag<Int>(8)
 val lemingo = ComponentTag<Lemingo>(9)
-val leader = ComponentTag<LemingoLeader>(10)
+val player = ComponentTag<Player>(10)
+val ball = ComponentTag<Ball>(11)

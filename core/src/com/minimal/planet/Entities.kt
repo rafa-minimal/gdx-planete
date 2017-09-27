@@ -1,16 +1,11 @@
 package com.minimal.planet
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.KinematicBody
-import com.minimal.ecs.Family2
 import ktx.box2d.*
-import ktx.math.plus
 import ktx.math.vec2
-import kotlin.experimental.xor
 
 private val asterVel = vec2()
 
@@ -54,7 +49,7 @@ fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
                         density = 2f
                         restitution = 1f
                         filter {
-                            categoryBits = ziemia
+                            categoryBits = default
                             groupIndex = -2
                         }
                     }
@@ -94,5 +89,30 @@ fun edge(ctx: Context, from: Vector2, to: Vector2) {
                     }
                 }
         )
+    }
+}
+
+class RespawnScript(val ctx: Context) : Script {
+    override fun beforeDestroy(me: MyEntity) {
+        createBall(ctx)
+    }
+}
+
+fun createBall(ctx: Context) {
+    ctx.engine.entity {
+        body(ctx.world.body(DynamicBody) {
+            //position.set(ctx.level.width/2, ctx.level.height/6 + 3)
+            position.set(ctx.level.width/2, ctx.level.height/5 + 3)
+            circle(0.5f) {
+                density = 1f
+                restitution = 1f
+                filter {
+                    categoryBits = default
+                }
+            }
+        })
+        ball()
+        bullet(5f)
+        script(RespawnScript(ctx))
     }
 }

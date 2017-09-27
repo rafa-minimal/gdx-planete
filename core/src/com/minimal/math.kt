@@ -19,10 +19,6 @@ object VecPool {
     }
 }
 
-fun rndBall(radius: Float) = vec(MathUtils.random(radius), 0f).rotate(MathUtils.random(360f))
-
-fun rndBox(w: Float, h: Float) = vec(MathUtils.random(-w/2, w/2), MathUtils.random(-h/2, h/2))
-
 
 fun vec(): Vector2 {
     return VecPool.get().setZero()

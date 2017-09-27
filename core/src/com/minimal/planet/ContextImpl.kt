@@ -27,7 +27,7 @@ interface Context {
 class ContextImpl : Context {
     override var timeMs = 0
 
-    override val world = World(vec2(0f, 0f), true)
+    override val world = World(vec2(0f, -10f), true)
     override val engine = MyEngine()
     override val level = Level()
 
@@ -39,18 +39,17 @@ class ContextImpl : Context {
 
     init {
         engine.add(
-                GravitySystem(this),
                 WorldSystem(this),
                 EnergySystem(engine),
-                LemingoLeaderSystem(this),
-                LemingoSystem(this),
+                PlayerSystem(this),
                 //GravitySystem(this),
                 LifetimeSystem(engine),
                 //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
-                CameraSystem(this),
+                //CameraSystem(this),
                 WorldRenderSystem(this),
                 DebugRenderSystem(this),
+                CleanUpSystem(this),
                 ScriptSystem(this),
                 BodyDisposeSystem(engine))
         //engine.add()

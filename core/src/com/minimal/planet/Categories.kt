@@ -7,5 +7,6 @@ val planetCat = 8.toShort()
 
 val all = 0xffff.toShort()
 
-val ziemia: Short = 1
+val static: Short = 1
+val default: Short = 2
 val hero: Short = 2

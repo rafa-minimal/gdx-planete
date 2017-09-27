@@ -160,20 +160,6 @@ fun Int.justPressed(): Boolean {
     return Gdx.input.isKeyJustPressed(this)
 }
 
-class EdgeForceSystem(val ctx: Context) : System {
-    val factor = 1f
-    val family = ctx.engine.family(body)
-    override fun update(timeStepSec: Float) {
-        family.foreach { body ->
-            val outside = body.position.len() - ctx.level.worldRadius
-            if (outside > 0) {
-                val force = -body.position.nor().scl(outside * factor)
-                body.applyForceToCenter(force, true)
-            }
-        }
-    }
-}
-
 class GravitySystem(val ctx: Context) : System {
     val factor = 1f
     val planets = ctx.engine.family(body, gravity)
@@ -241,6 +227,20 @@ class ScriptSystem(val ctx: Context) : System {
             e ->
             e.scripts.forEach {
                 s -> s.update(e, timeStepSec)
+                if (e.dead) {
+                    s.beforeDestroy(e)
+                }
+            }
+        }
+    }
+}
+
+class CleanUpSystem(val ctx: Context) : System {
+    val family = ctx.engine.family(body)
+    override fun update(timeStepSec: Float) {
+        family.foreach { ent, body ->
+            if (body.position.y < -5f) {
+                ent.dead = true
             }
         }
     }

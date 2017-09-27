@@ -5,9 +5,6 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.Fixture
-import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
-import com.badlogic.gdx.physics.box2d.joints.WheelJoint
-import com.minimal.ecs.Engine
 import com.minimal.ecs.Entity
 
 interface Script {
@@ -16,13 +13,14 @@ interface Script {
     fun endContact(me: MyEntity, other: MyEntity, contact: Contact) {}
     fun postSolve(me: MyEntity, other: MyEntity, contact: Contact, impulse: ContactImpulse) {}
     fun debugDraw(me: MyEntity, renderer: ShapeRenderer) {}
+    fun beforeDestroy(me: MyEntity) {}
 }
 
 object bulletScript : Script {
     override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
-        if(other.contains(energy))
+        if(other.contains(energy)) {
             other[energy] -= me[bullet].hitPoints
-        me.dead = true
+        }
     }
 }
 
@@ -80,6 +78,18 @@ class EntityBuilder() {
     fun lemingo() {
         e.add(lemingo, Lemingo())
     }
+    fun player(rangeFixture: Fixture) {
+        e.add(player, Player(rangeFixture))
+    }
+
+    fun script(script: Script) {
+        e.add(script)
+    }
+
+    fun ball() {
+        e.add(ball, Ball)
+    }
+
 }
 
 fun MyEngine.entity(init: EntityBuilder.() -> Unit): MyEntity {
