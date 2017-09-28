@@ -109,6 +109,7 @@ fun createBall(ctx: Context) {
             circle(0.5f) {
                 density = 1f
                 restitution = 1f
+                friction = 0f
                 filter {
                     categoryBits = default
                 }
@@ -118,6 +119,7 @@ fun createBall(ctx: Context) {
         bullet(5f)
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
+        script(ballScript)
     }
 }
 

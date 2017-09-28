@@ -77,19 +77,57 @@ class Level {
     }
 
     private fun createBox(x: Float, y: Float) {
-        val box = ctx.engine.entity {
-            body(ctx.world.body(StaticBody) {
-                position.set(x, y)
-                box(2f, 1f) {
-                    density = 1f
-                    restitution = 1f
-                    filter {
-                        categoryBits = default
+        when(rnd(1,2)) {
+            1 -> {
+                ctx.engine.entity {
+                    body(ctx.world.body(StaticBody) {
+                        position.set(x, y)
+                        box(2f, 1f) {
+                            density = 1f
+                            restitution = 1f
+                            filter {
+                                categoryBits = default
+                            }
+                        }
+                    })
+                    energy(10f)
+                }
+            }
+            2 -> {
+                val body = ctx.world.body(DynamicBody) {
+                    position.set(x, y)
+                    linearDamping = 0.5f
+                    angularDamping = 0.5f
+                    box(2f, 1f) {
+                        density = 0.2f
+                        restitution = 1f
+                        filter {
+                            categoryBits = default
+                        }
                     }
                 }
-            })
-            energy(10f)
+                val jl = baseBody.distanceJointWith(body) {
+                    length = 0f
+                    localAnchorA.set(x - 0.5f, y)
+                    localAnchorB.set(-0.5f, 0f)
+                    frequencyHz = 4f
+                    dampingRatio = 0.8f
+                }
+                val jr = baseBody.distanceJointWith(body) {
+                    length = 0f
+                    localAnchorA.set(x + 0.5f, y)
+                    localAnchorB.set(0.5f, 0f)
+                    frequencyHz = 4f
+                    dampingRatio = 0.8f
+                }
+                ctx.engine.entity {
+                    body(body)
+                    script(JointBreakScript(ctx, jl))
+                    script(JointBreakScript(ctx, jr))
+                }
+            }
         }
+
     }
 
     private fun createPlayer() {
