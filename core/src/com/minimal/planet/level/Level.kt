@@ -137,11 +137,12 @@ class Level {
 
         val body = ctx.world.body(DynamicBody) {
             position.set(pos)
+            linearDamping = 0.5f
             fixedRotation = true
         }
 
         val mainFixture = body.circle(playerRadius) {
-            density = 3f
+            density = 2f
             filter {
                 categoryBits = default
                 maskBits = 0

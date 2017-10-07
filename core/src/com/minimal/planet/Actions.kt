@@ -15,7 +15,7 @@ object actionOrder : Comparator<Action> {
 }
 
 object Actions {
-    val queue = PriorityQueue<Action>(actionOrder)
+    val queue = PriorityQueue<Action>(30, actionOrder)
     var currentTime: Int = 0
     fun schedule(delay: Int, action: () -> Unit) {
         queue.add(Action(currentTime + delay, action))

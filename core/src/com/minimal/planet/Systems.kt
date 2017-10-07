@@ -1,7 +1,7 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
@@ -13,8 +13,43 @@ import com.badlogic.gdx.physics.box2d.Manifold
 import com.minimal.ecs.ComponentTag
 import com.minimal.ecs.System
 import ktx.math.minus
-import ktx.math.unaryMinus
 import ktx.math.vec2
+
+class PlayerControlUpdateSystem(val ctx: Context) : System {
+    val family = ctx.engine.family(player)
+    override fun update(timeStepSec: Float) {
+        family.foreach {
+            ent, player ->
+            val wasFire = player.fire
+            player.fire = false
+            player.left = false
+            player.right = false
+
+            for (i in 0..4) {
+                if (Gdx.input.isTouched(i)) {
+                    var x = Gdx.input.getX(i)
+                    val y = Gdx.graphics.height - Gdx.input.getY(i)
+                    if (x < Gdx.graphics.width / 2) {
+                        if (y > x)
+                            player.left = true
+
+                        else
+                            player.right = true
+                    }
+                    x = Gdx.graphics.width - Gdx.input.getX(i)
+                    if (x < Gdx.graphics.width / 2) {
+                        player.fire = true
+                        player.fireJustPressed = !wasFire
+                    }
+                }
+            }
+            player.fire = player.fire or player.fireKey.pressed()
+            player.fireJustPressed = player.fireJustPressed or player.fireKey.justPressed()
+            player.left = player.left or player.leftKey.pressed()
+            player.right = player.right or player.rightKey.pressed()
+        }
+    }
+}
 
 class WorldSystem(val ctx: Context) : System, ContactListener {
     override fun endContact(contact: Contact?) {
@@ -176,8 +211,10 @@ class GravitySystem(val ctx: Context) : System {
 }
 
 class WorldRenderSystem(val ctx: Context) : System {
+    val painter = BoxPainter(ctx)
     override fun update(timeStepSec: Float) {
-        ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
+//        ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
+        painter.render(ctx.world, ctx.worldCamera.combined)
     }
 }
 

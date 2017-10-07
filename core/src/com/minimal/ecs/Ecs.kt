@@ -54,7 +54,8 @@ class Engine<E: Entity> {
         for (s in systems) {
             s.update(timeStepSec)
         }
-        ents.removeIf{ it.dead }
+        ents.removeAll(ents.filter{it.dead})
+        //  ents.removeIf{ it.dead }  // SDK 24
         updating = false
         ents.addAll(entsToAdd)
         entsToAdd.clear()

@@ -4,12 +4,10 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
+import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint
-import com.minimal.ecs.Entity
 import com.minimal.ecs.System
 import com.minimal.minus
 import com.minimal.plus
@@ -22,13 +20,17 @@ class Lemingo() {
 }
 
 class Player(val rangeFixture: Fixture,
-             val up: Int = Keys.UP,
-             val left: Int = Keys.LEFT,
-             val right: Int = Keys.RIGHT,
-             val fire: Int = Keys.A) {
+             val leftKey: Int = Keys.LEFT,
+             val rightKey: Int = Keys.RIGHT,
+             val fireKey: Int = Keys.A) {
     val entsInRange = ArrayList<MyEntity>()
-    var firePressed = false
+    var fireHold = false
     var joint: DistanceJoint? = null
+
+    var fire: Boolean = false
+    var fireJustPressed: Boolean = false
+    var left: Boolean = false
+    var right: Boolean = false
 }
 
 object PlayerRangeScript : Script {
@@ -58,7 +60,7 @@ class PlayerSystem(val ctx: Context) : System {
     override fun update(timeStepSec: Float) {
         family.foreach {
             e, player, b ->
-            if (player.fire.justPressed() and player.entsInRange.isNotEmpty()) {
+            if (player.fireJustPressed and player.entsInRange.isNotEmpty()) {
                 val otherBody = player.entsInRange[0][body]
                 player.joint = b.distanceJointWith(otherBody) {
                     frequencyHz = 4f
@@ -66,12 +68,12 @@ class PlayerSystem(val ctx: Context) : System {
                     //length = b.position.dst(otherBody.position)
                     length = 3f
                 }
-                player.firePressed = true
+                player.fireHold = true
             }
-            if (player.firePressed and !player.fire.pressed()) {
+            if (player.fireHold and !player.fire) {
                 ctx.world.destroyJoint(player.joint)
                 player.joint = null
-                player.firePressed = false
+                player.fireHold = false
             }
             if (player.joint != null) {
                 val ball = vec(player.joint!!.bodyB.position)
@@ -86,15 +88,13 @@ class PlayerSystem(val ctx: Context) : System {
                 ctx.renderer.line(player.joint!!.bodyB.position, player.joint!!.bodyB.position + tan)
                 ctx.renderer.end()
             }
-            val left = player.left.pressed() && !player.right.pressed()
-            val right = player.right.pressed() && !player.left.pressed()
 
             val v = when {
-                left -> -vmax
-                right -> vmax
+                player.left -> -vmax
+                player.right -> vmax
                 else -> 0f
             }
-            val f = (v - b.linearVelocity.x) * pidProportional
+            val f = (v - b.linearVelocity.x) * pidProportional * b.mass
             b.applyForceToCenter(f, 0f, true)
         }
     }

@@ -112,3 +112,7 @@ gradle-app.setting
 ## OS Specific
 .DS_Store
 Thumbs.db
+
+# Idea / Android studio
+.idea-as/
+.idea-id/

@@ -1,8 +1,10 @@
 package com.minimal.planet
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
@@ -19,9 +21,11 @@ interface Context {
     val world: World
     val level: Level
     val worldCamera: Camera
+    val batch: SpriteBatch
     val renderer: ShapeRenderer
     val debugRenderer: Box2DDebugRenderer
     var timeMs: Int
+    val atlas: TextureAtlas
 }
 
 class ContextImpl : Context {
@@ -33,12 +37,14 @@ class ContextImpl : Context {
 
     override val worldCamera = OrthographicCamera();
 
-    val batch = SpriteBatch()
+    override val batch = SpriteBatch()
     override val debugRenderer = Box2DDebugRenderer()
     override val renderer = ShapeRenderer()
+    override val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
 
     init {
         engine.add(
+                PlayerControlUpdateSystem(this),
                 WorldSystem(this),
                 EnergySystem(engine),
                 PlayerSystem(this),
