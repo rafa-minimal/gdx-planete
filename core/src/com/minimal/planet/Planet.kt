@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.minimal.planet.level.LevelResult
 
 class Planet : ApplicationAdapter() {
     lateinit var ctx: ContextImpl
@@ -19,12 +20,7 @@ class Planet : ApplicationAdapter() {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        ctx.batch.projectionMatrix.set(ctx.worldCamera.combined)
-        ctx.batch.begin()
-        ctx.batch.setColor(Color.WHITE)
-        val region = ctx.atlas.findRegion("stroke1")
-        ctx.batch.draw(region, 2f, 2f, 2f, 0.2f)
-        ctx.batch.end()
+
 
         if(Keys.ESCAPE.pressed()) {
             Gdx.app.exit()
@@ -50,6 +46,12 @@ class Planet : ApplicationAdapter() {
             ctx.worldCamera.update()
         }
         ctx.engine.update(step)
+        when(ctx.level.result()) {
+            LevelResult.Failed -> TODO()
+            LevelResult.TimesUp -> TODO()
+            LevelResult.Complete -> TODO()
+            LevelResult.None -> TODO()
+        }
     }
 
     override fun dispose() {

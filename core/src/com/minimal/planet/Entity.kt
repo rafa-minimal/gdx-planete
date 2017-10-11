@@ -90,6 +90,9 @@ class EntityBuilder() {
         e.add(ball, Ball)
     }
 
+    fun powerUp(powerUp: PowerUp) {
+        e.add(pup, powerUp)
+    }
 }
 
 fun MyEngine.entity(init: EntityBuilder.() -> Unit): MyEntity {

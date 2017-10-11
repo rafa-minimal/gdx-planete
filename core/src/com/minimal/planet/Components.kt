@@ -20,6 +20,9 @@ class Lifetime(var lifetime: Float)
 
 class Crash(val threshold: Float, val factor: Float)
 
+open class PowerUp
+object Diamond : PowerUp()
+
 val body = ComponentTag<Body>(0)
 val energy = ComponentTag<Energy>(1)
 val bullet = ComponentTag<Bullet>(2)
@@ -31,3 +34,4 @@ val asteroid = ComponentTag<Int>(8)
 val lemingo = ComponentTag<Lemingo>(9)
 val player = ComponentTag<Player>(10)
 val ball = ComponentTag<Ball>(11)
+val pup = ComponentTag<PowerUp>(12)

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.KinematicBody
+import com.badlogic.gdx.physics.box2d.Contact
 import ktx.box2d.*
 import ktx.math.vec2
 
@@ -102,7 +103,7 @@ fun createBall(ctx: Context) {
     ctx.engine.entity {
         body(ctx.world.body(DynamicBody) {
             //position.set(ctx.level.width/2, ctx.level.height/6 + 3)
-            position.set(ctx.level.width/2, ctx.level.height/5 + 3)
+            position.set(ctx.level.width / 2, ctx.level.height / 5 + 3)
             linearVelocity.set(10f, 10f)
             linearDamping = 0f
             gravityScale = 0.5f
@@ -128,5 +129,38 @@ object BallSpeedLimit : Script {
         if (me[body].linearVelocity.y < -20f) {
             me[body].linearVelocity.y = -20f
         }
+    }
+}
+
+class PowerUpCollector(val ctx: Context) : Script {
+    override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
+        if (other.contains(pup)) {
+            when (other.get(pup)) {
+                Diamond -> {
+                    print("Diamond collected")
+                    other.dead = true
+                }
+            }
+        }
+    }
+}
+
+private val diamondVertices = floatArrayOf(-2f, 0f, 0f, -2f, 2f, 0f, 1f, 1f, -1f, 1f)
+private val diamondVerticesScaled = FloatArray(diamondVertices.size) { i -> diamondVertices[i] * 0.4f }
+fun createDiamond(ctx: Context, pos: Vector2) {
+    ctx.engine.entity {
+        body(ctx.world.body(DynamicBody) {
+            linearDamping = 0.4f
+            angularDamping = 0.4f
+            position.set(pos)
+            polygon(diamondVerticesScaled) {
+                density = 0.2f
+                restitution = 0.1f
+                filter {
+                    categoryBits = default
+                }
+            }
+        })
+        powerUp(Diamond)
     }
 }

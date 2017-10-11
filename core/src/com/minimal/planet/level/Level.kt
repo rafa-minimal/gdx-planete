@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.*
 import com.minimal.planet.*
+import com.minimal.planet.level.LevelResult.None
 import ktx.box2d.*
 import ktx.math.vec2
 import kotlin.experimental.xor
@@ -54,7 +55,14 @@ class Level {
         repeat(10) {
             val x = rnd(0, map.w-1)
             val y = rnd(0, map.h-1)
-            map[x, y] = '#'
+
+            when(rnd(1,3)) {
+                /*1 -> map[x, y] = '#'
+                2 -> map[x, y] = '='
+                3 -> map[x, y] = 'V'*/
+            }
+            map[x, y] = 'V'
+
         }
 
         // create boxes
@@ -62,8 +70,10 @@ class Level {
             print("|")
             for (y in 0 until map.h) {
                 print(map[x,y])
-                if (map[x, y] == '#') {
-                    createBox(x*2 + 1f, height / 3 + y + 0.5f)
+                when(map[x,y]) {
+                    '#' -> boxOneShot(x*2 + 1f, height / 3 + y + 0.5f)
+                    '=' -> boxNaZawiasach(x*2 + 1f, height / 3 + y + 0.5f)
+                    'V' -> boxDiament(x*2 + 1f, height / 3 + y + 0.5f)
                 }
             }
             println("|")
@@ -76,58 +86,58 @@ class Level {
         createBall(ctx)
     }
 
-    private fun createBox(x: Float, y: Float) {
-        when(rnd(1,2)) {
-            1 -> {
-                ctx.engine.entity {
-                    body(ctx.world.body(StaticBody) {
-                        position.set(x, y)
-                        box(2f, 1f) {
-                            density = 1f
-                            restitution = 1f
-                            filter {
-                                categoryBits = default
-                            }
-                        }
-                    })
-                    energy(10f)
-                }
-            }
-            2 -> {
-                val body = ctx.world.body(DynamicBody) {
-                    position.set(x, y)
-                    linearDamping = 0.5f
-                    angularDamping = 0.5f
-                    box(2f, 1f) {
-                        density = 0.2f
-                        restitution = 1f
-                        filter {
-                            categoryBits = default
-                        }
+    fun boxOneShot(x: Float, y: Float): MyEntity {
+        return ctx.engine.entity {
+            body(ctx.world.body(StaticBody) {
+                position.set(x, y)
+                box(2f, 1f) {
+                    density = 1f
+                    restitution = 0.4f
+                    filter {
+                        categoryBits = default
                     }
                 }
-                val jl = baseBody.distanceJointWith(body) {
-                    length = 0f
-                    localAnchorA.set(x - 0.5f, y)
-                    localAnchorB.set(-0.5f, 0f)
-                    frequencyHz = 4f
-                    dampingRatio = 0.8f
-                }
-                val jr = baseBody.distanceJointWith(body) {
-                    length = 0f
-                    localAnchorA.set(x + 0.5f, y)
-                    localAnchorB.set(0.5f, 0f)
-                    frequencyHz = 4f
-                    dampingRatio = 0.8f
-                }
-                ctx.engine.entity {
-                    body(body)
-                    script(JointBreakScript(ctx, jl))
-                    script(JointBreakScript(ctx, jr))
+            })
+            energy(10f)
+        }
+    }
+
+    fun boxDiament(x: Float, y: Float) {
+        boxOneShot(x, y).add(BoxDiamondScript(ctx))
+    }
+
+    fun boxNaZawiasach(x: Float, y: Float) {
+        val body = ctx.world.body(DynamicBody) {
+            position.set(x, y)
+            linearDamping = 0.5f
+            angularDamping = 0.5f
+            box(2f, 1f) {
+                density = 0.2f
+                restitution = 1f
+                filter {
+                    categoryBits = default
                 }
             }
         }
-
+        val jl = baseBody.distanceJointWith(body) {
+            length = 0f
+            localAnchorA.set(x - 0.5f, y)
+            localAnchorB.set(-0.5f, 0f)
+            frequencyHz = 4f
+            dampingRatio = 0.8f
+        }
+        val jr = baseBody.distanceJointWith(body) {
+            length = 0f
+            localAnchorA.set(x + 0.5f, y)
+            localAnchorB.set(0.5f, 0f)
+            frequencyHz = 4f
+            dampingRatio = 0.8f
+        }
+        ctx.engine.entity {
+            body(body)
+            script(JointBreakScript(ctx, jl))
+            script(JointBreakScript(ctx, jr))
+        }
     }
 
     private fun createPlayer() {
@@ -160,6 +170,7 @@ class Level {
             body(body)
             player(rangeFixture)
             script(PlayerRangeScript)
+            script(PowerUpCollector(ctx))
         }
 
         val limit = width/2 - playerRadius
@@ -172,5 +183,22 @@ class Level {
             upperTranslation = limit
         }
     }
+
+    class BoxDiamondScript(val ctx: Context) : Script {
+        override fun beforeDestroy(me: MyEntity) {
+            createDiamond(ctx, me.get(body).position)
+        }
+    }
+
+    fun result(): LevelResult {
+        return None
+    }
+}
+
+enum class LevelResult {
+    Failed,
+    TimesUp,
+    Complete,
+    None
 }
 
