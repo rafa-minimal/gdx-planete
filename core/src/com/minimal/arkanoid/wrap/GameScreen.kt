@@ -12,9 +12,10 @@ class GameScreen(val ctx: ContextImpl) : ScreenAdapter() {
     }
 
     override fun resize(width: Int, height: Int) {
-        val refworldRadius = ctx.level.height/2
-        val xScale = refworldRadius * 2f / width
-        val yScale = refworldRadius * 2f / height
+        val refworldHeight = ctx.level.height
+        val refworldWidth = ctx.level.width
+        val xScale = refworldWidth  / width
+        val yScale = refworldHeight  / height
         if (yScale < xScale) {
             ctx.worldCamera.viewportWidth = width * xScale
             ctx.worldCamera.viewportHeight = height * xScale

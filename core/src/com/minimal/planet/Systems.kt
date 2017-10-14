@@ -213,8 +213,8 @@ class GravitySystem(val ctx: Context) : System {
 class WorldRenderSystem(val ctx: Context) : System {
     val painter = BoxPainter(ctx)
     override fun update(timeStepSec: Float) {
-//        ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
-        painter.render(ctx.world, ctx.worldCamera.combined)
+        ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
+//        painter.render(ctx.world, ctx.worldCamera.combined)
     }
 }
 

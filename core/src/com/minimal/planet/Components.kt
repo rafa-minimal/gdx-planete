@@ -22,6 +22,7 @@ class Crash(val threshold: Float, val factor: Float)
 
 open class PowerUp
 object Diamond : PowerUp()
+object ExtraTime : PowerUp()
 
 val body = ComponentTag<Body>(0)
 val energy = ComponentTag<Energy>(1)

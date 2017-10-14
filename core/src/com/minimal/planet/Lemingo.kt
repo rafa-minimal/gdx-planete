@@ -37,7 +37,9 @@ object PlayerRangeScript : Script {
     override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
         val player = me[player]
         if (player.rangeFixture == contact.fixtureA || player.rangeFixture == contact.fixtureB) {
-            player.entsInRange.add(other)
+            if (!other.contains(pup)) {
+                player.entsInRange.add(other)
+            }
         } else {
             // energia?
         }

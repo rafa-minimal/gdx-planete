@@ -64,6 +64,7 @@ class ArkanoidGame : CompoundScreenGame() {
     }
 
     override fun resize(width: Int, height: Int) {
+        super.resize(width, height)
         WrapCtx.viewport.update(width, height, true)
 
         WrapCtx.camera.viewportWidth = width.toFloat()
