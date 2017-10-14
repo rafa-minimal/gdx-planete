@@ -4,10 +4,9 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.script.BulletScript
-import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.script.CrashScript
+import com.minimal.arkanoid.game.script.Script
 import com.minimal.ecs.Entity
-import com.minimal.planet.*
 
 class MyEntity : Entity() {
     val scripts = mutableListOf<Script>()
@@ -59,6 +58,10 @@ class EntityBuilder() {
 
     fun powerUp(powerUp: PowerUp) {
         e.add(pup, powerUp)
+    }
+
+    fun box() {
+        e.add(box, Box)
     }
 }
 

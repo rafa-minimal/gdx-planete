@@ -5,12 +5,13 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.minimal.arkanoid.game.ContextImpl
+import com.minimal.arkanoid.game.level.LevelResult
 import com.minimal.planet.justPressed
 
 class GameScreen(var ctx: ContextImpl) : ScreenAdapter() {
 
     private var running = true
-    
+
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -54,5 +55,9 @@ class GameScreen(var ctx: ContextImpl) : ScreenAdapter() {
         ctx.worldCamera.position.set(ctx.level.width/2, ctx.level.height/2, 0f)
 
         ctx.worldCamera.update()
+    }
+
+    fun result(): LevelResult {
+        return ctx.level.result()
     }
 }

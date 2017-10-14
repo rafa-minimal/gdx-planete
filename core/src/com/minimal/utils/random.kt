@@ -6,4 +6,7 @@ fun rndBall(radius: Float) = vec(MathUtils.random(radius), 0f).rotate(MathUtils.
 
 fun rndBox(w: Float, h: Float) = vec(MathUtils.random(-w / 2, w / 2), MathUtils.random(-h / 2, h / 2))
 
+/**
+ * Both inclusive
+ */
 fun rnd(from: Int, to: Int) = MathUtils.random(from, to)

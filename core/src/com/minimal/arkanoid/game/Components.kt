@@ -13,6 +13,7 @@ class Energy(var total: Float,
 class Bullet(val hitPoints: Float)
 
 object Ball
+object Box
 
 class Lifetime(var lifetime: Float)
 
@@ -29,6 +30,7 @@ val lifetime = ComponentTag<Lifetime>(4)
 val gravity = ComponentTag<Float>(5)
 val crash = ComponentTag<Crash>(6)
 val cameraMagnet = ComponentTag<Float>(7)
+val box = ComponentTag<Box>(8)
 val player = ComponentTag<Player>(10)
 val ball = ComponentTag<Ball>(11)
 val pup = ComponentTag<PowerUp>(12)

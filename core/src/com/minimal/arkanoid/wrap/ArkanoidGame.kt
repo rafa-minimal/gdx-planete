@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
 import com.minimal.arkanoid.game.ContextImpl
+import com.minimal.arkanoid.game.level.LevelResult.*
 import com.minimal.planet.pressed
 
 open class ArkanoidGame : CompoundScreenGame() {
@@ -18,6 +19,7 @@ open class ArkanoidGame : CompoundScreenGame() {
 
     lateinit var welcomeScreen: Screen
     lateinit var menuScreen: MenuScreen
+    var gameScreen: GameScreen? = null
 
     override fun create() {
         Gdx.input.inputProcessor = WrapCtx.mux
@@ -47,12 +49,23 @@ open class ArkanoidGame : CompoundScreenGame() {
                 State.Menu -> {
                     if (menuScreen.isPlay) {
                         val ctx = ContextImpl()
-                        setScreen(GameScreen(ctx))
+                        gameScreen = GameScreen(ctx)
+                        setScreen(gameScreen!!)
                         state = State.Game
                     }
                 }
                 State.Game -> {
-
+                    when(gameScreen?.result()) {
+                        None -> null
+                        TimesUp -> {
+                            state = State.Menu
+                            setScreen(menuScreen)
+                        }
+                        Complete -> {
+                            state = State.Menu
+                            setScreen(menuScreen)
+                        }
+                    }
                 }
             }
     }
