@@ -1,0 +1,38 @@
+{
+	com.badlogic.gdx.graphics.Color: {
+		grey: { a: 1, b: 0.7, g: 0.7, r: 0.7 },
+		white: { a: 1, b: 1, g: 1, r: 1 },
+		transparent: { a: 0, b: 1, g: 1, r: 1 }
+	},
+	/*com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+		default: { down: button-down, up: button-up, font: default-font, fontColor: grey, downFontColor: white }
+	},*/
+	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+		default: { font: default-font, fontColor: white },
+		small: { font: small-font, fontColor: white }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+		/*plus-up: { name: plus, color: grey },
+		plus-down: { name: plus, color: white },
+		repeat-up: { name: repeat, color: grey },
+		repeat-down: { name: repeat, color: white },
+		ok-up: { name: ok, color: grey },
+		ok-down: { name: ok, color: white },*/
+		right-up: { name: arrow, color: grey },
+		right-down: { name: arrow, color: white },
+		right-disabled: { name: arrow, color: transparent },
+		/*left-up: { name: left, color: grey },
+		left-down: { name: left, color: white },
+		left-disabled: { name: left, color: transparent },
+		garage-up: { name: garage, color: grey },
+		garage-down: { name: garage, color: white }*/
+	}
+	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+		/*button-left: { imageUp: left-up, imageDown: left-down, imageDisabled: left-disabled },*/
+		button-right: { imageUp: right-up, imageDown: right-down, imageDisabled: right-disabled }
+	}
+	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+		/*button-left: { up: left-up, down: left-down},*/
+		button-right: { up: right-up, down: right-down}
+	}
+}

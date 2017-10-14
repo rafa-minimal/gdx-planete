@@ -116,3 +116,7 @@ Thumbs.db
 # Idea / Android studio
 .idea-as/
 .idea-id/
+
+# atlas.atlas i atlas.png - generujemy z /images
+/android/assets/atlas.atlas
+/android/assets/atlas.png
