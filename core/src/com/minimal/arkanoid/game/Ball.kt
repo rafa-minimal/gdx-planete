@@ -28,6 +28,7 @@ fun createBall(ctx: Context) {
         })
         ball()
         bullet(5f)
+        texture(ctx.atlas.findRegion("circle"), 1f, 1f)
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
         script(BallScript)

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.arkanoid.game.*
+import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.level.LevelResult.Complete
 import com.minimal.arkanoid.game.level.LevelResult.None
@@ -25,9 +26,13 @@ class Level {
 
     val map = LevelMap(width.toInt() / 2, (height.toInt() * 2 / 3))
 
-    fun edge(from: Vector2, to: Vector2) {
-        ctx.engine.entity {
+    fun edge(from: Vector2, to: Vector2): MyEntity {
+        val center = Vector2(to).add(from).scl(0.5f)
+        from.sub(center)
+        to.sub(center)
+        return ctx.engine.entity {
             body(ctx.world.body {
+                position.set(center)
                 edge(from, to) {
                     restitution = 1f
                     filter {
@@ -48,9 +53,15 @@ class Level {
         baseBody = baseBodyEnt[body]
 
         // edges (box)
-        edge(vec2(0f, 0f), vec2(0f, height))
-        edge(vec2(width, 0f), vec2(width, height))
-        edge(vec2(0f, height), vec2(width, height))
+        val left = edge(vec2(0f, 0f), vec2(0f, height))
+        val right = edge(vec2(width, 0f), vec2(width, height))
+        val top = edge(vec2(0f, height), vec2(width, height))
+        /*left.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))
+        right.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))
+        top.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))*/
+        left.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(-width/2, 0f)))
+        right.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(width/2, 0f)))
+        top.add(texture, Texture(ctx.atlas.findRegion("box"), 3 * width, 10f, vec2(0f, 5f)))
 
         // generate level
         repeat(10) {

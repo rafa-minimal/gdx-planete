@@ -54,10 +54,12 @@ class ContextImpl : Context {
                 //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
                 //CameraSystem(this),
+                SpriteRenderSystem(this),
                 WorldRenderSystem(this),
                 DebugRenderSystem(this),
                 CleanUpSystem(this),
                 ScriptSystem(this),
+                ParentChildSystem(this),
                 BodyDisposeSystem(engine))
         //engine.add()
 

@@ -131,8 +131,14 @@ fun createPlayer(ctx: Context, width: Float, height: Float, baseBody: Body) {
     val player = ctx.engine.entity {
         body(body)
         player(rangeFixture)
+        texture(ctx.atlas.findRegion("circle"), 1f, 1f)
         script(PlayerRangeScript)
         script(PowerUpCollector(ctx))
+    }
+
+    val playerCircle = ctx.engine.entity {
+        texture(ctx.atlas.findRegion("range"), 6f, 6f)
+        parent(player)
     }
 
     val limit = width/2 - playerRadius

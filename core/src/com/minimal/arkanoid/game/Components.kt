@@ -1,7 +1,11 @@
 package com.minimal.arkanoid.game
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.physics.box2d.Body
 import com.minimal.ecs.ComponentTag
+import com.badlogic.gdx.math.Vector2
+import com.minimal.arkanoid.game.entity.MyEntity
+import ktx.collections.GdxArray
 
 class Energy(var total: Float,
              var energy: Float = total) {
@@ -19,6 +23,16 @@ class Lifetime(var lifetime: Float)
 
 class Crash(val threshold: Float, val factor: Float)
 
+class Parent(val parent: MyEntity)
+class Children() {
+    val children = GdxArray<MyEntity>()
+    fun add(e: MyEntity) {
+        children.add(e)
+    }
+}
+
+class Texture(val texture: TextureRegion, val width: Float, val height: Float, val pos: Vector2)
+
 open class PowerUp
 object Diamond : PowerUp()
 object ExtraTime : PowerUp()
@@ -34,3 +48,6 @@ val box = ComponentTag<Box>(8)
 val player = ComponentTag<Player>(10)
 val ball = ComponentTag<Ball>(11)
 val pup = ComponentTag<PowerUp>(12)
+val texture = ComponentTag<Texture>(13)
+val parent = ComponentTag<Parent>(14)
+val children = ComponentTag<Children>(15)

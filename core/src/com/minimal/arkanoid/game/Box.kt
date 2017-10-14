@@ -24,6 +24,7 @@ fun boxOneShot(ctx: Context, x: Float, y: Float): MyEntity {
             }
         })
         energy(10f)
+        texture(ctx.atlas.findRegion("box"), 2f, 1f)
         box()
     }
 }
@@ -61,6 +62,7 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float, baseBody: Body) {
     }
     ctx.engine.entity {
         body(body)
+        texture(ctx.atlas.findRegion("box"), 2f, 1f)
         script(JointBreakScript(ctx, jl))
         script(JointBreakScript(ctx, jr))
         box()

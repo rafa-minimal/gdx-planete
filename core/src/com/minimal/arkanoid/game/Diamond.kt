@@ -8,8 +8,8 @@ import ktx.box2d.filter
 
 
 
-private val diamondVertices = floatArrayOf(-2f, 0f, 0f, -2f, 2f, 0f, 1f, 1f, -1f, 1f)
-private val diamondVerticesScaled = FloatArray(diamondVertices.size) { i -> diamondVertices[i] * 0.4f }
+private val diamondVertices = floatArrayOf(-1.5f, 0f, 0f, -2f, 1.5f, 0f, 0.8f, 1f, -0.8f, 1f)
+private val diamondVerticesScaled = FloatArray(diamondVertices.size) { i -> diamondVertices[i] / 3f }
 fun createDiamond(ctx: Context, pos: Vector2) {
     ctx.engine.entity {
         body(ctx.world.body(DynamicBody) {
@@ -24,6 +24,7 @@ fun createDiamond(ctx: Context, pos: Vector2) {
                 }
             }
         })
+        texture(ctx.atlas.findRegion("diamond"), 1f, 1f)
         powerUp(Diamond)
     }
 }
