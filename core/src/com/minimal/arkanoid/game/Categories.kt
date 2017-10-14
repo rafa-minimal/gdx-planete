@@ -1,4 +1,4 @@
-package com.minimal.planet
+package com.minimal.arkanoid.game
 
 val lemingoCat = 1.toShort()
 val bulletCat = 2.toShort()

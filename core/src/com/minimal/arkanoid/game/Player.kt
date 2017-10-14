@@ -1,23 +1,23 @@
-package com.minimal.planet
+package com.minimal.arkanoid.game
 
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint
+import com.minimal.arkanoid.game.entity.MyEntity
+import com.minimal.arkanoid.game.script.Script
+import com.minimal.arkanoid.game.entity.entity
 import com.minimal.ecs.System
-import com.minimal.minus
-import com.minimal.plus
-import com.minimal.vec
-import ktx.box2d.body
-import ktx.box2d.distanceJointWith
-import ktx.box2d.filter
-
-class Lemingo() {
-}
+import com.minimal.utils.minus
+import com.minimal.utils.plus
+import com.minimal.utils.vec
+import ktx.box2d.*
+import ktx.math.vec2
+import kotlin.experimental.xor
 
 class Player(val rangeFixture: Fixture,
              val leftKey: Int = Keys.LEFT,
@@ -102,25 +102,58 @@ class PlayerSystem(val ctx: Context) : System {
     }
 }
 
-fun lemingo(ctx: Context, pos: Vector2) {
+fun createPlayer(ctx: Context, width: Float, height: Float, baseBody: Body) {
+    val pos = vec2(width / 2, height / 6)
+    val playerRadius = 0.5f
+    val playerRange = 3f
+
     val body = ctx.world.body(DynamicBody) {
         position.set(pos)
-        gravityScale = 10f
+        linearDamping = 0.5f
         fixedRotation = true
-        circle(radius = 0.5f) {
-            density = 1f
-            restitution = 0f
-            friction = 0.1f
-            filter {
-                categoryBits = hero
-            }
+    }
+
+    val mainFixture = body.circle(playerRadius) {
+        density = 2f
+        filter {
+            categoryBits = default
+            maskBits = 0
+        }
+    }
+    val rangeFixture = body.circle(playerRange) {
+        isSensor = true
+        filter {
+            categoryBits = default
+            maskBits = all xor static
         }
     }
 
-    val e = ctx.engine.entity {
+    val player = ctx.engine.entity {
         body(body)
-        lemingo()
-        energy(5f)
+        player(rangeFixture)
+        script(PlayerRangeScript)
+        script(PowerUpCollector(ctx))
     }
-    //e.scripts.add(angleControlScript)
+
+    val limit = width/2 - playerRadius
+
+    baseBody.prismaticJointWith(body) {
+        localAnchorA.set(pos)
+        localAxisA.set(1f, 0f)
+        enableLimit = true
+        lowerTranslation = -limit
+        upperTranslation = limit
+    }
+}
+
+class PowerUpCollector(val ctx: Context) : Script {
+    override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
+        if (other.contains(pup)) {
+            when (other.get(pup)) {
+                Diamond -> {
+                    other.dead = true
+                }
+            }
+        }
+    }
 }

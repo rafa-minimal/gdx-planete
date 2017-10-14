@@ -3,6 +3,7 @@ package com.minimal.planet.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.minimal.arkanoid.wrap.ArkanoidDebugGame;
 import com.minimal.arkanoid.wrap.ArkanoidGame;
 import com.minimal.planet.Planet;
 
@@ -17,7 +18,8 @@ public class DesktopLauncher {
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 //		new LwjglApplication(new Planet(), config);
-		new LwjglApplication(new ArkanoidGame(), config);
+//		new LwjglApplication(new ArkanoidGame(), config);
+		new LwjglApplication(new ArkanoidDebugGame(), config);
 	}
 
 	private static void texturePacker(boolean force) {

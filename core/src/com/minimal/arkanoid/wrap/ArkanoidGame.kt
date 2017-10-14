@@ -3,9 +3,10 @@ package com.minimal.arkanoid.wrap
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
-import com.minimal.planet.ContextImpl
+import com.minimal.arkanoid.game.ContextImpl
+import com.minimal.planet.pressed
 
-class ArkanoidGame : CompoundScreenGame() {
+open class ArkanoidGame : CompoundScreenGame() {
 
     enum class State {
         WelcomeScreen,
@@ -30,6 +31,9 @@ class ArkanoidGame : CompoundScreenGame() {
     override fun render() {
         super.render()
         update()
+        if(Keys.ESCAPE.pressed()) {
+            Gdx.app.exit()
+        }
     }
 
     private fun update() {

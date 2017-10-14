@@ -1,11 +1,11 @@
-package com.minimal.planet
+package com.minimal.utils
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.Shape.Type
+import com.minimal.arkanoid.game.Context
 import com.badlogic.gdx.utils.Array as GdxArray
 
 class BoxPainter(ctx: Context) {

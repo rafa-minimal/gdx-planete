@@ -1,8 +1,5 @@
-package com.minimal
+package com.minimal.utils
 
-import com.badlogic.gdx.math.Interpolation
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector
 import com.badlogic.gdx.math.Vector2
 
 object VecPool {

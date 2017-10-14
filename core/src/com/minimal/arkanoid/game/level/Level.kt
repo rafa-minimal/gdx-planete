@@ -1,15 +1,18 @@
-package com.minimal.planet.level
+package com.minimal.arkanoid.game.level
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
-import com.minimal.*
-import com.minimal.planet.*
-import com.minimal.planet.level.LevelResult.None
+import com.minimal.arkanoid.game.*
+import com.minimal.arkanoid.game.entity.MyEntity
+import com.minimal.arkanoid.game.script.Script
+import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.level.LevelResult.None
+import com.minimal.arkanoid.game.script.JointBreakScript
+import com.minimal.utils.rnd
 import ktx.box2d.*
 import ktx.math.vec2
-import kotlin.experimental.xor
 
 class Level {
     lateinit var ctx : Context
@@ -53,10 +56,10 @@ class Level {
 
         // generate level
         repeat(10) {
-            val x = rnd(0, map.w-1)
-            val y = rnd(0, map.h-1)
+            val x = rnd(0, map.w - 1)
+            val y = rnd(0, map.h - 1)
 
-            when(rnd(1,3)) {
+            when(rnd(1, 3)) {
                 /*1 -> map[x, y] = '#'
                 2 -> map[x, y] = '='
                 3 -> map[x, y] = 'V'*/
@@ -80,7 +83,7 @@ class Level {
         }
 
         // create player
-        createPlayer()
+        createPlayer(ctx, width, height, baseBody)
 
         // ball
         createBall(ctx)
@@ -140,49 +143,7 @@ class Level {
         }
     }
 
-    private fun createPlayer() {
-        val pos = vec2(width / 2, height / 6)
-        val playerRadius = 0.5f
-        val playerRange = 3f
 
-        val body = ctx.world.body(DynamicBody) {
-            position.set(pos)
-            linearDamping = 0.5f
-            fixedRotation = true
-        }
-
-        val mainFixture = body.circle(playerRadius) {
-            density = 2f
-            filter {
-                categoryBits = default
-                maskBits = 0
-            }
-        }
-        val rangeFixture = body.circle(playerRange) {
-            isSensor = true
-            filter {
-                categoryBits = default
-                maskBits = all xor static
-            }
-        }
-
-        val player = ctx.engine.entity {
-            body(body)
-            player(rangeFixture)
-            script(PlayerRangeScript)
-            script(PowerUpCollector(ctx))
-        }
-
-        val limit = width/2 - playerRadius
-
-        baseBody.prismaticJointWith(body) {
-            localAnchorA.set(pos)
-            localAxisA.set(1f, 0f)
-            enableLimit = true
-            lowerTranslation = -limit
-            upperTranslation = limit
-        }
-    }
 
     class BoxDiamondScript(val ctx: Context) : Script {
         override fun beforeDestroy(me: MyEntity) {

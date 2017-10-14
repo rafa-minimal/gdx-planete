@@ -1,8 +1,8 @@
 package com.minimal.planet
 
+import com.minimal.arkanoid.game.Actions
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
-import org.junit.Assert.*
 
 class ActionsTest : StringSpec() {
     init {

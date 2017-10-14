@@ -6,7 +6,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
-import com.minimal.planet.level.Level
+import com.minimal.arkanoid.game.ActionsSystem
+import com.minimal.arkanoid.game.Context
+import com.minimal.arkanoid.game.MyEngine
+import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.level.Level
+import com.minimal.arkanoid.game.system.BodyDisposeSystem
+import com.minimal.arkanoid.game.system.EnergySystem
+import com.minimal.arkanoid.game.system.LifetimeSystem
+import com.minimal.arkanoid.game.system.WorldSystem
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import ktx.box2d.body

@@ -1,4 +1,4 @@
-package com.minimal.planet.level
+package com.minimal.arkanoid.game.level
 
 class LevelMap(val w: Int, val h: Int) {
     val map = Array<Char>(w * h){i -> ' '}
