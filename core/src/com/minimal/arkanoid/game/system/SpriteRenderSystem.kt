@@ -22,6 +22,7 @@ class SpriteRenderSystem(val ctx: Context) : System {
     }
 
     fun draw(body: Body, texture: Texture) {
+        ctx.batch.setColor(1f, 1f, 1f, 1f)
         val pos = body.position.add(texture.pos)
         val angle = body.angle.rad_deg()
         ctx.batch.draw(texture.texture,

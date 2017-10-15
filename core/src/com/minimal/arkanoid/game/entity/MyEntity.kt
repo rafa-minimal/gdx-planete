@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.minimal.arkanoid.game.*
+import com.minimal.arkanoid.game.fx.Tail
 import com.minimal.arkanoid.game.script.BulletScript
 import com.minimal.arkanoid.game.script.CrashScript
 import com.minimal.arkanoid.game.script.Script
@@ -75,6 +76,9 @@ class EntityBuilder() {
             entity.add(children, Children())
         }
         entity.get(children).add(e)
+    }
+    fun tail(t: Tail) {
+        e.add(tail, t)
     }
 }
 
