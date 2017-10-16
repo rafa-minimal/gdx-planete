@@ -1,11 +1,12 @@
 package com.minimal.arkanoid.game
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.entity.MyEntity
-import com.minimal.arkanoid.game.fx.Tail
+import com.minimal.fx.Tail
 import com.minimal.arkanoid.game.script.Script
 import ktx.box2d.body
 import ktx.box2d.filter
@@ -30,7 +31,7 @@ fun createBall(ctx: Context) {
         ball()
         bullet(5f)
         texture(ctx.atlas.findRegion("circle"), 1f, 1f)
-        tail(Tail(ctx.atlas.findRegion("circle")))
+        tail(Tail(TextureRegion(ctx.tailTex), 1f, 60))
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
         script(BallScript)

@@ -1,6 +1,7 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -21,6 +22,8 @@ import ktx.box2d.body
 import ktx.math.vec2
 
 class TestContext : Context {
+    override val tailTex: Texture
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val batch: SpriteBatch
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val atlas: TextureAtlas

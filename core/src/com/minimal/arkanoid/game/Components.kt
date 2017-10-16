@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.minimal.ecs.ComponentTag
 import com.badlogic.gdx.math.Vector2
 import com.minimal.arkanoid.game.entity.MyEntity
-import com.minimal.arkanoid.game.fx.Tail
+import com.minimal.fx.Tail
 import ktx.collections.GdxArray
 
 class Energy(var total: Float,

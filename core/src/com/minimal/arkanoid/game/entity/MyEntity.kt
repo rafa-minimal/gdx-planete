@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.minimal.arkanoid.game.*
-import com.minimal.arkanoid.game.fx.Tail
+import com.minimal.fx.Tail
 import com.minimal.arkanoid.game.script.BulletScript
 import com.minimal.arkanoid.game.script.CrashScript
 import com.minimal.arkanoid.game.script.Script

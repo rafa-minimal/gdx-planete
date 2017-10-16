@@ -14,6 +14,7 @@ import com.minimal.ecs.Engine
 import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.system.*
 import ktx.math.vec2
+import com.badlogic.gdx.graphics.Texture as Texture
 
 typealias MyEngine = Engine<MyEntity>
 
@@ -27,6 +28,7 @@ interface Context {
     val debugRenderer: Box2DDebugRenderer
     var timeMs: Int
     val atlas: TextureAtlas
+    val tailTex: Texture
 }
 
 class ContextImpl : Context {
@@ -36,12 +38,13 @@ class ContextImpl : Context {
     override val engine = MyEngine()
     override val level = Level()
 
-    override val worldCamera = OrthographicCamera();
+    override val worldCamera = OrthographicCamera()
 
     override val batch = SpriteBatch()
     override val debugRenderer = Box2DDebugRenderer()
     override val renderer = ShapeRenderer()
     override val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
+    override val tailTex = Texture("gradient_tail.png")
 
     init {
         engine.add(

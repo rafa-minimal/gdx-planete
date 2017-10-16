@@ -12,8 +12,7 @@ class TailSystem(val ctx: Context) : System {
         family.foreach { body, tail ->
             //val alpha = body.linearVelocity.len() / 20f
             //tail.add(body.position, alpha)
-            tail.add(body.position, 0.8f)
-            tail.update(timeStepSec)
+            tail.add(body.position)
         }
     }
 }

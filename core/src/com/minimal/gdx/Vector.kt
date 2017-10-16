@@ -26,3 +26,17 @@ fun Vector2.rnd(radius: Float): Vector2 {
     val phi = MathUtils.random(MathUtils.PI2)
     return set(rad * MathUtils.cos(phi), rad * MathUtils.sin(phi))
 }
+
+fun Vector2.rotateLeft(): Vector2 {
+    val x = this.x
+    this.x = -y
+    y = x
+    return this
+}
+
+fun Vector2.rotateRight(): Vector2 {
+    val x = this.x
+    this.x = y
+    y = -x
+    return this
+}

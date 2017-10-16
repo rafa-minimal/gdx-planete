@@ -1,14 +1,15 @@
 package com.minimal.utils
 
 /**
- * FIFO Queue of primitive float values, constant capacity
- * @author ragg
+ * Circular buffer of primitive float values, constant capacity.
+ *
+ * FIFO queue behavior with push() and pop() operations
  */
 class FloatCircularBuffer(capacity: Int) {
-    private val array: FloatArray
-    private var head: Int = 0
-    private var tail: Int = 0
-    private var size: Int = 0
+    val array: FloatArray
+    var head: Int = 0
+    var tail: Int = 0
+    var size: Int = 0
 
     init {
         assert(capacity > 0)
@@ -24,11 +25,84 @@ class FloatCircularBuffer(capacity: Int) {
     fun push(value: Float) {
         array[tail] = value
         moveTail()
-        if (size == capacity()) {
+        if (isFull()) {
             moveHead()
         } else {
             size++
         }
+    }
+
+    /**
+     * Remove and return the value from the front (head) of the queue
+     */
+    fun pop(): Float {
+        if (size > 0) {
+            val value = array[head]
+            moveHead()
+            size--
+            return value
+        } else {
+            throw IndexOutOfBoundsException("Array empty, size: " + size)
+        }
+    }
+
+    /**
+     * Return (but don't remove) the value from the front (head) of the queue
+     */
+    fun peek(): Float {
+        if (size > 0) {
+            return array[head]
+        } else {
+            throw IndexOutOfBoundsException("Array empty, size: " + size)
+        }
+    }
+
+    /**
+     * Get value at given position
+     */
+    operator fun get(index: Int): Float {
+        var i = index
+        i += head
+        if (i >= array.size) {
+            i -= array.size
+        }
+        return array[i]
+    }
+
+    /**
+     * Set value at given position
+     */
+    operator fun set(index: Int, value: Float) {
+        var i = index
+        i += head
+        if (i >= array.size) {
+            i -= array.size
+        }
+        array[i] = value
+    }
+
+    /**
+     * Get number of elements in the queue
+     */
+    fun size(): Int = size
+
+    /**
+     * Get total capacity of the queue
+     */
+    fun capacity(): Int = array.size
+
+    /**
+     * If number of elements in the buffer equals capacity
+     */
+    fun  isFull(): Boolean = size == capacity()
+
+    /**
+     * Remove all elements
+     */
+    fun clear() {
+        head = 0
+        tail = 0
+        size = 0
     }
 
     private fun moveTail() {
@@ -43,74 +117,5 @@ class FloatCircularBuffer(capacity: Int) {
         if (head >= array.size) {
             head = 0
         }
-    }
-
-    /**
-     * Remove and return the value from the beginning (head) of the queue
-     */
-    fun poll(): Float {
-        if (size > 0) {
-            val `val` = array[head]
-            moveHead()
-            size--
-            return `val`
-        } else {
-            throw IndexOutOfBoundsException("Array empty, size: " + size)
-        }
-    }
-
-    /**
-     * Return (but don't remove) the value from the beginning (head) of the queue
-     */
-    fun peek(): Float {
-        if (size > 0) {
-            return array[head]
-        } else {
-            throw IndexOutOfBoundsException("Array empty, size: " + size)
-        }
-    }
-
-    /**
-     * Get value at given position from head
-     */
-    operator fun get(index: Int): Float {
-        var index = index
-        index += head
-        if (index >= array.size) {
-            index -= array.size
-        }
-        return array[index]
-    }
-
-    operator fun set(index: Int, `val`: Float) {
-        var index = index
-        index += head
-        if (index >= array.size) {
-            index -= array.size
-        }
-        array[index] = `val`
-    }
-
-    /**
-     * Get number of elements in the queue
-     */
-    fun size(): Int {
-        return size
-    }
-
-    /**
-     * Get total capacity of the queue
-     */
-    fun capacity(): Int {
-        return array.size
-    }
-
-    /**
-     * Remove all elements
-     */
-    fun clear() {
-        head = 0
-        tail = 0
-        size = 0
     }
 }
