@@ -44,7 +44,7 @@ class ContextImpl : Context {
     override val debugRenderer = Box2DDebugRenderer()
     override val renderer = ShapeRenderer()
     override val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
-    override val tailTex = Texture("gradient_tail.png")
+    override val tailTex = Texture("tail.png")
 
     init {
         engine.add(

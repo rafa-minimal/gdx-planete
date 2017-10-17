@@ -62,9 +62,9 @@ class FloatCircularBufferTest : WordSpec() {
                 buf.push(3f)
                 buf.push(4f)
                 buf should contain(2f, 3f, 4f)
-                buf.poll() shouldBe 2f
-                buf.poll() shouldBe 3f
-                buf.poll() shouldBe 4f
+                buf.pop() shouldBe 2f
+                buf.pop() shouldBe 3f
+                buf.pop() shouldBe 4f
                 buf.size() shouldBe 0
             }
         }
