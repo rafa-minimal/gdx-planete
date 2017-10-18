@@ -1,24 +1,24 @@
 package com.minimal.arkanoid.game
 
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint
 import com.minimal.arkanoid.game.entity.MyEntity
-import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.script.SpeedScaleScript
 import com.minimal.ecs.System
 import com.minimal.utils.minus
-import com.minimal.utils.plus
 import com.minimal.utils.vec
 import ktx.box2d.*
 import ktx.math.vec2
 import kotlin.experimental.xor
+
+val MAX_FORCE = 80f
 
 class Player(val rangeFixture: Fixture,
              val leftKey: Int = Keys.LEFT,
@@ -27,6 +27,7 @@ class Player(val rangeFixture: Fixture,
     val entsInRange = ArrayList<MyEntity>()
     var fireHold = false
     var joint: DistanceJoint? = null
+    var ball: MyEntity? = null
 
     var fire: Boolean = false
     var fireJustPressed: Boolean = false
@@ -64,8 +65,18 @@ class PlayerSystem(val ctx: Context) : System {
         family.foreach {
             e, player, b ->
             if (player.fireJustPressed and player.entsInRange.isNotEmpty()) {
-                val otherBody = player.entsInRange[0][body]
-                player.joint = b.distanceJointWith(otherBody) {
+                var other = player.entsInRange.find { ent -> ent.contains(ball) }
+                if (other == null) {
+                    other = player.entsInRange[0]
+                }
+                if (player.joint != null) {
+                    ctx.world.destroyJoint(player.joint)
+                    player.joint = null
+                    player.ball = null
+                }
+
+                player.ball = other
+                player.joint = b.distanceJointWith(other[body]) {
                     frequencyHz = 4f
                     dampingRatio = 0.3f
                     //length = b.position.dst(otherBody.position)
@@ -76,6 +87,7 @@ class PlayerSystem(val ctx: Context) : System {
             if (player.fireHold and !player.fire) {
                 ctx.world.destroyJoint(player.joint)
                 player.joint = null
+                player.ball = null
                 player.fireHold = false
             }
             if (player.joint != null) {
@@ -84,12 +96,6 @@ class PlayerSystem(val ctx: Context) : System {
                 val tangentSpeed = player.joint!!.bodyB.linearVelocity.dot(tan)
                 val force = tan.scl(Math.signum(tangentSpeed) * 10f)
                 player.joint!!.bodyB.applyForceToCenter(force, true)
-
-                ctx.renderer.projectionMatrix = ctx.worldCamera.combined
-                ctx.renderer.begin(Line)
-                ctx.renderer.color = Color.RED
-                ctx.renderer.line(player.joint!!.bodyB.position, player.joint!!.bodyB.position + tan)
-                ctx.renderer.end()
             }
 
             val v = when {
@@ -98,6 +104,7 @@ class PlayerSystem(val ctx: Context) : System {
                 else -> 0f
             }
             val f = (v - b.linearVelocity.x) * pidProportional * b.mass
+            MathUtils.clamp(f, -MAX_FORCE, MAX_FORCE)
             b.applyForceToCenter(f, 0f, true)
         }
     }
@@ -132,16 +139,16 @@ fun createPlayer(ctx: Context, width: Float, height: Float, baseBody: Body) {
     val player = ctx.engine.entity {
         body(body)
         player(rangeFixture)
-        texture(ctx.atlas.findRegion("circle"), 1f, 1f)
+        texture(ctx.atlas.findRegion("circle2"), 1f, 1f)
         script(PlayerRangeScript)
         script(PowerUpCollector(ctx))
         script(SpeedScaleScript)
     }
 
-    val playerCircle = ctx.engine.entity {
+    /*val playerCircle = ctx.engine.entity {
         texture(ctx.atlas.findRegion("range"), 6f, 6f)
         parent(player)
-    }
+    }*/
 
     val limit = width/2 - playerRadius
 

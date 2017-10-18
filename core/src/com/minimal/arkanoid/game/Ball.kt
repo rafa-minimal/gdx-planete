@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
-import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.entity.MyEntity
-import com.minimal.fx.SnakeTail
+import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.script.Script
-import com.minimal.arkanoid.game.script.SpeedScaleScript
+import com.minimal.fx.SnakeTail
 import ktx.box2d.body
 import ktx.box2d.filter
 
@@ -36,7 +35,7 @@ fun createBall(ctx: Context) {
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
         script(BallScript)
-        script(SpeedScaleScript)
+        //script(SpeedScaleScript)
     }
 }
 

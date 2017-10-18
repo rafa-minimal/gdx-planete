@@ -3,6 +3,7 @@ package com.minimal.arkanoid.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -10,11 +11,10 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.minimal.arkanoid.game.entity.MyEntity
-import com.minimal.ecs.Engine
 import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.system.*
+import com.minimal.ecs.Engine
 import ktx.math.vec2
-import com.badlogic.gdx.graphics.Texture as Texture
 
 typealias MyEngine = Engine<MyEntity>
 
@@ -66,6 +66,7 @@ class ContextImpl : Context {
                 SpriteRenderSystem(this),
                 WorldRenderSystem(this),
                 TailRenderSystem(this),
+                RangeDrawSystem(this),
                 DebugRenderSystem(this),
                 CleanUpSystem(this),
                 ScriptSystem(this),

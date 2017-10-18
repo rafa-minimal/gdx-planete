@@ -3,19 +3,27 @@ package com.minimal.arkanoid.wrap
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.ScreenAdapter
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.Texture
 import com.minimal.arkanoid.game.ContextImpl
 import com.minimal.arkanoid.game.level.LevelResult
+import com.minimal.gdx.render
 import com.minimal.planet.justPressed
 import ktx.math.vec2
 
 class GameScreen(var ctx: ContextImpl) : ScreenAdapter() {
 
     private var running = true
+    val bg = Texture("bg2.png")
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+        ctx.batch.render(WrapCtx.camera, Color.WHITE) {
+            ctx.batch.draw(bg, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        }
 
         if(Keys.R.justPressed()) {
             ctx.dispose()
