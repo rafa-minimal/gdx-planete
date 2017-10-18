@@ -8,6 +8,7 @@ import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.fx.SnakeTail
 import com.minimal.arkanoid.game.script.Script
+import com.minimal.arkanoid.game.script.SpeedScaleScript
 import ktx.box2d.body
 import ktx.box2d.filter
 
@@ -35,6 +36,7 @@ fun createBall(ctx: Context) {
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
         script(BallScript)
+        script(SpeedScaleScript)
     }
 }
 

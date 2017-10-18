@@ -32,7 +32,8 @@ class Children() {
     }
 }
 
-class Texture(val texture: TextureRegion, val width: Float, val height: Float, val pos: Vector2)
+class Texture(val texture: TextureRegion, val width: Float, val height: Float, val pos: Vector2,
+              var scaleX: Float = 1f, var scaleY: Float = 1f)
 
 open class PowerUp
 object Diamond : PowerUp()

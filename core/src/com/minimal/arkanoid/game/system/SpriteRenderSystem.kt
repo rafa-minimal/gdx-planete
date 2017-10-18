@@ -28,7 +28,8 @@ class SpriteRenderSystem(val ctx: Context) : System {
         ctx.batch.draw(texture.texture,
                 pos.x - texture.width/2, pos.y - texture.height/2,
                 texture.width/2, texture.height/2,
-                texture.width, texture.height, 1f, 1f,
+                texture.width, texture.height,
+                texture.scaleX, texture.scaleY,
                 angle)
     }
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.joints.DistanceJoint
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.script.SpeedScaleScript
 import com.minimal.ecs.System
 import com.minimal.utils.minus
 import com.minimal.utils.plus
@@ -134,6 +135,7 @@ fun createPlayer(ctx: Context, width: Float, height: Float, baseBody: Body) {
         texture(ctx.atlas.findRegion("circle"), 1f, 1f)
         script(PlayerRangeScript)
         script(PowerUpCollector(ctx))
+        script(SpeedScaleScript)
     }
 
     val playerCircle = ctx.engine.entity {
