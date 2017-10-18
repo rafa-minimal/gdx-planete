@@ -14,7 +14,10 @@ class WorldSystem(val ctx: Context) : System, ContactListener {
     }
 
     override fun update(timeStepSec: Float) {
-        val worldStep = Math.min(timeStepSec, 1 / 60f)
+        // Symulujemy dokładnie taki czas jaki upłynął pomiędzy klatkami, czyli jeśli fps spadnie (zwolni)
+        // to i tak czas symulacji będzie płynął równo
+        // Jeżeli spadnie poniżej 30 fps, krok symulacji mógłby być za duży, więc będziemy działać tak, jakby było 30 fps
+        val worldStep = Math.min(timeStepSec, 0.033333f)
         ctx.world.step(worldStep, 8, 3)
         ctx.timeMs += (worldStep * 1000).toInt()
     }
