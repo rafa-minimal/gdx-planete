@@ -12,16 +12,15 @@ import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.MyEngine
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.level.Level
-import com.minimal.arkanoid.game.system.BodyDisposeSystem
-import com.minimal.arkanoid.game.system.EnergySystem
-import com.minimal.arkanoid.game.system.LifetimeSystem
-import com.minimal.arkanoid.game.system.WorldSystem
+import com.minimal.arkanoid.game.system.*
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import ktx.box2d.body
 import ktx.math.vec2
 
 class TestContext : Context {
+    override val cameraSystem: CameraSystem
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val tailTex: Texture
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val batch: SpriteBatch

@@ -1,24 +1,53 @@
 package com.minimal.arkanoid.game.system
 
+import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.math.Vector2
 import com.minimal.ecs.System
 import com.minimal.gdx.set
-import com.minimal.arkanoid.game.Context
-import com.minimal.arkanoid.game.body
-import com.minimal.arkanoid.game.cameraMagnet
 import ktx.math.vec2
 
-class CameraSystem(val ctx: Context) : System {
-    val family = ctx.engine.family(body, cameraMagnet)
-    val pos = vec2()
+class CameraSystem(val camera: Camera, val worldWidth: Float, val worldHeight: Float) : System {
+    // Gdzie celuje oś kamery w układzie świata
+    val worldPosition = vec2()
 
-    override fun update(timeStepSec: Float) {
-        pos.setZero()
-        family.foreach { body, magnet ->
-            // todo: średnia ważona
-            ctx.worldCamera.position.set(body.position)
-            ctx.worldCamera.up.x = body.position.x
-            ctx.worldCamera.up.y = body.position.y
-            ctx.worldCamera.update()
+    val deltaPos = vec2()
+    val vel = vec2()
+
+    val drag = 10f
+    val spring = 100f
+
+    val tmp = vec2()
+
+    override fun update(dt: Float) {
+        vel.x -= vel.x * drag * dt + deltaPos.x * spring * dt
+        vel.y -= vel.y * drag * dt + deltaPos.y * spring * dt
+
+        deltaPos.x += vel.x * dt
+        deltaPos.y += vel.y * dt
+
+        tmp.set(worldPosition).add(deltaPos)
+        camera.position.set(tmp)
+        camera.update()
+    }
+
+    fun resize(width: Int, height: Int) {
+        val xScale = worldWidth  / width
+        val yScale = worldHeight  / height
+        if (yScale < xScale) {
+            camera.viewportWidth = width * xScale
+            camera.viewportHeight = height * xScale
+        } else {
+            camera.viewportWidth = width * yScale
+            camera.viewportHeight = height * yScale
         }
+
+        tmp.set(worldPosition).add(deltaPos)
+        camera.position.set(tmp)
+
+        camera.update()
+    }
+
+    fun shake(delta: Vector2) {
+        deltaPos.set(delta)
     }
 }

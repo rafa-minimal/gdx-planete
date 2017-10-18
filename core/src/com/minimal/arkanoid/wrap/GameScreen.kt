@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.minimal.arkanoid.game.ContextImpl
 import com.minimal.arkanoid.game.level.LevelResult
 import com.minimal.planet.justPressed
+import ktx.math.vec2
 
 class GameScreen(var ctx: ContextImpl) : ScreenAdapter() {
 
@@ -29,6 +30,9 @@ class GameScreen(var ctx: ContextImpl) : ScreenAdapter() {
             ctx.worldCamera.zoom /= 2f
             ctx.worldCamera.update()
         }
+        if(Keys.K.justPressed()) {
+            ctx.cameraSystem.shake(vec2(0.5f, 0f))
+        }
         var step = 0f
         if(running || Keys.S.justPressed()) {
             step = delta
@@ -40,21 +44,7 @@ class GameScreen(var ctx: ContextImpl) : ScreenAdapter() {
     }
 
     override fun resize(width: Int, height: Int) {
-        val refworldHeight = ctx.level.height
-        val refworldWidth = ctx.level.width
-        val xScale = refworldWidth  / width
-        val yScale = refworldHeight  / height
-        if (yScale < xScale) {
-            ctx.worldCamera.viewportWidth = width * xScale
-            ctx.worldCamera.viewportHeight = height * xScale
-        } else {
-            ctx.worldCamera.viewportWidth = width * yScale
-            ctx.worldCamera.viewportHeight = height * yScale
-        }
-
-        ctx.worldCamera.position.set(ctx.level.width/2, ctx.level.height/2, 0f)
-
-        ctx.worldCamera.update()
+        ctx.cameraSystem.resize(width, height)
     }
 
     fun result(): LevelResult {

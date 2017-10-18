@@ -29,6 +29,7 @@ interface Context {
     var timeMs: Int
     val atlas: TextureAtlas
     val tailTex: Texture
+    val cameraSystem: CameraSystem
 }
 
 class ContextImpl : Context {
@@ -45,8 +46,12 @@ class ContextImpl : Context {
     override val renderer = ShapeRenderer()
     override val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
     override val tailTex = Texture("tail.png")
+    override val cameraSystem = CameraSystem(worldCamera, level.width, level.height)
+
 
     init {
+        cameraSystem.worldPosition.set(level.width/2, level.height/2)
+
         engine.add(
                 PlayerControlUpdateSystem(this),
                 WorldSystem(this),
@@ -57,7 +62,7 @@ class ContextImpl : Context {
                 LifetimeSystem(engine),
                 //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
-                //CameraSystem(this),
+                cameraSystem,
                 SpriteRenderSystem(this),
                 WorldRenderSystem(this),
                 TailRenderSystem(this),

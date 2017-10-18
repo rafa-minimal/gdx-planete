@@ -8,6 +8,7 @@ import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.level.LevelResult.Complete
 import com.minimal.arkanoid.game.level.LevelResult.None
+import com.minimal.arkanoid.game.script.ShakeScript
 import com.minimal.utils.rnd
 import ktx.box2d.body
 import ktx.box2d.filter
@@ -40,7 +41,7 @@ class Level {
                     }
                 }
             })
-            // shakeScript
+            script(ShakeScript(ctx))
         }
     }
 
