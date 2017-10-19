@@ -3,7 +3,8 @@ package com.minimal.arkanoid.wrap
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
-import com.minimal.arkanoid.game.ContextImpl
+import com.minimal.arkanoid.game.Context
+import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.level.LevelResult.*
 import com.minimal.planet.pressed
 
@@ -48,7 +49,7 @@ open class ArkanoidGame : CompoundScreenGame() {
                 }
                 State.Menu -> {
                     if (menuScreen.isPlay) {
-                        val ctx = ContextImpl()
+                        val ctx = Context(Level())
                         gameScreen = GameScreen(ctx)
                         setScreen(gameScreen!!)
                         state = State.Game

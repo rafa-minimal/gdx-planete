@@ -1,15 +1,15 @@
 package com.minimal.arkanoid.game
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.system.*
@@ -18,42 +18,29 @@ import ktx.math.vec2
 
 typealias MyEngine = Engine<MyEntity>
 
-interface Context {
-    val engine: MyEngine
-    val world: World
-    val level: Level
-    val worldCamera: Camera
-    val batch: SpriteBatch
-    val renderer: ShapeRenderer
-    val debugRenderer: Box2DDebugRenderer
-    var timeMs: Int
-    val atlas: TextureAtlas
-    val tailTex: Texture
-    val cameraSystem: CameraSystem
-}
+class Context(val level: Level) {
+    val engine = MyEngine()
+    val world = World(vec2(0f, -10f), true)
+    var timeMs = 0
 
-class ContextImpl : Context {
-    override var timeMs = 0
+    val batch = SpriteBatch()
+    val debugRenderer = Box2DDebugRenderer()
+    val renderer = ShapeRenderer()
 
-    override val world = World(vec2(0f, -10f), true)
-    override val engine = MyEngine()
-    override val level = Level()
+    val worldCamera = OrthographicCamera()
+    val cameraSystem = CameraSystem(worldCamera, level.width, level.height)
+    val viewport = FitViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+    val stage = Stage(viewport, batch)
 
-    override val worldCamera = OrthographicCamera()
+    val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
+    val tailTex = Texture("tail.png")
 
-    override val batch = SpriteBatch()
-    override val debugRenderer = Box2DDebugRenderer()
-    override val renderer = ShapeRenderer()
-    override val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
-    override val tailTex = Texture("tail.png")
-    override val cameraSystem = CameraSystem(worldCamera, level.width, level.height)
-
+    val playerControl = PlayerControl()
 
     init {
         cameraSystem.worldPosition.set(level.width/2, level.height/2)
 
         engine.add(
-                PlayerControlUpdateSystem(this),
                 WorldSystem(this),
                 EnergySystem(engine),
                 TailSystem(this),
@@ -68,11 +55,11 @@ class ContextImpl : Context {
                 TailRenderSystem(this),
                 RangeDrawSystem(this),
                 DebugRenderSystem(this),
+                HudSystem(this),
                 CleanUpSystem(this),
                 ScriptSystem(this),
                 ParentChildSystem(this),
                 BodyDisposeSystem(engine))
-        //engine.add()
 
         level.start(this)
     }
@@ -82,10 +69,9 @@ class ContextImpl : Context {
     }
 }
 
-fun Float.deg(): Float {
-    return this * 2f * MathUtils.PI / 360f
-}
-
-fun Int.deg(): Float {
-    return this * 2f * MathUtils.PI / 360f
+class PlayerControl {
+    var left: Boolean = false
+    var right: Boolean = false
+    var fire: Boolean = false
+    var fireJustPressed: Boolean = false
 }

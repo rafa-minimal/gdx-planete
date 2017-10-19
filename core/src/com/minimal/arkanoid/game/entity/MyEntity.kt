@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.minimal.arkanoid.game.*
-import com.minimal.fx.SnakeTail
 import com.minimal.arkanoid.game.script.BulletScript
 import com.minimal.arkanoid.game.script.CrashScript
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.ecs.Entity
+import com.minimal.fx.SnakeTail
 
 class MyEntity : Entity() {
     val scripts = mutableListOf<Script>()
@@ -47,8 +47,8 @@ class EntityBuilder() {
     fun cameraMagnet(magnet: Float) {
         e.add(cameraMagnet, magnet)
     }
-    fun player(rangeFixture: Fixture) {
-        e.add(player, Player(rangeFixture))
+    fun player(rangeFixture: Fixture, playerControl: PlayerControl) {
+        e.add(player, Player(rangeFixture, playerControl))
     }
 
     fun script(script: Script) {

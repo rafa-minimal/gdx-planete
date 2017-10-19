@@ -1,6 +1,7 @@
 package com.minimal.planet.desktop
 
-import com.badlogic.gdx.graphics.Texture.TextureFilter.*
+import com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
+import com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearNearest
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import java.io.File
 
@@ -22,6 +23,8 @@ fun texturePacker(args: Array<String>) {
         // textured and uses the GL_LINEAR criterion (a weighted average of the four texture elements that are closest
         // to the center of the pixel) to produce a texture value.
         settings.filterMin = MipMapLinearNearest
+        settings.paddingX = 4
+        settings.paddingY = 4
         TexturePacker.process(settings, "../../images", "./", "atlas")
     } else {
         println("Tekstury są starsze od atlasu, pomijam")

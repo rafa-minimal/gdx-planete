@@ -1,6 +1,5 @@
 package com.minimal.arkanoid.game
 
-import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
@@ -21,18 +20,11 @@ import kotlin.experimental.xor
 val MAX_FORCE = 80f
 
 class Player(val rangeFixture: Fixture,
-             val leftKey: Int = Keys.LEFT,
-             val rightKey: Int = Keys.RIGHT,
-             val fireKey: Int = Keys.A) {
+             val input: PlayerControl) {
     val entsInRange = ArrayList<MyEntity>()
     var fireHold = false
     var joint: DistanceJoint? = null
     var ball: MyEntity? = null
-
-    var fire: Boolean = false
-    var fireJustPressed: Boolean = false
-    var left: Boolean = false
-    var right: Boolean = false
 }
 
 object PlayerRangeScript : Script {
@@ -64,7 +56,7 @@ class PlayerSystem(val ctx: Context) : System {
     override fun update(timeStepSec: Float) {
         family.foreach {
             e, player, b ->
-            if (player.fireJustPressed and player.entsInRange.isNotEmpty()) {
+            if (player.input.fireJustPressed and player.entsInRange.isNotEmpty()) {
                 var other = player.entsInRange.find { ent -> ent.contains(ball) }
                 if (other == null) {
                     other = player.entsInRange[0]
@@ -84,7 +76,7 @@ class PlayerSystem(val ctx: Context) : System {
                 }
                 player.fireHold = true
             }
-            if (player.fireHold and !player.fire) {
+            if (player.fireHold and !player.input.fire) {
                 ctx.world.destroyJoint(player.joint)
                 player.joint = null
                 player.ball = null
@@ -99,8 +91,8 @@ class PlayerSystem(val ctx: Context) : System {
             }
 
             val v = when {
-                player.left -> -vmax
-                player.right -> vmax
+                player.input.left -> -vmax
+                player.input.right -> vmax
                 else -> 0f
             }
             val f = (v - b.linearVelocity.x) * pidProportional * b.mass
@@ -138,7 +130,7 @@ fun createPlayer(ctx: Context, width: Float, height: Float, baseBody: Body) {
 
     val player = ctx.engine.entity {
         body(body)
-        player(rangeFixture)
+        player(rangeFixture, ctx.playerControl)
         texture(ctx.atlas.findRegion("circle2"), 1f, 1f)
         script(PlayerRangeScript)
         script(PowerUpCollector(ctx))

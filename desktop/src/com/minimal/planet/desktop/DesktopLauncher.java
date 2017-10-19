@@ -11,6 +11,8 @@ public class DesktopLauncher {
 		texturePacker(arg);
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.width = 480;
+		config.height = 640;
 //		new LwjglApplication(new Planet(), config);
 //		new LwjglApplication(new ArkanoidGame(), config);
 		new LwjglApplication(new ArkanoidDebugGame(), config);
