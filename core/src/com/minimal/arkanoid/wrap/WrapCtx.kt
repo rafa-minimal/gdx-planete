@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 
 object WrapCtx {
@@ -51,6 +54,15 @@ object WrapCtx {
         skin.add("small-font", font)
         skin.add("default-font", bigFont)
         skin.load(Gdx.files.internal("skin.json"))
+
+        addDrawables()
+    }
+
+    private fun addDrawables() {
+        skin.add("right", skin.newDrawable("play"), Drawable::class.java)
+        val left = TextureRegion(skin.getRegion("play"))
+        left.flip(true, false)
+        skin.add("left", TextureRegionDrawable(left), Drawable::class.java)
     }
 
     /*private fun loadAtlas(dir: String) {
