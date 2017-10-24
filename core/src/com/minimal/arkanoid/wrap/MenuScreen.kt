@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.minimal.gdx.alphaButton
 import com.minimal.planet.justPressed
 
 class MenuScreen : Screen {
@@ -16,19 +14,27 @@ class MenuScreen : Screen {
 
     var isPlay = false
 
-    init {
+    val rootTable: Table
 
-        val rootTable = Table(WrapCtx.skin)
+    init {
+        val unit = Gdx.graphics.height/8f
+        val skin = WrapCtx.skin
+
+        rootTable = Table(skin)
+        rootTable.pad(10f)
         rootTable.setFillParent(true)
-        rootTable.add("Arkanoid", "default").prefHeight(50f).row()
-        rootTable.add("by minimal", "small").row()
-        val rightButton = Button(WrapCtx.skin, "button-right")
-        rightButton.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                isPlay = true
-            }
-        })
-        rootTable.add(rightButton)
+
+        rootTable.add("Arkanoid", "default").prefHeight(unit).colspan(3).row()
+        rootTable.add("by minimal", "small").prefHeight(unit/2).colspan(3).row()
+
+        val playButton = alphaButton(skin, "play") { isPlay = true }
+        rootTable.add(playButton).expand().colspan(3).row()
+
+        val starButton = alphaButton(skin, "star") { println("rate") }
+        val infoButton = alphaButton(skin, "info") { println("info") }
+        rootTable.add(starButton).size(unit)
+        rootTable.add().expandX()
+        rootTable.add(infoButton).size(unit).row()
 
         stage.addActor(rootTable)
     }
@@ -39,9 +45,13 @@ class MenuScreen : Screen {
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(delta);
-        stage.draw();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        stage.act(delta)
+        stage.draw()
+
+        if (Keys.NUM_1.justPressed()) {
+            rootTable.setDebug(!rootTable.debug, false)
+        }
 
         if (Keys.ENTER.justPressed()) {
             isPlay = true
