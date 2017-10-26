@@ -1,5 +1,6 @@
 package com.minimal.arkanoid.game.level
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
@@ -24,9 +25,38 @@ enum class LevelResult {
 fun loadLevel(level: String): Level {
     when (level) {
         "random" -> return Level(randomMap())
-
-        else -> return Level(randomMap())
+        else -> return Level(loadMap("level/" + level + ".txt"))
     }
+}
+
+fun loadMap(file: String): LevelMap {
+    val reader = Gdx.files.internal(file).reader(1024)
+    val lines = ArrayList<String>()
+
+    var line: String? = reader.readLine()
+    while(line != null) {
+        if(line.startsWith("------")) {
+            break
+        }
+        lines += line
+        line = reader.readLine()
+    }
+    // read any other config
+    reader.close()
+    val width = lines.map {li -> li.length}.max()
+    val height = lines.size
+
+    val map = LevelMap(width!! / 2, (height * 2 / 3))
+
+    for (x in 0 until map.w) {
+        print("|")
+        for (y in 0 until map.h) {
+            map[x,y] = lines[y].get(x)
+            print(map[x,y])
+        }
+        println("|")
+    }
+    return map
 }
 
 fun randomMap(): LevelMap {

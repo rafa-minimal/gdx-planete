@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color
 class ArkanoidDebugGame : ArkanoidGame() {
     override fun create() {
         super.create()
-        gameScreen = GameScreen("random")
+        gameScreen = GameScreen("1")
         setScreen(gameScreen!!)
         state = State.Game
     }
