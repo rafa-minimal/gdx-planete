@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.system.*
@@ -29,15 +27,13 @@ class Context(val level: Level) {
 
     val worldCamera = OrthographicCamera()
     val cameraSystem = CameraSystem(worldCamera, level.width, level.height)
-    val viewport = FitViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-    val stage = Stage(viewport, batch)
 
     val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
     val tailTex = Texture("tail.png")
 
     val playerControl = PlayerControl()
 
-    init {
+    fun start() {
         cameraSystem.worldPosition.set(level.width/2, level.height/2)
 
         engine.add(
@@ -55,7 +51,6 @@ class Context(val level: Level) {
                 TailRenderSystem(this),
                 RangeDrawSystem(this),
                 DebugRenderSystem(this),
-                HudSystem(this),
                 CleanUpSystem(this),
                 ScriptSystem(this),
                 ParentChildSystem(this),

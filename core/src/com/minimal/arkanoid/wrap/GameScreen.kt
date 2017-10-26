@@ -6,28 +6,35 @@ import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
-import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.level.LevelResult
+import com.minimal.arkanoid.game.level.loadLevel
 import com.minimal.gdx.render
 import com.minimal.planet.justPressed
 import ktx.math.vec2
 
-class GameScreen(var ctx: Context) : ScreenAdapter() {
-
+class GameScreen(val level: String) : ScreenAdapter() {
     private var running = true
     val bg = Texture("bg2.png")
+    val viewport = FitViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+    var ctx = Context(loadLevel(level))
+    val stage = Stage(viewport, ctx.batch)
 
     lateinit var hud: ControlsHud
 
     override fun show() {
-        hud = ControlsHud(ctx, ctx.playerControl)
-        WrapCtx.mux.addProcessor(ctx.stage)
+        ctx.start()
+        ctx.cameraSystem.resize(Gdx.graphics.width, Gdx.graphics.height)
+        hud = ControlsHud(stage, ctx.playerControl)
+        WrapCtx.mux.addProcessor(stage)
     }
 
     override fun hide() {
-        WrapCtx.mux.removeProcessor(ctx.stage)
+        WrapCtx.mux.removeProcessor(stage)
+        ctx.dispose()
     }
 
     override fun render(delta: Float) {
@@ -41,8 +48,9 @@ class GameScreen(var ctx: Context) : ScreenAdapter() {
         }
 
         if(Keys.R.justPressed()) {
-            ctx.dispose()
-            ctx = Context(Level())
+            hide()
+            ctx = Context(loadLevel(level))
+            show()
             resize(Gdx.graphics.width, Gdx.graphics.height)
         }
         if(Keys.P.justPressed()) {
@@ -64,11 +72,13 @@ class GameScreen(var ctx: Context) : ScreenAdapter() {
             running = !running
         }
         ctx.engine.update(step)
+        stage.act(delta)
+        stage.draw()
     }
 
     override fun resize(width: Int, height: Int) {
         ctx.cameraSystem.resize(width, height)
-        ctx.viewport.setWorldSize(width.toFloat(), height.toFloat())
+        viewport.setWorldSize(width.toFloat(), height.toFloat())
     }
 
     fun result(): LevelResult {

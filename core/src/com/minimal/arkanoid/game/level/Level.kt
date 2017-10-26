@@ -14,18 +14,52 @@ import ktx.box2d.body
 import ktx.box2d.filter
 import ktx.math.vec2
 
-class Level {
+enum class LevelResult {
+    Failed,
+    TimesUp,
+    Complete,
+    None
+}
+
+fun loadLevel(level: String): Level {
+    when (level) {
+        "random" -> return Level(randomMap())
+
+        else -> return Level(randomMap())
+    }
+}
+
+fun randomMap(): LevelMap {
+    // najbardziej popularne aspect ratio dla androida, see: https://hwstats.unity3d.com/mobile/display-android.html
+    // - 16:9       74%
+    // - 5:3 (15:9) 22,2%
+    // świat odpowiadający aspect ratio 16:9 -> 32:18
+    val width = 18f + rnd(0, 18)
+    val height = 32f + rnd(0, 32)
+
+    val map = LevelMap(width.toInt() / 2, (height.toInt() * 2 / 3))
+
+    // generate level
+    repeat(10) {
+        val x = rnd(0, map.w - 1)
+        val y = rnd(0, map.h - 1)
+
+        when(rnd(1, 3)) {
+            1 -> map[x, y] = '#'
+            2 -> map[x, y] = '='
+            3 -> map[x, y] = 'V'
+        }
+
+    }
+    return map
+}
+
+open class Level(val map: LevelMap) {
     lateinit var ctx : Context
     lateinit var baseBody: Body
 
-    // najbardziej popularne aspect ratio dla androida, see: https://hwstats.unity3d.com/mobile/display-android.html
-    // - 16:9 74%
-    // - 5:3 (15:9) 22,2%
-    // zrobimy świat odpowiadający aspect ratio 16:9
-    val width = 18f
-    val height = 32f
-
-    val map = LevelMap(width.toInt() / 2, (height.toInt() * 2 / 3))
+    val width = map.w * 2f
+    val height = map.h * 3f/2f
 
     fun edge(from: Vector2, to: Vector2): MyEntity {
         val center = Vector2(to).add(from).scl(0.5f)
@@ -45,7 +79,7 @@ class Level {
         }
     }
 
-    fun start(ctx: Context) {
+    open fun start(ctx: Context) {
         this.ctx = ctx
 
         val baseBodyEnt = ctx.engine.entity {
@@ -63,19 +97,6 @@ class Level {
         left.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(-width/2, 0f)))
         right.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(width/2, 0f)))
         top.add(texture, Texture(ctx.atlas.findRegion("box"), 3 * width, 10f, vec2(0f, 5f)))
-
-        // generate level
-        repeat(10) {
-            val x = rnd(0, map.w - 1)
-            val y = rnd(0, map.h - 1)
-
-            when(rnd(1, 3)) {
-                1 -> map[x, y] = '#'
-                2 -> map[x, y] = '='
-                3 -> map[x, y] = 'V'
-            }
-
-        }
 
         // create boxes
         for (x in 0 until map.w) {
@@ -98,8 +119,6 @@ class Level {
         createBall(ctx)
     }
 
-
-
     fun result(): LevelResult {
         var count = 0
         ctx.engine.family(box).foreach { entity, box -> count++ }
@@ -110,10 +129,5 @@ class Level {
     }
 }
 
-enum class LevelResult {
-    Failed,
-    TimesUp,
-    Complete,
-    None
-}
+
 

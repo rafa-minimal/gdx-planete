@@ -2,13 +2,11 @@ package com.minimal.arkanoid.wrap
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.minimal.arkanoid.game.Context
-import com.minimal.arkanoid.game.level.Level
 
 class ArkanoidDebugGame : ArkanoidGame() {
     override fun create() {
         super.create()
-        gameScreen = GameScreen(Context(Level()))
+        gameScreen = GameScreen("random")
         setScreen(gameScreen!!)
         state = State.Game
     }
