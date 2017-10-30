@@ -12,8 +12,8 @@ import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
 import com.minimal.arkanoid.game.level.LevelResult
 import com.minimal.arkanoid.game.level.loadLevel
+import com.minimal.gdx.justPressed
 import com.minimal.gdx.render
-import com.minimal.planet.justPressed
 import ktx.math.vec2
 
 class GameScreen(val level: String) : ScreenAdapter() {

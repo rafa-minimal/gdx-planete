@@ -1,4 +1,4 @@
-package com.minimal.planet
+package com.minimal.gdx
 
 import com.badlogic.gdx.Gdx
 

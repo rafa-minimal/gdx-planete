@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
 import com.minimal.arkanoid.game.level.LevelResult.*
-import com.minimal.planet.pressed
+import com.minimal.gdx.pressed
 
 open class ArkanoidGame : CompoundScreenGame() {
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.minimal.gdx.alphaButton
-import com.minimal.planet.justPressed
+import com.minimal.gdx.justPressed
 
 class MenuScreen : Screen {
     private val stage: Stage = Stage(WrapCtx.viewport, WrapCtx.batch)

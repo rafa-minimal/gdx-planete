@@ -31,7 +31,7 @@ fun loadLevel(level: String): Level {
 
 fun loadMap(file: String): LevelMap {
     val reader = Gdx.files.internal(file).reader(1024)
-    val lines = ArrayList<String>()
+    var lines: List<String> = ArrayList<String>()
 
     var line: String? = reader.readLine()
     while(line != null) {
@@ -43,6 +43,7 @@ fun loadMap(file: String): LevelMap {
     }
     // read any other config
     reader.close()
+    //lines = lines.reversed()
     val width = lines.map {li -> li.length}.max()
     val height = lines.size
 

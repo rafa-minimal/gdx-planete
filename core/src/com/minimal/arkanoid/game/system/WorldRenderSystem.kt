@@ -1,9 +1,9 @@
 package com.minimal.arkanoid.game.system
 
 import com.badlogic.gdx.Input.Keys
-import com.minimal.ecs.System
 import com.minimal.arkanoid.game.Context
-import com.minimal.planet.justPressed
+import com.minimal.ecs.System
+import com.minimal.gdx.justPressed
 import com.minimal.utils.BoxPainter
 
 class WorldRenderSystem(val ctx: Context) : System {

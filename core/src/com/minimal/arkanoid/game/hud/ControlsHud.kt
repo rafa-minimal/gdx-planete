@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.minimal.arkanoid.game.PlayerControl
 import com.minimal.arkanoid.wrap.WrapCtx
 import com.minimal.gdx.alphaButton
-import com.minimal.planet.pressed
+import com.minimal.gdx.pressed
 
 
 class ControlsHud(val stage: Stage, val player: PlayerControl) {
