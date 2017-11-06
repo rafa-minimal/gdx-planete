@@ -7,8 +7,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
-import com.minimal.arkanoid.game.level.LevelResult.Complete
-import com.minimal.arkanoid.game.level.LevelResult.None
+import com.minimal.arkanoid.game.level.LevelResult.*
 import com.minimal.arkanoid.game.script.ShakeScript
 import com.minimal.utils.rnd
 import ktx.box2d.body
@@ -112,6 +111,7 @@ open class Level(val map: LevelMap) {
 
     open fun start(ctx: Context) {
         this.ctx = ctx
+        ctx.balls = 2
 
         val baseBodyEnt = ctx.engine.entity {
             body(ctx.world.body(StaticBody) {})
@@ -155,6 +155,11 @@ open class Level(val map: LevelMap) {
         ctx.engine.family(box).foreach { entity, box -> count++ }
         if (count == 0) {
             return Complete
+        }
+        var ballCount = 0
+        ctx.engine.family(ball).foreach { entity, ball -> ballCount++ }
+        if (ctx.balls == 0 && ballCount == 0) {
+            return Failed
         }
         return None
     }

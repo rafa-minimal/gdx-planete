@@ -49,7 +49,10 @@ object BallSpeedLimit : Script {
 
 class RespawnScript(val ctx: Context) : Script {
     override fun beforeDestroy(me: MyEntity) {
-        createBall(ctx)
+        if (ctx.balls > 0) {
+            createBall(ctx)
+            ctx.balls--
+        }
     }
 }
 

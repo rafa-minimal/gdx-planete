@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
+import com.minimal.arkanoid.game.hud.GameHud
 import com.minimal.arkanoid.game.level.LevelResult
 import com.minimal.arkanoid.game.level.loadLevel
 import com.minimal.gdx.glClear
@@ -22,12 +23,14 @@ class GameScreen(val level: String) : ScreenAdapter() {
     var ctx = Context(loadLevel(level))
     val stage = Stage(viewport, ctx.batch)
 
-    lateinit var hud: ControlsHud
+    lateinit var controlsHud: ControlsHud
+    lateinit var gameHud: GameHud
 
     override fun show() {
         ctx.start()
         ctx.cameraSystem.resize(Gdx.graphics.width, Gdx.graphics.height)
-        hud = ControlsHud(stage, ctx.playerControl)
+        controlsHud = ControlsHud(stage, ctx.playerControl)
+        gameHud = GameHud(stage, ctx)
         WrapCtx.mux.addProcessor(stage)
     }
 
@@ -40,7 +43,8 @@ class GameScreen(val level: String) : ScreenAdapter() {
         //glClear(WrapCtx.tuning.getColorHex("bg.color", Color.BLACK))
         glClear(Params.color_bg)
 
-        hud.update()
+        controlsHud.update()
+        gameHud.update()
 
         /*ctx.batch.render(WrapCtx.camera, Color.WHITE) {
             ctx.batch.draw(bg, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())

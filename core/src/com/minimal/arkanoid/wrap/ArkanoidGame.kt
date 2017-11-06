@@ -63,6 +63,10 @@ open class ArkanoidGame : CompoundScreenGame() {
                             state = State.Menu
                             setScreen(menuScreen)
                         }
+                        Failed -> {
+                            state = State.Menu
+                            setScreen(menuScreen)
+                        }
                     }
                 }
             }

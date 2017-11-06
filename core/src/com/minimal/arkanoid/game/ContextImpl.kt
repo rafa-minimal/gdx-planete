@@ -32,6 +32,7 @@ class Context(val level: Level) {
     val tailTex = Texture("tail.png")
 
     val playerControl = PlayerControl()
+    var balls: Int = 0
 
     fun start() {
         cameraSystem.worldPosition.set(level.width/2, level.height/2)
