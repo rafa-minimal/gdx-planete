@@ -3,10 +3,10 @@ package com.minimal.arkanoid.wrap
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.ScreenAdapter
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
 import com.minimal.arkanoid.game.level.LevelResult
@@ -37,7 +37,8 @@ class GameScreen(val level: String) : ScreenAdapter() {
     }
 
     override fun render(delta: Float) {
-        glClear(WrapCtx.tuning.getColorHex("bg.color", Color.BLACK))
+        //glClear(WrapCtx.tuning.getColorHex("bg.color", Color.BLACK))
+        glClear(Params.color_bg)
 
         hud.update()
 

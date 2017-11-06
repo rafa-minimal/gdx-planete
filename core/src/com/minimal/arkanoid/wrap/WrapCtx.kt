@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.minimal.arkanoid.Tuning
 
 object WrapCtx {
     val batch = SpriteBatch()
@@ -25,8 +24,6 @@ object WrapCtx {
     var bigFont: BitmapFont
     val atlas: TextureAtlas
     val skin: Skin
-
-    val tuning = Tuning("tuning.properties")
 
     init {
         // On some devices it might start in portrait mode and then quickly rotate to landscape

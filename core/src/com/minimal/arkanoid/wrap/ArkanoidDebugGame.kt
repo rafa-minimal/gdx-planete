@@ -2,6 +2,7 @@ package com.minimal.arkanoid.wrap
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.minimal.arkanoid.debug.ParamsReloader
 
 class ArkanoidDebugGame : ArkanoidGame() {
     override fun create() {
@@ -9,6 +10,8 @@ class ArkanoidDebugGame : ArkanoidGame() {
         gameScreen = GameScreen("1")
         setScreen(gameScreen!!)
         state = State.Game
+
+        ParamsReloader("params.properties")
     }
 
     override fun render() {
