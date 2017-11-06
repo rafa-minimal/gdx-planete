@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
@@ -12,8 +11,8 @@ import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
 import com.minimal.arkanoid.game.level.LevelResult
 import com.minimal.arkanoid.game.level.loadLevel
+import com.minimal.gdx.glClear
 import com.minimal.gdx.justPressed
-import com.minimal.gdx.render
 import ktx.math.vec2
 
 class GameScreen(val level: String) : ScreenAdapter() {
@@ -38,14 +37,13 @@ class GameScreen(val level: String) : ScreenAdapter() {
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        glClear(WrapCtx.tuning.getColorHex("bg.color", Color.BLACK))
 
         hud.update()
 
-        ctx.batch.render(WrapCtx.camera, Color.WHITE) {
+        /*ctx.batch.render(WrapCtx.camera, Color.WHITE) {
             ctx.batch.draw(bg, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-        }
+        }*/
 
         if(Keys.R.justPressed()) {
             hide()
