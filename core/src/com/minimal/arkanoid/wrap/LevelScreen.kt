@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
 import com.minimal.gdx.alphaButton
 import com.minimal.gdx.justPressed
 
@@ -28,11 +29,21 @@ class LevelScreen : Screen {
         rootTable.pad(10f)
         rootTable.setFillParent(true)
 
-        rootTable.add("Arkanoid", "default").prefHeight(unit).colspan(3).row()
-        rootTable.add("by minimal", "small").prefHeight(unit/2).colspan(3).row()
+        rootTable.add("Arkanoid", "default").prefHeight(unit).row()
+        rootTable.add("by minimal", "small").prefHeight(unit/2).row()
 
-        val playButton = alphaButton(skin, "play") { isPlay = true }
-        rootTable.add(playButton).expand().colspan(3).row()
+        rootTable.add().expand().row()
+
+        val play = alphaButton(skin, "play") { isPlay = true }
+        val left = alphaButton(skin, "left") { levelPreview.setLevel("random") }
+        val right = alphaButton(skin, "right") { levelPreview.setLevel("random") }
+
+        val bottom = Table()
+        bottom.align(Align.bottom)
+        bottom.add(left).size(unit)
+        bottom.add(play).size(2*unit).expandX()
+        bottom.add(right).size(unit)
+        rootTable.add(bottom).fillX().row()
 
         stage.addActor(rootTable)
     }
@@ -51,8 +62,11 @@ class LevelScreen : Screen {
         stage.act(delta)
         stage.draw()
 
-        if (Keys.NUM_1.justPressed()) {
-            rootTable.setDebug(!rootTable.debug, false)
+        if (Keys.LEFT.justPressed()) {
+            levelPreview.setLevel("random")
+        }
+        if (Keys.RIGHT.justPressed()) {
+            levelPreview.setLevel("random")
         }
 
         if (Keys.ENTER.justPressed()) {

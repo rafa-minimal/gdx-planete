@@ -13,13 +13,14 @@ class LevelPreview(level: String) {
     val stage: Stage = Stage(viewport, WrapCtx.batch)
     val boxDrawable = WrapCtx.skin.getDrawable("box")
 
-    val levelMap = loadLevelMap(level)
+    var levelMap = loadLevelMap(level)
 
     init {
         initView(levelMap)
     }
 
     fun initView(map: LevelMap) {
+        stage.clear()
 
         val width = map.w * 2f
         val height = map.h * 3f/2f
@@ -33,6 +34,11 @@ class LevelPreview(level: String) {
         }
 
         camera.setSize(width*2, height*2)
+    }
+
+    fun setLevel(level: String) {
+        levelMap = loadLevelMap(level)
+        initView(levelMap)
     }
 
     fun draw() {
