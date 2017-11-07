@@ -21,12 +21,14 @@ enum class LevelResult {
     None
 }
 
-fun loadLevel(level: String): Level {
+fun loadLevelMap(level: String): LevelMap {
     when (level) {
-        "random" -> return Level(randomMap())
-        else -> return Level(loadMap("level/" + level + ".txt"))
+        "random" -> return randomMap()
+        else -> return loadMap("level/" + level + ".txt")
     }
 }
+
+fun loadLevel(level: String) = Level(loadLevelMap(level))
 
 fun loadMap(file: String): LevelMap {
     val reader = Gdx.files.internal(file).reader(1024)

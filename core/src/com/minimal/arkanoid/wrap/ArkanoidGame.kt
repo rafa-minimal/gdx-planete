@@ -11,6 +11,7 @@ open class ArkanoidGame : CompoundScreenGame() {
     enum class State {
         WelcomeScreen,
         Menu,
+        LevelScreen,
         Game
     }
 
@@ -18,6 +19,7 @@ open class ArkanoidGame : CompoundScreenGame() {
 
     lateinit var welcomeScreen: Screen
     lateinit var menuScreen: MenuScreen
+    lateinit var levelScreen: LevelScreen
     var gameScreen: GameScreen? = null
 
     override fun create() {
@@ -25,6 +27,7 @@ open class ArkanoidGame : CompoundScreenGame() {
 
         welcomeScreen = MinimalScreen()
         menuScreen = MenuScreen()
+        levelScreen = LevelScreen()
 
         setScreen(welcomeScreen)
     }
@@ -47,6 +50,13 @@ open class ArkanoidGame : CompoundScreenGame() {
                 }
                 State.Menu -> {
                     if (menuScreen.isPlay) {
+                        setScreen(levelScreen)
+                        state = State.LevelScreen
+                    }
+                }
+                State.LevelScreen -> {
+                    if (levelScreen.isPlay) {
+                        //gameScreen = GameScreen(levelScreen.getLevel())
                         gameScreen = GameScreen("random")
                         setScreen(gameScreen!!)
                         state = State.Game

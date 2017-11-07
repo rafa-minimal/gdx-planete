@@ -7,9 +7,13 @@ import com.minimal.arkanoid.debug.ParamsReloader
 class ArkanoidDebugGame : ArkanoidGame() {
     override fun create() {
         super.create()
-        gameScreen = GameScreen("1")
+        /*gameScreen = GameScreen("1")
         setScreen(gameScreen!!)
-        state = State.Game
+        state = State.Game*/
+
+
+        setScreen(levelScreen)
+        state = State.LevelScreen
 
         ParamsReloader("params.properties")
     }

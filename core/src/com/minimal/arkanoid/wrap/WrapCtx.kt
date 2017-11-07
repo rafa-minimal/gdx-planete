@@ -81,4 +81,8 @@ object WrapCtx {
         atlas.dispose()
         skin.dispose()
     }
+
+    fun resize(w: Float, h: Float) {
+        viewport.setWorldSize(w, h)
+    }
 }
