@@ -24,7 +24,14 @@ enum class LevelResult {
 fun loadLevelMap(level: String): LevelMap {
     when (level) {
         "random" -> return randomMap()
-        else -> return loadMap("level/" + level + ".txt")
+        else -> {
+            val file = "level/" + level + ".txt"
+            if (Gdx.files.internal(file).exists()) {
+                return loadMap(file)
+            } else {
+                return randomMap()
+            }
+        }
     }
 }
 
@@ -35,8 +42,8 @@ fun loadMap(file: String): LevelMap {
     var lines: List<String> = ArrayList<String>()
 
     var line: String? = reader.readLine()
-    while(line != null) {
-        if(line.startsWith("------")) {
+    while (line != null) {
+        if (line.startsWith("--")) {
             break
         }
         lines += line
@@ -44,17 +51,17 @@ fun loadMap(file: String): LevelMap {
     }
     // read any other config
     reader.close()
-    //lines = lines.reversed()
-    val width = lines.map {li -> li.length}.max()
+    lines = lines.map { it.trimEnd() }.reversed()
+    val width = lines.map { li -> li.length }.max()
     val height = lines.size
 
-    val map = LevelMap(width!! / 2, (height * 2 / 3))
+    val map = LevelMap(width!!, height)
 
-    for (x in 0 until map.w) {
+    for (y in 0 until map.h) {
         print("|")
-        for (y in 0 until map.h) {
-            map[x,y] = lines[y].get(x)
-            print(map[x,y])
+        for (x in 0 until map.w) {
+            map[x, y] = lines[y].get(x)
+            print(map[x, y])
         }
         println("|")
     }
@@ -69,29 +76,28 @@ fun randomMap(): LevelMap {
     val width = 18f + rnd(0, 18)
     val height = 32f + rnd(0, 32)
 
-    val map = LevelMap(width.toInt() / 2, (height.toInt() * 2 / 3))
+    val map = LevelMap(width.toInt() / 2, height.toInt())
 
     // generate level
     repeat(10) {
         val x = rnd(0, map.w - 1)
-        val y = rnd(0, map.h - 1)
+        val y = map.h / 3 + rnd(0, (map.h * 2 / 3) - 1)
 
-        when(rnd(1, 3)) {
+        when (rnd(1, 3)) {
             1 -> map[x, y] = '#'
             2 -> map[x, y] = '='
             3 -> map[x, y] = 'V'
         }
-
     }
     return map
 }
 
 open class Level(val map: LevelMap) {
-    lateinit var ctx : Context
+    lateinit var ctx: Context
     lateinit var baseBody: Body
 
     val width = map.w * 2f
-    val height = map.h * 3f/2f
+    val height = map.h * 3f / 2f
 
     fun edge(from: Vector2, to: Vector2): MyEntity {
         val center = Vector2(to).add(from).scl(0.5f)
@@ -127,26 +133,26 @@ open class Level(val map: LevelMap) {
         /*left.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))
         right.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))
         top.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))*/
-        left.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(-width/2, 0f)))
-        right.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(width/2, 0f)))
+        left.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(-width / 2, 0f)))
+        right.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(width / 2, 0f)))
         top.add(texture, Texture(ctx.atlas.findRegion("box"), 3 * width, 10f, vec2(0f, 5f)))
 
         // create boxes
-        for (x in 0 until map.w) {
+        for (y in 0 until map.h) {
             print("|")
-            for (y in 0 until map.h) {
-                print(map[x,y])
-                when(map[x,y]) {
-                    '#' -> boxOneShot(ctx, x*2 + 1f, height / 3 + y + 0.5f)
-                    '=' -> boxNaZawiasach(ctx, x*2 + 1f, height / 3 + y + 0.5f, baseBody)
-                    'V' -> boxDiament(ctx, x*2 + 1f, height / 3 + y + 0.5f)
+            for (x in 0 until map.w) {
+                print(map[x, y])
+                when (map[x, y]) {
+                    '#' -> boxOneShot(ctx, x * 2 + 1f, y + 0.5f)
+                    '=' -> boxNaZawiasach(ctx, x * 2 + 1f, y + 0.5f, baseBody)
+                    'V' -> boxDiament(ctx, x * 2 + 1f, y + 0.5f)
                 }
             }
             println("|")
         }
 
         // create player
-        createPlayer(ctx, width, height, baseBody)
+        createPlayer(ctx, width, 5f, baseBody)
 
         // ball
         createBall(ctx)

@@ -16,5 +16,6 @@ public class DesktopLauncher {
 //		new LwjglApplication(new Planet(), config);
 //		new LwjglApplication(new ArkanoidGame(), config);
 		new LwjglApplication(new ArkanoidDebugGame(), config);
+		new ParamsReloader("params.properties");
 	}
 }

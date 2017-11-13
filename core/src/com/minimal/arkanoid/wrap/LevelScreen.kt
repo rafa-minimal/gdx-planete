@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.minimal.gdx.alphaButton
@@ -17,9 +18,10 @@ class LevelScreen : Screen {
 
     val rootTable: Table
 
-    var currentLevel = "random"
+    var currentLevel = 1
 
-    val levelPreview = LevelPreview(currentLevel)
+    val levelPreview = LevelPreview(currentLevel.toString())
+    val levelLabel = Label("Level ", WrapCtx.skin)
 
     init {
         val unit = Gdx.graphics.height/8f
@@ -32,11 +34,12 @@ class LevelScreen : Screen {
         rootTable.add("Arkanoid", "default").prefHeight(unit).row()
         rootTable.add("by minimal", "small").prefHeight(unit/2).row()
 
-        rootTable.add().expand().row()
+
+        rootTable.add(levelLabel).expand().row()
 
         val play = alphaButton(skin, "play") { isPlay = true }
-        val left = alphaButton(skin, "left") { levelPreview.setLevel("random") }
-        val right = alphaButton(skin, "right") { levelPreview.setLevel("random") }
+        val left = alphaButton(skin, "left") { prevLevel() }
+        val right = alphaButton(skin, "right") { nextLevel() }
 
         val bottom = Table()
         bottom.align(Align.bottom)
@@ -46,6 +49,18 @@ class LevelScreen : Screen {
         rootTable.add(bottom).fillX().row()
 
         stage.addActor(rootTable)
+    }
+
+    private fun nextLevel() {
+        currentLevel++
+        levelLabel.setText("Level " + currentLevel.toString())
+        levelPreview.setLevel(currentLevel.toString())
+    }
+
+    private fun prevLevel() {
+        currentLevel = Math.max(1, currentLevel - 1)
+        levelLabel.setText("Level " + currentLevel.toString())
+        levelPreview.setLevel(currentLevel.toString())
     }
 
     override fun show() {
@@ -63,10 +78,10 @@ class LevelScreen : Screen {
         stage.draw()
 
         if (Keys.LEFT.justPressed()) {
-            levelPreview.setLevel("random")
+            prevLevel()
         }
         if (Keys.RIGHT.justPressed()) {
-            levelPreview.setLevel("random")
+            nextLevel()
         }
 
         if (Keys.ENTER.justPressed()) {

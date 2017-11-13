@@ -1,4 +1,4 @@
-package com.minimal.arkanoid.debug
+package com.minimal.planet.desktop
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color

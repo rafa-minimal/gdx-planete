@@ -102,8 +102,8 @@ class PlayerSystem(val ctx: Context) : System {
     }
 }
 
-fun createPlayer(ctx: Context, width: Float, height: Float, baseBody: Body) {
-    val pos = vec2(width / 2, height / 6)
+fun createPlayer(ctx: Context, width: Float, playerHeight: Float, baseBody: Body) {
+    val pos = vec2(width / 2, playerHeight / 6)
     val playerRadius = 0.5f
     val playerRange = 3f
 

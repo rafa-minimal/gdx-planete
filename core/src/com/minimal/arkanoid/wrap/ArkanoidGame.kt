@@ -57,7 +57,7 @@ open class ArkanoidGame : CompoundScreenGame() {
                 State.LevelScreen -> {
                     if (levelScreen.isPlay) {
                         //gameScreen = GameScreen(levelScreen.getLevel())
-                        gameScreen = GameScreen("random")
+                        gameScreen = GameScreen(levelScreen.currentLevel.toString())
                         setScreen(gameScreen!!)
                         state = State.Game
                     }
