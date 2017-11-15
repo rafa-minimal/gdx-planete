@@ -4,15 +4,20 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
+import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.level.LevelResult.*
 import com.minimal.arkanoid.game.script.ShakeScript
+import com.minimal.utils.getInt
 import com.minimal.utils.rnd
 import ktx.box2d.body
 import ktx.box2d.filter
 import ktx.math.vec2
+import java.lang.Math.abs
+import java.lang.Math.max
+import java.util.*
 
 enum class LevelResult {
     Failed,
@@ -21,13 +26,14 @@ enum class LevelResult {
     None
 }
 
+fun levelFile(levelNumber: String) = "level/" + levelNumber + ".txt"
+
 fun loadLevelMap(level: String): LevelMap {
     when (level) {
         "random" -> return randomMap()
         else -> {
-            val file = "level/" + level + ".txt"
-            if (Gdx.files.internal(file).exists()) {
-                return loadMap(file)
+            if (Gdx.files.internal(levelFile(level)).exists()) {
+                return loadLevel(level).map
             } else {
                 return randomMap()
             }
@@ -35,10 +41,8 @@ fun loadLevelMap(level: String): LevelMap {
     }
 }
 
-fun loadLevel(level: String) = Level(loadLevelMap(level))
-
-fun loadMap(file: String): LevelMap {
-    val reader = Gdx.files.internal(file).reader(1024)
+fun loadLevel(levelNumber: String): Level {
+    val reader = Gdx.files.internal(levelFile(levelNumber)).reader(1024)
     var lines: List<String> = ArrayList<String>()
 
     var line: String? = reader.readLine()
@@ -49,7 +53,10 @@ fun loadMap(file: String): LevelMap {
         lines += line
         line = reader.readLine()
     }
-    // read any other config
+
+    val props = Properties()
+    props.load(reader)
+
     reader.close()
     lines = lines.map { it.trimEnd() }.reversed()
     val width = lines.map { li -> li.length }.max()
@@ -65,7 +72,7 @@ fun loadMap(file: String): LevelMap {
         }
         println("|")
     }
-    return map
+    return Level(map, props)
 }
 
 fun randomMap(): LevelMap {
@@ -92,7 +99,7 @@ fun randomMap(): LevelMap {
     return map
 }
 
-open class Level(val map: LevelMap) {
+open class Level(val map: LevelMap, val props: Properties = Properties()) {
     lateinit var ctx: Context
     lateinit var baseBody: Body
 
@@ -113,13 +120,19 @@ open class Level(val map: LevelMap) {
                     }
                 }
             })
+            val width = max(abs(from.x - to.x), 1f)
+            val height = max(abs(from.y - to.y), 1f)
+            texture(ctx.atlas.findRegion("fill"), width, height)
             script(ShakeScript(ctx))
         }
     }
 
     open fun start(ctx: Context) {
         this.ctx = ctx
-        ctx.balls = 2
+        ctx.balls = props.getInt("balls", 2)
+        ctx.levelTimeMs = props.getInt("time_sec", 60) * 1000
+
+        Params.override(props)
 
         val baseBodyEnt = ctx.engine.entity {
             body(ctx.world.body(StaticBody) {})
@@ -127,15 +140,9 @@ open class Level(val map: LevelMap) {
         baseBody = baseBodyEnt[body]
 
         // edges (box)
-        val left = edge(vec2(0f, 0f), vec2(0f, height))
-        val right = edge(vec2(width, 0f), vec2(width, height))
-        val top = edge(vec2(0f, height), vec2(width, height))
-        /*left.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))
-        right.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))
-        top.add(texture, Texture(ctx.atlas.findRegion("box"), 1f, 1f, vec2()))*/
-        left.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(-width / 2, 0f)))
-        right.add(texture, Texture(ctx.atlas.findRegion("box"), width, 2 * height, vec2(width / 2, 0f)))
-        top.add(texture, Texture(ctx.atlas.findRegion("box"), 3 * width, 10f, vec2(0f, 5f)))
+        edge(vec2(0f, 0f), vec2(0f, height))
+        edge(vec2(width, 0f), vec2(width, height))
+        edge(vec2(0f, height), vec2(width, height))
 
         // create boxes
         for (y in 0 until map.h) {
@@ -164,6 +171,11 @@ open class Level(val map: LevelMap) {
         if (count == 0) {
             return Complete
         }
+
+        if (ctx.timeMs >= ctx.levelTimeMs) {
+            return TimesUp
+        }
+
         var ballCount = 0
         ctx.engine.family(ball).foreach { entity, ball -> ballCount++ }
         if (ctx.balls == 0 && ballCount == 0) {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.minimal.arkanoid.Persistent
 import com.minimal.gdx.alphaButton
 import com.minimal.gdx.justPressed
 
@@ -18,10 +19,10 @@ class LevelScreen : Screen {
 
     val rootTable: Table
 
-    var currentLevel = 1
+    var currentLevel = Persistent.getLastLevel()
 
     val levelPreview = LevelPreview(currentLevel.toString())
-    val levelLabel = Label("Level ", WrapCtx.skin)
+    val levelLabel = Label("Level " + currentLevel, WrapCtx.skin)
 
     init {
         val unit = Gdx.graphics.height/8f

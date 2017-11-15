@@ -1,5 +1,6 @@
 package com.minimal.arkanoid.game.entity
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
@@ -67,8 +68,8 @@ class EntityBuilder() {
         e.add(box, Box)
     }
 
-    fun texture(tex: TextureRegion, width: Float, height: Float, pos: Vector2 = Vector2()) {
-        e.add(texture, Texture(tex, width, height, pos))
+    fun texture(tex: TextureRegion, width: Float, height: Float, pos: Vector2 = Vector2(), color: Color = Color.WHITE) {
+        e.add(texture, Texture(tex, width, height, pos, 1f, 1f, color))
     }
     fun parent(entity: MyEntity) {
         e.add(parent, Parent(entity))

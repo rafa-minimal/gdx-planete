@@ -1,7 +1,6 @@
 package com.minimal.planet.desktop
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.minimal.arkanoid.Params
 import java.io.File
 import java.util.*
@@ -27,56 +26,7 @@ class ParamsReloader(path: String) : Runnable {
         props.load(input)
         input.close()
 
-        props.forEach { key, value ->
-            val valStr = value.toString()
-            try {
-                val setterName = "set" + key.toString()[0].toUpperCase() + key.toString().substring(1)
-                val setter = Params::class.java.methods.firstOrNull { method ->
-                    method.name == setterName
-                }
-                if (setter != null) {
-                    val field = Params::class.java.getDeclaredField(key.toString())
-                    when(field.type) {
-                        Color::class.java -> {
-                            val color = parseColorHex(valStr)
-                            if (color != null)
-                                setter.invoke(Params, color)
-                        }
-                        String::class.java -> setter.invoke(Params, valStr)
-                        Int::class.java -> {
-                            val int = parseInt(valStr)
-                            if (int != null)
-                                field.set(Params, int)
-                        }
-                        else -> throw IllegalArgumentException("Unsupported type: " + field.type)
-                    }
-                }
-                else {
-                    println("Params - setter not found: " + key)
-                }
-            }
-            catch(e: NoSuchFieldException) {
-                println("Params - unknown field: " + key)
-            }
-        }
-    }
-
-    fun parseInt(str: String?): Int? {
-        if (str != null)
-            try {
-                return Integer.parseInt(str)
-            }
-            catch (e: NumberFormatException) {}
-        return null
-    }
-
-    fun parseColorHex(str: String?): Color? {
-        if (str != null)
-            try {
-                return Color.valueOf(str)
-            }
-            catch (e: NumberFormatException) {}
-        return null
+        Params.override(props)
     }
 
     override fun run() {
@@ -84,7 +34,12 @@ class ParamsReloader(path: String) : Runnable {
         while (!Thread.interrupted()) {
             Thread.sleep(500)
             if (lastModified < stdFile.lastModified()) {
-                reload()
+                try {
+                    reload()
+                } catch(e: Exception) {
+                    println("Failed to reload properties: " + e.message)
+                    continue
+                }
                 println("Props updated")
             }
             lastModified = stdFile.lastModified()

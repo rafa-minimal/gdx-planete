@@ -1,10 +1,11 @@
 package com.minimal.arkanoid.game
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.physics.box2d.Body
-import com.minimal.ecs.ComponentTag
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
 import com.minimal.arkanoid.game.entity.MyEntity
+import com.minimal.ecs.ComponentTag
 import com.minimal.fx.SnakeTail
 import ktx.collections.GdxArray
 
@@ -33,7 +34,7 @@ class Children() {
 }
 
 class Texture(val texture: TextureRegion, val width: Float, val height: Float, val pos: Vector2,
-              var scaleX: Float = 1f, var scaleY: Float = 1f)
+              var scaleX: Float = 1f, var scaleY: Float = 1f, val color: Color = Color.WHITE)
 
 open class PowerUp
 object Diamond : PowerUp()

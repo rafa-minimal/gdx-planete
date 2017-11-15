@@ -3,6 +3,7 @@ package com.minimal.arkanoid.game
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
+import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.script.JointBreakScript
@@ -15,7 +16,7 @@ fun boxOneShot(ctx: Context, x: Float, y: Float): MyEntity {
     return ctx.engine.entity {
         body(ctx.world.body(StaticBody) {
             position.set(x, y)
-            box(2f, 1f) {
+            box(Params.box_width, Params.box_height) {
                 density = 1f
                 restitution = 0.4f
                 filter {
@@ -24,7 +25,7 @@ fun boxOneShot(ctx: Context, x: Float, y: Float): MyEntity {
             }
         })
         energy(10f)
-        texture(ctx.atlas.findRegion("box"), 2f, 1f)
+        texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, color = Params.color_box)
         box()
     }
 }
@@ -38,7 +39,7 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float, baseBody: Body) {
         position.set(x, y)
         linearDamping = 0.5f
         angularDamping = 0.5f
-        box(2f, 1f) {
+        box(Params.box_width, Params.box_height) {
             density = 0.2f
             restitution = 1f
             filter {
@@ -62,7 +63,7 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float, baseBody: Body) {
     }
     ctx.engine.entity {
         body(body)
-        texture(ctx.atlas.findRegion("box"), 2f, 1f)
+        texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, color = Params.color_box)
         script(JointBreakScript(ctx, jl))
         script(JointBreakScript(ctx, jr))
         box()

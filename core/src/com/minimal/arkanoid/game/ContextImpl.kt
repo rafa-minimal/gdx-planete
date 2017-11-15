@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
+import com.minimal.arkanoid.Params
+import com.minimal.arkanoid.ParamsDefaults
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.system.*
@@ -20,6 +22,7 @@ class Context(val level: Level) {
     val engine = MyEngine()
     val world = World(vec2(0f, -10f), true)
     var timeMs = 0
+    var levelTimeMs = 0
 
     val batch = SpriteBatch()
     val debugRenderer = Box2DDebugRenderer()
@@ -35,6 +38,10 @@ class Context(val level: Level) {
     var balls: Int = 0
 
     fun start() {
+        // level ustawia parametry (Params), więc musi być na początku
+        Params = ParamsDefaults()
+        level.start(this)
+
         cameraSystem.worldPosition.set(level.width/2, level.height/2)
 
         engine.add(
@@ -56,8 +63,6 @@ class Context(val level: Level) {
                 ScriptSystem(this),
                 ParentChildSystem(this),
                 BodyDisposeSystem(engine))
-
-        level.start(this)
     }
 
     fun dispose() {
