@@ -1,0 +1,22 @@
+
+* ball spawn system
+  - pojawiaj¹ siê np. z prawej  strony (0.8*width, player_y + player_range)
+  - na pocz¹tku (po chwili ~ 1 sec)
+  - po ka¿dej oderwanej pi³ce (np 10 sec)
+* ball na haczyku - kontakt tylko z range (¿eby klocki pi³ki nie wytr¹ci³y)
+
+
+16.11.2017
+----------
+v fix ³apanie
+v ball spawn - na "haczyku"
+v level failed - jeœli nie ma w grze pi³ek i -wolnych klocków-
+v level - player_y, player_range
+
+15.11.2017
+----------
+v * timeout - OK
+v - level - czytanie z pliku ustawieñ
+v * krawêdzie - rysowanie
+v * przechodzenie leveli -> zapis
+v * level screen - ostatni level

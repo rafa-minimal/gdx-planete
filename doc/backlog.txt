@@ -1,0 +1,3 @@
+
+Efekty
+* ball spawn - efekt - kilka kó³ek
