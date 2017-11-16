@@ -17,7 +17,8 @@ class ParamsDefaults {
     var ball_joint_threshold = 0.1f
 
     fun override(props: Properties) {
-        props.forEach { key, value ->
+        for (key in props.keys) {
+            val value = props[key]
             val valStr = value.toString()
             try {
                 val setterName = "set" + key.toString()[0].toUpperCase() + key.toString().substring(1)
