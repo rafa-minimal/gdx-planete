@@ -1,6 +1,5 @@
 package com.minimal.arkanoid.game
 
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.arkanoid.Params
@@ -34,7 +33,7 @@ fun boxDiament(ctx: Context, x: Float, y: Float) {
     boxOneShot(ctx, x, y).add(BoxDiamondScript(ctx))
 }
 
-fun boxNaZawiasach(ctx: Context, x: Float, y: Float, baseBody: Body) {
+fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
     val body = ctx.world.body(DynamicBody) {
         position.set(x, y)
         linearDamping = 0.5f
@@ -47,14 +46,14 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float, baseBody: Body) {
             }
         }
     }
-    val jl = baseBody.distanceJointWith(body) {
+    val jl = ctx.baseBody.distanceJointWith(body) {
         length = 0f
         localAnchorA.set(x - 0.5f, y)
         localAnchorB.set(-0.5f, 0f)
         frequencyHz = 4f
         dampingRatio = 0.8f
     }
-    val jr = baseBody.distanceJointWith(body) {
+    val jr = ctx.baseBody.distanceJointWith(body) {
         length = 0f
         localAnchorA.set(x + 0.5f, y)
         localAnchorB.set(0.5f, 0f)

@@ -14,6 +14,7 @@ class ParamsDefaults {
     var box_render_width = 1.8f
     var box_render_height = 0.9f
     var player_vmax = 20f
+    var ball_joint_threshold = 0.1f
 
     fun override(props: Properties) {
         props.forEach { key, value ->
@@ -41,6 +42,8 @@ class ParamsDefaults {
                             val float = parseFloat(valStr)
                             if (float != null)
                                 setter.invoke(Params, float)
+                            println("    " + key + ": " + float)
+                            println("    Params.ball...: " + Params.ball_joint_threshold)
                         }
                         else -> throw IllegalArgumentException("Unsupported type: " + field.type)
                     }
@@ -81,4 +84,8 @@ class ParamsDefaults {
             catch (e: Exception) {}
         return null
     }
+
+    var player_y = 5f
+    var player_range = 3f
+    var player_radius = 0.5f
 }

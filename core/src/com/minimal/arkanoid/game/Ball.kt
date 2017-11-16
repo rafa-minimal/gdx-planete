@@ -4,30 +4,42 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.script.JointBreakScript
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.fx.SnakeTail
 import ktx.box2d.body
+import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
+import ktx.math.vec2
 
 fun createBall(ctx: Context) {
-    ctx.engine.entity {
-        body(ctx.world.body(DynamicBody) {
-            //position.set(ctx.level.width/2, ctx.level.height/6 + 3)
-            position.set(ctx.level.width / 2, ctx.level.height / 5 + 3)
-            linearVelocity.set(10f, 10f)
-            linearDamping = 0f
-            gravityScale = 0.5f
-            circle(0.5f) {
-                density = 1f
-                restitution = 1f
-                friction = 0f
-                filter {
-                    categoryBits = com.minimal.arkanoid.game.default
-                }
+    val pos = vec2(ctx.level.width / 2, Params.player_y + Params.player_range)
+
+    val body = ctx.world.body(DynamicBody) {
+        position.set(pos)
+        linearDamping = 0f
+        gravityScale = 0.5f
+        circle(0.5f) {
+            density = 1f
+            restitution = 1f
+            friction = 0f
+            filter {
+                categoryBits = com.minimal.arkanoid.game.default
             }
-        })
+        }
+    }
+    val joint = ctx.baseBody.distanceJointWith(body) {
+        localAnchorA.set(pos)
+        frequencyHz = 4f
+        dampingRatio = 1f
+        length = 0f
+    }
+
+    ctx.engine.entity {
+        body(body)
         ball()
         bullet(5f)
         texture(ctx.atlas.findRegion("circle"), 1f, 1f)
@@ -35,6 +47,8 @@ fun createBall(ctx: Context) {
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
         script(BallScript)
+        print("threshold: " + Params.ball_joint_threshold)
+        script(JointBreakScript(ctx, joint, Params.ball_joint_threshold))
         //script(SpeedScaleScript)
     }
 }

@@ -2,8 +2,6 @@ package com.minimal.arkanoid.game.level
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
@@ -43,7 +41,7 @@ fun loadLevelMap(level: String): LevelMap {
 
 fun loadLevel(levelNumber: String): Level {
     val reader = Gdx.files.internal(levelFile(levelNumber)).reader(1024)
-    var lines: List<String> = ArrayList<String>()
+    var lines: List<String> = ArrayList()
 
     var line: String? = reader.readLine()
     while (line != null) {
@@ -101,7 +99,6 @@ fun randomMap(): LevelMap {
 
 open class Level(val map: LevelMap, val props: Properties = Properties()) {
     lateinit var ctx: Context
-    lateinit var baseBody: Body
 
     val width = map.w * 2f
     val height = map.h * 3f / 2f
@@ -134,10 +131,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
 
         Params.override(props)
 
-        val baseBodyEnt = ctx.engine.entity {
-            body(ctx.world.body(StaticBody) {})
-        }
-        baseBody = baseBodyEnt[body]
+
 
         // edges (box)
         edge(vec2(0f, 0f), vec2(0f, height))
@@ -151,7 +145,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
                 print(map[x, y])
                 when (map[x, y]) {
                     '#' -> boxOneShot(ctx, x * 2 + 1f, y + 0.5f)
-                    '=' -> boxNaZawiasach(ctx, x * 2 + 1f, y + 0.5f, baseBody)
+                    '=' -> boxNaZawiasach(ctx, x * 2 + 1f, y + 0.5f)
                     'V' -> boxDiament(ctx, x * 2 + 1f, y + 0.5f)
                 }
             }
@@ -159,7 +153,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
         }
 
         // create player
-        createPlayer(ctx, width, 5f, baseBody)
+        createPlayer(ctx, width, Params.player_y)
 
         // ball
         createBall(ctx)

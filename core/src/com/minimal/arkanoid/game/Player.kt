@@ -111,10 +111,8 @@ class PlayerSystem(val ctx: Context) : System {
     }
 }
 
-fun createPlayer(ctx: Context, width: Float, playerHeight: Float, baseBody: Body) {
-    val pos = vec2(width / 2, playerHeight / 6)
-    val playerRadius = 0.5f
-    val playerRange = 3f
+fun createPlayer(ctx: Context, width: Float, playerY: Float) {
+    val pos = vec2(width / 2, playerY)
 
     val body = ctx.world.body(DynamicBody) {
         position.set(pos)
@@ -122,14 +120,14 @@ fun createPlayer(ctx: Context, width: Float, playerHeight: Float, baseBody: Body
         fixedRotation = true
     }
 
-    val mainFixture = body.circle(playerRadius) {
+    val mainFixture = body.circle(Params.player_radius) {
         density = 2f
         filter {
             categoryBits = default
             maskBits = 0
         }
     }
-    val rangeFixture = body.circle(playerRange) {
+    val rangeFixture = body.circle(Params.player_range) {
         isSensor = true
         filter {
             categoryBits = default
@@ -151,9 +149,9 @@ fun createPlayer(ctx: Context, width: Float, playerHeight: Float, baseBody: Body
         parent(player)
     }*/
 
-    val limit = width / 2 - playerRadius
+    val limit = width / 2 - Params.player_radius
 
-    baseBody.prismaticJointWith(body) {
+    ctx.baseBody.prismaticJointWith(body) {
         localAnchorA.set(pos)
         localAxisA.set(1f, 0f)
         enableLimit = true
