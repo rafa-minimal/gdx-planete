@@ -13,6 +13,7 @@ class ParamsDefaults {
     var box_height = 0.9f
     var box_render_width = 1.8f
     var box_render_height = 0.9f
+    var player_vmax = 20f
 
     fun override(props: Properties) {
         props.forEach { key, value ->
