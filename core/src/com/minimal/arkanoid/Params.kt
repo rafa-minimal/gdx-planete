@@ -88,4 +88,5 @@ class ParamsDefaults {
     var player_y = 5f
     var player_range = 3f
     var player_radius = 0.5f
+    var box_joint_threshold = 0.1f
 }

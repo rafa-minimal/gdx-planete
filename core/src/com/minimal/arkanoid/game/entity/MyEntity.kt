@@ -57,7 +57,7 @@ class EntityBuilder() {
     }
 
     fun ball() {
-        e.add(ball, Ball)
+        e.add(ball, Ball(0))
     }
 
     fun powerUp(powerUp: PowerUp) {

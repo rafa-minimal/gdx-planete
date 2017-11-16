@@ -1,11 +1,14 @@
 package com.minimal.arkanoid.game.script
 
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint
-import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.Context
+import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.utils.minus
 
-class JointBreakScript(val context: Context, val joint: DistanceJoint, val lengthThreshold: Float = 0.1f) : Script {
+class JointBreakScript(val context: Context,
+                       val joint: DistanceJoint,
+                       val lengthThreshold: Float = 0.1f,
+                       val onBreak: (MyEntity) -> Unit = {}) : Script {
 
     var broken = false
 
@@ -17,6 +20,7 @@ class JointBreakScript(val context: Context, val joint: DistanceJoint, val lengt
         if (length > lengthThreshold) {
             context.world.destroyJoint(joint)
             broken = true
+            onBreak(me)
             // Tak się nie da, bo jesteśmy w trakcie iteracji po me.scripts, concurrent modification error, czy jakoś tak
             //me.scripts.remove(this)
         }

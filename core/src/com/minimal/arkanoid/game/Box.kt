@@ -10,6 +10,7 @@ import com.minimal.arkanoid.game.script.Script
 import ktx.box2d.body
 import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
+import ktx.collections.isEmpty
 
 fun boxOneShot(ctx: Context, x: Float, y: Float): MyEntity {
     return ctx.engine.entity {
@@ -34,7 +35,7 @@ fun boxDiament(ctx: Context, x: Float, y: Float) {
 }
 
 fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
-    val body = ctx.world.body(DynamicBody) {
+    val bod = ctx.world.body(DynamicBody) {
         position.set(x, y)
         linearDamping = 0.5f
         angularDamping = 0.5f
@@ -46,25 +47,30 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
             }
         }
     }
-    val jl = ctx.baseBody.distanceJointWith(body) {
+    val jl = ctx.baseBody.distanceJointWith(bod) {
         length = 0f
         localAnchorA.set(x - 0.5f, y)
         localAnchorB.set(-0.5f, 0f)
         frequencyHz = 4f
         dampingRatio = 0.8f
     }
-    val jr = ctx.baseBody.distanceJointWith(body) {
+    val jr = ctx.baseBody.distanceJointWith(bod) {
         length = 0f
         localAnchorA.set(x + 0.5f, y)
         localAnchorB.set(0.5f, 0f)
         frequencyHz = 4f
         dampingRatio = 0.8f
     }
+    val onBreak: (MyEntity) -> Unit = {ent: MyEntity ->
+        if (ent[body].jointList.isEmpty()) {
+            ent.add(ball, Ball(4))
+        }
+    }
     ctx.engine.entity {
-        body(body)
+        body(bod)
         texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, color = Params.color_box)
-        script(JointBreakScript(ctx, jl))
-        script(JointBreakScript(ctx, jr))
+        script(JointBreakScript(ctx, jl, Params.box_joint_threshold, onBreak))
+        script(JointBreakScript(ctx, jr, Params.box_joint_threshold, onBreak))
         box()
     }
 }

@@ -56,19 +56,10 @@ class PlayerSystem(val ctx: Context) : System {
 
     fun pickOtherEntity(player: Player, b: Body): MyEntity {
         assert(player.entsInRange.isNotEmpty())
-        val closestBall = player.entsInRange
+        return player.entsInRange
                 .filter { ent -> ent.contains(ball) }
-                .map { b.position.dst2(it[body].position) to it }
-                .sortedBy { it.first }
-                .firstOrNull()?.second
-        if (closestBall != null) {
-            return closestBall
-        }
-        val closestEntity = player.entsInRange
-                .map { b.position.dst2(it[body].position) to it }
-                .sortedBy { it.first }
-                .first().second
-        return closestEntity
+                .sortedWith(compareBy({ it[ball].priority }, { b.position.dst2(it[body].position) }))
+                .first()
     }
 
     override fun update(timeStepSec: Float) {
