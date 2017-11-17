@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "25.0.2"
-    compileSdkVersion 20
+    buildToolsVersion "27.0.1"      //
+    compileSdkVersion 27
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -19,8 +19,8 @@ android {
     }
     defaultConfig {
         applicationId "com.minimal.planet"
-        minSdkVersion 9
-        targetSdkVersion 20
+        minSdkVersion 10
+        targetSdkVersion 27
     }
 }
 
