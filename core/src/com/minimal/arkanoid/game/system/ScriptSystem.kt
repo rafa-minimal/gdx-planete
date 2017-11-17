@@ -1,7 +1,7 @@
 package com.minimal.arkanoid.game.system
 
-import com.minimal.ecs.System
 import com.minimal.arkanoid.game.Context
+import com.minimal.ecs.System
 
 class ScriptSystem(val ctx: Context) : System {
     override fun update(timeStepSec: Float) {
@@ -13,6 +13,10 @@ class ScriptSystem(val ctx: Context) : System {
                     s.beforeDestroy(e)
                 }
             }
+            for(s in e.scriptsToRemove) {
+                e.scripts.remove(s)
+            }
+            e.scriptsToRemove.clear()
         }
     }
 }
