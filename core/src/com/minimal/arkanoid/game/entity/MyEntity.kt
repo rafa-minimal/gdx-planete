@@ -56,8 +56,8 @@ class EntityBuilder() {
         e.add(script)
     }
 
-    fun ball() {
-        e.add(ball, Ball(0))
+    fun ball(priority: Int) {
+        e.add(ball, Ball(priority))
     }
 
     fun powerUp(powerUp: PowerUp) {

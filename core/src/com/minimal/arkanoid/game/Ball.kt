@@ -15,6 +15,21 @@ import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
 import ktx.math.vec2
 
+val NEW_BALL_PRIORITY = 1
+val BALL_PRIORITY = 0
+
+val activateBall: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
+    ent[ball].priority = BALL_PRIORITY
+    if (Params.ball_respawn_mode == "after_taken") {
+        Actions.schedule(Params.ball_respawn_after_taken_delay) {
+            if (ctx.balls > 0) {
+                createBall(ctx)
+                ctx.balls--
+            }
+        }
+    }
+}
+
 fun createBall(ctx: Context) {
     val pos = vec2(ctx.level.width / 2, Params.player_y + Params.player_range)
 
@@ -40,7 +55,7 @@ fun createBall(ctx: Context) {
 
     ctx.engine.entity {
         body(body)
-        ball()
+        ball(NEW_BALL_PRIORITY)
         bullet(5f)
         texture(ctx.atlas.findRegion("circle"), 1f, 1f)
         tail(SnakeTail(TextureRegion(ctx.tailTex), 0.5f, 60))
@@ -48,7 +63,7 @@ fun createBall(ctx: Context) {
         script(BallSpeedLimit)
         script(BallScript)
         print("threshold: " + Params.ball_joint_threshold)
-        script(JointBreakScript(ctx, joint, Params.ball_joint_threshold))
+        script(JointBreakScript(ctx, joint, Params.ball_joint_threshold, activateBall))
         //script(SpeedScaleScript)
     }
 }
@@ -63,9 +78,11 @@ object BallSpeedLimit : Script {
 
 class RespawnScript(val ctx: Context) : Script {
     override fun beforeDestroy(me: MyEntity) {
-        if (ctx.balls > 0) {
-            createBall(ctx)
-            ctx.balls--
+        if (Params.ball_respawn_mode == "after_death") {
+            if (ctx.balls > 0) {
+                createBall(ctx)
+                ctx.balls--
+            }
         }
     }
 }

@@ -20,4 +20,4 @@
                            |
                            |
 ------------------
-Detale
+ball_respawn_mode = after_taken

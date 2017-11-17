@@ -90,4 +90,6 @@ class ParamsDefaults {
     var player_range = 3f
     var player_radius = 0.5f
     var box_joint_threshold = 0.1f
+    var ball_respawn_mode = "after_death"
+    var ball_respawn_after_taken_delay = 3f
 }

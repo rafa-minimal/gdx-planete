@@ -34,6 +34,12 @@ fun boxDiament(ctx: Context, x: Float, y: Float) {
     boxOneShot(ctx, x, y).add(BoxDiamondScript(ctx))
 }
 
+val onBreak: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
+    if (ent[body].jointList.isEmpty()) {
+        ent.add(ball, Ball(4))
+    }
+}
+
 fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
     val bod = ctx.world.body(DynamicBody) {
         position.set(x, y)
@@ -60,11 +66,6 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
         localAnchorB.set(0.5f, 0f)
         frequencyHz = 4f
         dampingRatio = 0.8f
-    }
-    val onBreak: (MyEntity) -> Unit = {ent: MyEntity ->
-        if (ent[body].jointList.isEmpty()) {
-            ent.add(ball, Ball(4))
-        }
     }
     ctx.engine.entity {
         body(bod)

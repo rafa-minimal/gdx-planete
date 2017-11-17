@@ -19,7 +19,7 @@ class Energy(var total: Float,
 class Bullet(val hitPoints: Float)
 
 // Jeżeli jest kilka piłek w zasięgu, Player łapie piłkę o najniższym priorytecie
-class Ball(val priority: Int)
+class Ball(var priority: Int)
 object Box
 
 class Lifetime(var lifetime: Float)
