@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
@@ -19,9 +18,8 @@ import ktx.math.vec2
 class GameScreen(val level: String) : ScreenAdapter() {
     private var running = true
     val bg = Texture("bg2.png")
-    val viewport = FitViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
     var ctx = Context(loadLevel(level))
-    val stage = Stage(viewport, ctx.batch)
+    val stage = Stage(WrapCtx.viewport, ctx.batch)
 
     lateinit var controlsHud: ControlsHud
     lateinit var gameHud: GameHud
@@ -81,7 +79,7 @@ class GameScreen(val level: String) : ScreenAdapter() {
 
     override fun resize(width: Int, height: Int) {
         ctx.cameraSystem.resize(width, height)
-        viewport.setWorldSize(width.toFloat(), height.toFloat())
+        //WrapCtx.viewport.update(width, height, true)
     }
 
     fun result(): LevelResult {
