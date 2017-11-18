@@ -5,16 +5,29 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearNearest
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import java.io.File
 
-fun texturePacker(args: Array<String>) {
-    val force = args.contains("-f")
+private fun doPack(args: Array<String>): Boolean {
+    if(args.contains("-f")) {
+        println("force = true (flaga '-f'), pakujemy")
+        return true
+    }
+    val target = File("./atlas.atlas")
+    if (!target.exists()) {
+        println("Nie ma pliku 'atlas.atlas', pakujemy")
+        return true
+    }
 
     val source = File("../../images")
-    val target = File("./")
-    if (force || source.lastModified() > target.lastModified()) {
-        if (force)
-            println("force = true (flaga '-f'), pakujemy")
-        else
-            println("Tekstury są nowsze od atlasu, pakujemy")
+    if (source.lastModified() > target.lastModified()) {
+        println("Tekstury są nowsze od atlasu, pakujemy")
+        return true
+    } else {
+        println("Tekstury są starsze od atlasu, pomijam")
+        return false
+    }
+}
+
+fun texturePacker(args: Array<String>) {
+    if (doPack(args)) {
         val settings = TexturePacker.Settings()
         settings.maxWidth = 1024
         settings.maxHeight = 1024
@@ -26,7 +39,5 @@ fun texturePacker(args: Array<String>) {
         settings.paddingX = 4
         settings.paddingY = 4
         TexturePacker.process(settings, "../../images", "./", "atlas")
-    } else {
-        println("Tekstury są starsze od atlasu, pomijam")
     }
 }
