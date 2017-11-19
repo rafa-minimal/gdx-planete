@@ -2,11 +2,14 @@ package com.minimal.arkanoid.game.level
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
+import com.badlogic.gdx.physics.box2d.Contact
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.level.LevelResult.*
+import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.script.ShakeScript
 import com.minimal.utils.getInt
 import com.minimal.utils.rnd
@@ -124,6 +127,26 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
         }
     }
 
+    var lastBallLeftRangeTime = 0
+    var ballsInRange = 0
+    val entityCounScript = object : Script {
+
+        override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
+            if (other.contains(ball)) {
+                ballsInRange++
+            }
+        }
+
+        override fun endContact(me: MyEntity, other: MyEntity, contact: Contact) {
+            if (other.contains(ball)) {
+                ballsInRange--
+                if (ballsInRange == 0) {
+                    lastBallLeftRangeTime = ctx.timeMs
+                }
+            }
+        }
+    }
+
     open fun start(ctx: Context) {
         this.ctx = ctx
         ctx.balls = props.getInt("balls", 2)
@@ -132,6 +155,15 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
         Params.override(props)
 
 
+        ctx.engine.entity {
+            body(ctx.world.body(StaticBody) {
+                position.set(width/2f, Params.player_y)
+                box(width, 2 * Params.player_range) {
+                    isSensor = true
+                }
+            })
+            script(entityCounScript)
+        }
 
         // edges (box)
         edge(vec2(0f, 0f), vec2(0f, height))
@@ -170,11 +202,22 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
             return TimesUp
         }
 
-        var ballCount = 0
-        ctx.engine.family(ball).foreach { entity, ball -> ballCount++ }
-        if (ctx.balls == 0 && ballCount == 0) {
-            return Failed
+        if (ctx.balls == 0) {
+            // jeśli liczba piłek w grze = 0
+            var ballCount = 0
+            ctx.engine.family(ball).foreach { entity, ball -> ballCount++ }
+            if (ballCount == 0) {
+                println("Nie ma piłek w grze - Level Failed")
+                return Failed
+            }
+
+            // jeśli są piłki, ale od czasu Params.level_no_balls_in_range_timeout, żadna nie była w zasięgu
+            if (ballsInRange == 0 && ctx.timeMs > lastBallLeftRangeTime + Params.level_no_balls_in_range_timeout) {
+                println("Nie ma piłek w zasięgu gracza od $Params.level_no_balls_in_range_timeout ms - Level Failed")
+                return Failed
+            }
         }
+
         return None
     }
 }
