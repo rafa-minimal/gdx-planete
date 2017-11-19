@@ -38,7 +38,9 @@ class Texture(val texture: TextureRegion,
               val width: Float, val height: Float,
               val pos: Vector2, var angleDeg: Float = 0f,
               var scaleX: Float = 1f, var scaleY: Float = 1f,
-              val color: Color = Color.WHITE)
+              color: Color = Color.WHITE) {
+    val color = Color(color)
+}
 
 open class PowerUp
 object Diamond : PowerUp()

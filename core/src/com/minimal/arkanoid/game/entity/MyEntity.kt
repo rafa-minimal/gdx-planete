@@ -15,6 +15,7 @@ import com.minimal.fx.SnakeTail
 class MyEntity : Entity() {
     val scripts = mutableListOf<Script>()
     val scriptsToRemove = mutableListOf<Script>()
+    val scriptsToAdd = mutableListOf<Script>()
     fun add(s: Script) {
         scripts.add(s)
     }

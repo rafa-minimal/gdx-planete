@@ -6,12 +6,34 @@ import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.fx.BoxTweeningScript
+import com.minimal.arkanoid.game.fx.FadeOutScript
 import com.minimal.arkanoid.game.script.JointBreakScript
 import com.minimal.arkanoid.game.script.Script
+import com.minimal.utils.maskBits
 import ktx.box2d.body
 import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
 import ktx.collections.isEmpty
+
+object BoxDeadEffectScript : Script {
+    override fun beforeDestroy(me: MyEntity) {
+        me.dead = false
+        val duration = 2f
+        me[lifetime] = Lifetime(duration)
+        me.scriptsToAdd.add(FadeOutScript(duration))
+        me[energy] = null
+        me.scriptsToRemove.add(this)
+        for (fix in me[body].fixtureList) {
+            fix.maskBits = 0
+        }
+
+        // usunięcie węzłów nie jest trywialne, trzeba jakoś dezaktywować JointBreakScript
+        /*me.scriptsToRemove.addAll(me.scripts)
+        for(joint in me[body].jointList) {
+            joint.joint.bodyA.world.destroyJoint(joint.joint)
+        }*/
+    }
+}
 
 fun boxOneShot(ctx: Context, x: Float, y: Float): MyEntity {
     return ctx.engine.entity {
@@ -70,10 +92,14 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
     }
     ctx.engine.entity {
         body(bod)
+        if(Params.box_energy > 0f) {
+            energy(Params.box_energy)
+        }
         texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, scale = 0f, color = Params.color_box)
         script(BoxTweeningScript(1f))
         script(JointBreakScript(ctx, jl, Params.box_joint_threshold, onBreak))
         script(JointBreakScript(ctx, jr, Params.box_joint_threshold, onBreak))
+        script(BoxDeadEffectScript)
         box()
     }
 }

@@ -94,4 +94,5 @@ class ParamsDefaults {
     var ball_respawn_after_taken_delay = 3f
     var ball_autodestruction_timeout = 3f
     var level_no_balls_in_range_timeout = 5000
+    var box_energy = 0f
 }

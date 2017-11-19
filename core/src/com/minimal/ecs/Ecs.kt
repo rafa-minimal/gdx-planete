@@ -19,6 +19,13 @@ open class Entity {
     fun <T> contains(tag: CT<T>): Boolean {
         return comps[tag.index] !is NoComp
     }
+
+    operator fun <T: Any> set(tag: ComponentTag<T>, c: T?) {
+        if (c != null)
+            comps[tag.index] = c
+        else
+            comps[tag.index] = NoComp
+    }
 }
 
 interface System {

@@ -1,5 +1,6 @@
 package com.minimal.arkanoid.game.fx
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Interpolation.SwingOut
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.script.Script
@@ -19,6 +20,22 @@ class ScaleScript(val duration: Float) : Script {
             me.scriptsToRemove.add(this)
             me[texture].scaleX = 1f
             me[texture].scaleY = 1f
+        }
+    }
+}
+
+class FadeOutScript(val duration: Float) : Script {
+    val interpol = Interpolation.pow2Out
+    var x = 0f
+
+    override fun update(me: MyEntity, timeStepSec: Float) {
+        x += timeStepSec
+        if(x < duration) {
+            val tween = interpol.apply(x / duration)
+            me[texture].color.a = 1 - tween
+        } else {
+            me.scriptsToRemove.add(this)
+            me[texture].color.a = 0f
         }
     }
 }

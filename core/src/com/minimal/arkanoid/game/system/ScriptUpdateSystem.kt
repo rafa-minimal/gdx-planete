@@ -14,6 +14,10 @@ class ScriptUpdateSystem(val ctx: Context) : System {
                 e.scripts.remove(s)
             }
             e.scriptsToRemove.clear()
+            for(s in e.scriptsToAdd) {
+                e.scripts.add(s)
+            }
+            e.scriptsToAdd.clear()
         }
     }
 }
