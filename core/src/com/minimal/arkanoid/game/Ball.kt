@@ -45,7 +45,7 @@ fun createBall(ctx: Context) {
         gravityScale = 0.5f
         circle(0.5f) {
             density = 1f
-            restitution = 1f
+            restitution = Params.ball_restitution
             friction = 0f
             filter {
                 categoryBits = com.minimal.arkanoid.game.default

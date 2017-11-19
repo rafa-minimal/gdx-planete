@@ -114,7 +114,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
             body(ctx.world.body {
                 position.set(center)
                 edge(from, to) {
-                    restitution = 1f
+                    restitution = Params.edge_restitution
                     filter {
                         categoryBits = static
                     }

@@ -1,3 +1,7 @@
+UI:
+* Control HUD - buttons fix
 
-Efekty
-* ball spawn - efekt - kilka k�ek
+Efekty:
+particles:
+  * ball spawn - efekt - kilka kółek
+  * box destroy

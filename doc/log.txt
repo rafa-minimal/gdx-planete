@@ -1,22 +1,30 @@
+19.11.2017
+----------
+* ball, box tweening - Swing Out
+* ball na haczyku - kontakt tylko z range (Å¼eby klocki piÅ‚ki nie wytrÄ…ciÅ‚y)
+* ball - autodestruction - jeÅ›li od czasu np. 5 sec prÄ™dkoÅ›Ä‡ < 0.5 m/s
+* level failed
+  - jeÅ›li nie ma piÅ‚ek, lub
+  - jeÅ›li przez T (np. 5 sec) nie pojawiÅ‚o siÄ™ nic w zasiÄ™gu playera
+* rozpadajÄ…ce siÄ™ klocki (energy + crash)
+* fix: odbijanie piÅ‚ki od Å›cian - za bardzo siÄ™ rozpÄ™dzaÅ‚a 9restitution edge, ball -> 0.8)
 
-* ball spawn system
-  - pojawiaj¹ siê np. z prawej  strony (0.8*width, player_y + player_range)
-  - na pocz¹tku (po chwili ~ 1 sec)
-  - po ka¿dej oderwanej pi³ce (np 10 sec)
-* ball na haczyku - kontakt tylko z range (¿eby klocki pi³ki nie wytr¹ci³y)
-
+17.11.2017
+----------
+* ball spawn system - po kaÅ¼dej oderwanej piÅ‚ce (np 3 sec) 
+  - dwa tryby "after_taken", "after_death"
 
 16.11.2017
 ----------
-v fix ³apanie
-v ball spawn - na "haczyku"
-v level failed - jeœli nie ma w grze pi³ek i -wolnych klocków-
-v level - player_y, player_range
+* fix Å‚apanie
+* ball spawn - na "haczyku"
+* level failed - jeÅ›li nie ma w grze piÅ‚ek i -wolnych klockÃ³w-
+* level - player_y, player_range
 
 15.11.2017
 ----------
-v * timeout - OK
-v - level - czytanie z pliku ustawieñ
-v * krawêdzie - rysowanie
-v * przechodzenie leveli -> zapis
-v * level screen - ostatni level
+* timeout - OK
+* level - czytanie z pliku ustawieÅ„
+* krawÄ™dzie - rysowanie
+* przechodzenie leveli -> zapis
+* level screen - ostatni level

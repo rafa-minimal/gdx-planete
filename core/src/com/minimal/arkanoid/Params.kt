@@ -95,4 +95,10 @@ class ParamsDefaults {
     var ball_autodestruction_timeout = 3f
     var level_no_balls_in_range_timeout = 5000
     var box_energy = 0f
+    // Chodzi o to, żeby piłka dobrze odbijała się od klocków
+    // ale nie tak dobrze od ścian (bo za bardzo przyśpiesza)
+    // Klocki po oderwaniu zmieniają restitution na ball_restitution
+    var box_restitution = 1f
+    var ball_restitution = 0.8f
+    var edge_restitution = 0.8f
 }

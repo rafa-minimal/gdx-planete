@@ -59,6 +59,9 @@ fun boxDiament(ctx: Context, x: Float, y: Float) {
 }
 
 val onBreak: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
+    for (fix in ent[body].fixtureList) {
+        fix.restitution = Params.ball_restitution
+    }
     if (ent[body].jointList.isEmpty()) {
         ent.add(ball, Ball(4))
     }
@@ -71,7 +74,7 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
         angularDamping = 0.5f
         box(Params.box_width, Params.box_height) {
             density = 0.2f
-            restitution = 1f
+            restitution = Params.box_restitution
             filter {
                 categoryBits = default
             }
