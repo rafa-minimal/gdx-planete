@@ -67,8 +67,9 @@ fun loadLevel(levelNumber: String): Level {
 
     for (y in 0 until map.h) {
         print("|")
-        for (x in 0 until map.w) {
-            map[x, y] = lines[y].get(x)
+        lines[y].forEachIndexed {
+            x, char ->
+            map[x, y] = char
             print(map[x, y])
         }
         println("|")
