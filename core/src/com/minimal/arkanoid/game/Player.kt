@@ -121,7 +121,7 @@ fun createPlayer(ctx: Context, width: Float, playerY: Float) {
     val rangeFixture = body.circle(Params.player_range) {
         isSensor = true
         filter {
-            categoryBits = default
+            categoryBits = cat.range
             maskBits = all xor static
         }
     }

@@ -57,6 +57,7 @@ class Context(val level: Level) {
                 PlayerSystem(this),
                 //GravitySystem(this),
                 LifetimeSystem(engine),
+                ScriptUpdateSystem(this),
                 //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
                 cameraSystem,
@@ -66,7 +67,7 @@ class Context(val level: Level) {
                 RangeDrawSystem(this),
                 DebugRenderSystem(this),
                 CleanUpSystem(this),
-                ScriptSystem(this),
+                ScriptBeforeDestroySystem(this),
                 ParentChildSystem(this),
                 BodyDisposeSystem(engine))
     }

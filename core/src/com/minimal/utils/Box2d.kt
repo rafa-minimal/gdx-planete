@@ -1,7 +1,10 @@
 package com.minimal.utils
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.*
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.Fixture
+import com.badlogic.gdx.physics.box2d.QueryCallback
+import com.badlogic.gdx.physics.box2d.World
 import kotlin.experimental.and
 
 private object categoryCheck : QueryCallback {
@@ -29,6 +32,14 @@ fun Body.tangentVelocity(): Float =
 
 fun Body.tangentVector(): Vector2 =
         this.position.nor().rotate90(-1)
+
+var Fixture.maskBits: Short
+    get() {return this.filterData.maskBits}
+    set(newMaskBits) {
+        val filterData = this.filterData
+        filterData.maskBits = newMaskBits
+        this.filterData = filterData
+    }
 
 /*
 fun filter(init: Filter.() -> Unit): Filter {

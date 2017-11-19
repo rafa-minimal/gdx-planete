@@ -92,4 +92,5 @@ class ParamsDefaults {
     var box_joint_threshold = 0.1f
     var ball_respawn_mode = "after_death"
     var ball_respawn_after_taken_delay = 3f
+    var ball_autodestruction_timeout = 5f
 }

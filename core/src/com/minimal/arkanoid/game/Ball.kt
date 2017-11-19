@@ -11,6 +11,7 @@ import com.minimal.arkanoid.game.fx.ScaleScript
 import com.minimal.arkanoid.game.script.JointBreakScript
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.fx.SnakeTail
+import com.minimal.utils.maskBits
 import ktx.box2d.body
 import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
@@ -21,6 +22,10 @@ val BALL_PRIORITY = 0
 
 val activateBall: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
     ent[ball].priority = BALL_PRIORITY
+    for (fix in ent[body].fixtureList) {
+        fix.maskBits = all
+    }
+
     if (Params.ball_respawn_mode == "after_taken") {
         Actions.schedule(Params.ball_respawn_after_taken_delay) {
             if (ctx.balls > 0) {
@@ -44,6 +49,7 @@ fun createBall(ctx: Context) {
             friction = 0f
             filter {
                 categoryBits = com.minimal.arkanoid.game.default
+                maskBits = cat.range
             }
         }
     }
@@ -57,13 +63,13 @@ fun createBall(ctx: Context) {
     ctx.engine.entity {
         body(body)
         ball(NEW_BALL_PRIORITY)
-        bullet(5f)
+        // bullet(5f) // BallScript spełnia tę rolę
         texture(ctx.atlas.findRegion("circle"), 1f, 1f, scale = 0f, color = Params.color_ball)
         script(ScaleScript(1f))
         tail(SnakeTail(TextureRegion(ctx.tailTex), 0.5f, 60))
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
-        script(BallScript)
+        script(BallScript())
         print("threshold: " + Params.ball_joint_threshold)
         script(JointBreakScript(ctx, joint, Params.ball_joint_threshold, activateBall))
         //script(SpeedScaleScript)
@@ -89,9 +95,29 @@ class RespawnScript(val ctx: Context) : Script {
     }
 }
 
-object BallScript : Script {
+class BallScript : Script {
     val threshold = 1f
     val factor = 5f
+    var autodestructionTimer = 0f
+
+    fun autodestruction(me: MyEntity, timeStepSec: Float) {
+        if (me[ball].priority == NEW_BALL_PRIORITY) {
+            return
+        }
+        if(me[body].linearVelocity.len2() < 0.5f * 0.5f) {
+            autodestructionTimer += timeStepSec
+            if (autodestructionTimer > Params.ball_autodestruction_timeout) {
+                me.dead = true
+                // todo: [particle] explosion
+            }
+        } else {
+            autodestructionTimer = 0f
+        }
+    }
+
+    override fun update(me: MyEntity, timeStepSec: Float) {
+        autodestruction(me, timeStepSec)
+    }
 
     override fun postSolve(me: MyEntity, other: MyEntity, contact: Contact, impulse: ContactImpulse) {
         if(other.contains(energy)) {
