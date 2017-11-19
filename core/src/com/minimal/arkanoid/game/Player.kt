@@ -64,6 +64,12 @@ class PlayerSystem(val ctx: Context) : System {
 
     override fun update(timeStepSec: Float) {
         family.foreach { e, player, b ->
+            if (player.ball?.dead ?: false) {
+                ctx.world.destroyJoint(player.joint)
+                player.joint = null
+                player.ball = null
+            }
+
             if (player.input.fire) {
                 if (player.joint == null && player.entsInRange.isNotEmpty()) {
                     val other = pickOtherEntity(player, b)

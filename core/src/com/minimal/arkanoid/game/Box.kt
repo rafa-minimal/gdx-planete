@@ -7,6 +7,7 @@ import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.fx.BoxTweeningScript
 import com.minimal.arkanoid.game.fx.FadeOutScript
+import com.minimal.arkanoid.game.script.CrashScript
 import com.minimal.arkanoid.game.script.JointBreakScript
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.utils.maskBits
@@ -94,6 +95,8 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
         body(bod)
         if(Params.box_energy > 0f) {
             energy(Params.box_energy)
+            crash(1f, 1f)
+            script(CrashScript)
         }
         texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, scale = 0f, color = Params.color_box)
         script(BoxTweeningScript(1f))
