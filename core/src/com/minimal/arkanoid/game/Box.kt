@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.fx.BoxTweeningScript
 import com.minimal.arkanoid.game.script.JointBreakScript
 import com.minimal.arkanoid.game.script.Script
 import ktx.box2d.body
@@ -69,7 +70,8 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
     }
     ctx.engine.entity {
         body(bod)
-        texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, color = Params.color_box)
+        texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, scale = 0f, color = Params.color_box)
+        script(BoxTweeningScript(1f))
         script(JointBreakScript(ctx, jl, Params.box_joint_threshold, onBreak))
         script(JointBreakScript(ctx, jr, Params.box_joint_threshold, onBreak))
         box()

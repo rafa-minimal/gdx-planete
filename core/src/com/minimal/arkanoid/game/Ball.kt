@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.fx.ScaleScript
 import com.minimal.arkanoid.game.script.JointBreakScript
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.fx.SnakeTail
@@ -57,7 +58,8 @@ fun createBall(ctx: Context) {
         body(body)
         ball(NEW_BALL_PRIORITY)
         bullet(5f)
-        texture(ctx.atlas.findRegion("circle"), 1f, 1f)
+        texture(ctx.atlas.findRegion("circle"), 1f, 1f, scale = 0f, color = Params.color_ball)
+        script(ScaleScript(1f))
         tail(SnakeTail(TextureRegion(ctx.tailTex), 0.5f, 60))
         script(RespawnScript(ctx))
         script(BallSpeedLimit)

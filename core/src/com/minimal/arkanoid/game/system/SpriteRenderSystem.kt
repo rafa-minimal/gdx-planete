@@ -30,6 +30,6 @@ class SpriteRenderSystem(val ctx: Context) : System {
                 texture.width/2, texture.height/2,
                 texture.width, texture.height,
                 texture.scaleX, texture.scaleY,
-                angle)
+                angle + texture.angleDeg)
     }
 }
