@@ -45,7 +45,6 @@ class Context(val level: Level) {
     var balls: Int = 0
 
     fun displayWorldHeight(levelWidth: Float, levelHeight: Float): Float {
-        print("Level height: " + levelHeight)
         // Preferowana wysokość, która pasuje do aspect ratio urządzenia
         val prefHeight = levelWidth * Gdx.graphics.height.toFloat() / Gdx.graphics.width.toFloat()
         val height = Math.max(prefHeight, levelHeight)

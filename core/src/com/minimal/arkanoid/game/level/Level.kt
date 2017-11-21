@@ -16,8 +16,7 @@ import com.minimal.utils.rnd
 import ktx.box2d.body
 import ktx.box2d.filter
 import ktx.math.vec2
-import java.lang.Math.abs
-import java.lang.Math.max
+import java.lang.Math.*
 import java.util.*
 
 enum class LevelResult {
@@ -43,13 +42,38 @@ fun loadLevelMap(level: String): LevelMap {
 }
 
 fun loadLevel(levelNumber: String): Level {
-    val reader = Gdx.files.internal(levelFile(levelNumber)).reader(1024)
-    var lines: List<String> = ArrayList()
+    try {
+        return loadLevelInternal(levelNumber)
+    } catch(e: Throwable) {
+        throw RuntimeException("Error reading level " + levelNumber, e)
+    }
+}
 
+fun loadLevelInternal(levelNumber: String): Level {
+    val reader = Gdx.files.internal(levelFile(levelNumber)).reader(1024)
     var line: String? = reader.readLine()
+    var width: Int
+    var height: Int
+    try {
+        val size = line!!.trim().split(":")
+        width = Integer.parseInt(size[0])
+        height = Integer.parseInt(size[1])
+    } catch (e: RuntimeException) {
+        println("Failed to parse first line <width>:<height> expected, got: " + line)
+        width = 36 / 2
+        height = 56
+        println("Falling back to default size: " + width + ":" + height)
+    }
+
+    var lines: List<String> = ArrayList()
+    line = reader.readLine()
     while (line != null) {
         if (line.startsWith("--")) {
             break
+        }
+        if (line.startsWith(";")) {
+            line = reader.readLine()
+            continue
         }
         lines += line
         line = reader.readLine()
@@ -59,17 +83,17 @@ fun loadLevel(levelNumber: String): Level {
     props.load(reader)
 
     reader.close()
+    while (lines.size < height) {
+        lines += ""
+    }
+    lines = lines.subList(0, height)
     lines = lines.map { it.trimEnd() }.reversed()
-    val width = lines.map { li -> li.length }.max()
-    val height = lines.size
 
-    val map = LevelMap(width!!, height)
+    val map = LevelMap(width, height)
 
-    for (y in 0 until map.h) {
-        //print("|")
-        lines[y].forEachIndexed {
-            x, char ->
-            map[x, y] = char
+    for (y in 0 until min(map.h, lines.size)) {
+        for (x in 0 until min(map.w, lines[y].length)) {
+            map[x, y] = lines[y][x]
             //print(map[x, y])
         }
         //println("|")
@@ -104,8 +128,8 @@ fun randomMap(): LevelMap {
 open class Level(val map: LevelMap, val props: Properties = Properties()) {
     lateinit var ctx: Context
 
-    val width = map.w * 2f
-    val height = map.h * 3f / 2f
+    val width = map.w.toFloat()
+    val height = map.h.toFloat()
 
     fun edge(from: Vector2, to: Vector2): MyEntity {
         val center = Vector2(to).add(from).scl(0.5f)
@@ -177,9 +201,13 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
             for (x in 0 until map.w) {
                 //print(map[x, y])
                 when (map[x, y]) {
-                    '#' -> boxOneShot(ctx, x * 2 + 1f, y + 0.5f)
-                    '=' -> boxNaZawiasach(ctx, x * 2 + 1f, y + 0.5f)
-                    'V' -> boxDiament(ctx, x * 2 + 1f, y + 0.5f)
+                    '#' -> boxOneShot(ctx, x + 1f, y + 0.5f)
+                    '=' -> {
+                        if (x % 2 == 0) {
+                            boxNaZawiasach(ctx, x + 1f, y + 0.5f)
+                        }
+                    }
+                    'V' -> boxDiament(ctx, x + 1f, y + 0.5f)
                 }
             }
             //println("|")
