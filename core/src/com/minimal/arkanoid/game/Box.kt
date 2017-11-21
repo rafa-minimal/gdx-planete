@@ -63,7 +63,7 @@ val onBreak: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
         fix.restitution = Params.ball_restitution
     }
     if (ent[body].jointList.isEmpty()) {
-        ent.add(ball, Ball(4))
+        ent.add(ball, Ball(BOX_PRIORITY))
     }
 }
 

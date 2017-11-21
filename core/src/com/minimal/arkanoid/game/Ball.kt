@@ -17,9 +17,6 @@ import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
 import ktx.math.vec2
 
-val NEW_BALL_PRIORITY = 1
-val BALL_PRIORITY = 0
-
 val activateBall: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
     ent[ball].priority = BALL_PRIORITY
     for (fix in ent[body].fixtureList) {
