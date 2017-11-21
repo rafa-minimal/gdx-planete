@@ -35,7 +35,8 @@ class Context(val level: Level) {
     val renderer = ShapeRenderer()
 
     val worldCamera = OrthographicCamera()
-    val cameraSystem = CameraSystem(worldCamera, level.width, level.height)
+    val displayHeight = displayWorldHeight(level.width, level.height)
+    val cameraSystem = CameraSystem(worldCamera, level.width, displayHeight)
 
     val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
     val tailTex = Texture("tail.png")
@@ -43,12 +44,20 @@ class Context(val level: Level) {
     val playerControl = PlayerControl()
     var balls: Int = 0
 
+    fun displayWorldHeight(levelWidth: Float, levelHeight: Float): Float {
+        print("Level height: " + levelHeight)
+        // Preferowana wysokość, która pasuje do aspect ratio urządzenia
+        val prefHeight = levelWidth * Gdx.graphics.height.toFloat() / Gdx.graphics.width.toFloat()
+        val height = Math.max(prefHeight, levelHeight)
+        return height
+    }
+
     fun start() {
         // level ustawia parametry (Params), więc musi być na początku
         Params = ParamsDefaults()
         level.start(this)
 
-        cameraSystem.worldPosition.set(level.width/2, level.height/2)
+        cameraSystem.worldPosition.set(level.width/2, level.height-displayHeight/2)
 
         engine.add(
                 WorldSystem(this),

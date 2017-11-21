@@ -66,13 +66,13 @@ fun loadLevel(levelNumber: String): Level {
     val map = LevelMap(width!!, height)
 
     for (y in 0 until map.h) {
-        print("|")
+        //print("|")
         lines[y].forEachIndexed {
             x, char ->
             map[x, y] = char
-            print(map[x, y])
+            //print(map[x, y])
         }
-        println("|")
+        //println("|")
     }
     return Level(map, props)
 }
@@ -167,22 +167,22 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
         }
 
         // edges (box)
-        edge(vec2(0f, 0f), vec2(0f, height))
-        edge(vec2(width, 0f), vec2(width, height))
+        edge(vec2(0f, -height), vec2(0f, height))
+        edge(vec2(width, -height), vec2(width, height))
         edge(vec2(0f, height), vec2(width, height))
 
         // create boxes
         for (y in 0 until map.h) {
-            print("|")
+            //print("|")
             for (x in 0 until map.w) {
-                print(map[x, y])
+                //print(map[x, y])
                 when (map[x, y]) {
                     '#' -> boxOneShot(ctx, x * 2 + 1f, y + 0.5f)
                     '=' -> boxNaZawiasach(ctx, x * 2 + 1f, y + 0.5f)
                     'V' -> boxDiament(ctx, x * 2 + 1f, y + 0.5f)
                 }
             }
-            println("|")
+            //println("|")
         }
 
         // create player
