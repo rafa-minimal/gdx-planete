@@ -1,0 +1,27 @@
+Statystyka aspect ratio
+-----------------------
+(https://hwstats.unity3d.com/mobile/display-android.html)
+
+16:9         - 74%     najwęższy ekran <- pod to projektujemy
+5:3 (15:9)   - 16%
+16:10        - 6,4%    najszerszy ekran
+
+Level (world) jest wyświetlany u góry (tzn. dosunięty do górnej krawędzi).
+Levele projektuj pod najwęższy ekran, tzn. proporcje 16:9, bo:
+ - jest najbardziej popularny
+ - na szerszym ekranie po prostu będzie więcej miejsca u dołu
+
+Zakładam miejsce na klawisze - 1/4 szerokości ekranu, wtedy zostaje 14:9 na sam level.
+
+Przykładowe rozmiary (zakładamy wspomniane proporcje 14:9)
+-------------------------------
+szer x wys   użyteczna wys.
+  - 18:28      18
+  - 27:42      32
+  - 36:56      46
+
+Użyteczna wysokość
+  Powinniśmy zostawić 9~10 metrów (linii) od dołu pustych.
+  Player zajmuje zazwyczaj 8 metrów (zobacz Params):
+    player_y = 5
+    player_range = 3
