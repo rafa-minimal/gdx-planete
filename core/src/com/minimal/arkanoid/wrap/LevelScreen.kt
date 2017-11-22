@@ -55,13 +55,13 @@ class LevelScreen : Screen {
     private fun nextLevel() {
         currentLevel++
         levelLabel.setText("Level " + currentLevel.toString())
-        levelPreview.setLevel(currentLevel.toString())
+        levelPreview.nextLevel(currentLevel.toString())
     }
 
     private fun prevLevel() {
         currentLevel = Math.max(1, currentLevel - 1)
         levelLabel.setText("Level " + currentLevel.toString())
-        levelPreview.setLevel(currentLevel.toString())
+        levelPreview.prevLevel(currentLevel.toString())
     }
 
     override fun show() {

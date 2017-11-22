@@ -10,3 +10,7 @@ fun rndBox(w: Float, h: Float) = vec(MathUtils.random(-w / 2, w / 2), MathUtils.
  * Both inclusive
  */
 fun rnd(from: Int, to: Int) = MathUtils.random(from, to)
+
+fun rnd(from: Float, to: Float) = MathUtils.random(from, to)
+
+fun rnd(to: Float) = MathUtils.random(to)
