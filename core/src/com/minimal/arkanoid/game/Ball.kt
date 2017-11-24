@@ -25,15 +25,14 @@ val activateBall: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
 
     if (Params.ball_respawn_mode == "after_taken") {
         Actions.schedule(Params.ball_respawn_after_taken_delay) {
-            if (ctx.balls > 0) {
-                createBall(ctx)
-                ctx.balls--
+            if (ctx.takeBall()) {
+                createBallHooked(ctx)
             }
         }
     }
 }
 
-fun createBall(ctx: Context) {
+fun createBallHooked(ctx: Context) {
     val pos = vec2(ctx.level.width / 2, Params.player_y + Params.player_range)
 
     val body = ctx.world.body(DynamicBody) {
@@ -84,9 +83,8 @@ object BallSpeedLimit : Script {
 class RespawnScript(val ctx: Context) : Script {
     override fun beforeDestroy(me: MyEntity) {
         if (Params.ball_respawn_mode == "after_death") {
-            if (ctx.balls > 0) {
-                createBall(ctx)
-                ctx.balls--
+            if (ctx.takeBall()) {
+                createBallHooked(ctx)
             }
         }
     }

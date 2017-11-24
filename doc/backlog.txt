@@ -1,3 +1,10 @@
+MVP:
+* [ 10%] 100 leveli
+* [  0%] dźwięki
+* [  0%] ekran sukces / porażka
+* [  0%] kolory - dostroić
+* [  0%] nawigacja
+
 UI:
 * Control HUD - buttons fix
 

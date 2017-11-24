@@ -84,6 +84,16 @@ class Family1<E: Entity, C1>(val engine: Engine<E>, val c1: CT<C1>) {
             }
         }
     }
+
+    fun count(): Int {
+        var c = 0
+        engine.ents.forEach {
+            if (it.contains(c1)) {
+                c++
+            }
+        }
+        return c
+    }
 }
 
 class Family2<E: Entity, C1, C2>(val engine: Engine<E>, val c1: CT<C1>, val c2: CT<C2>) {

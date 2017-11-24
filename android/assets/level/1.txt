@@ -1,5 +1,5 @@
 18:28
-; 14:9 aspect ration
+; tutorial 1
 
 
 
@@ -10,7 +10,7 @@
 
 
 
-  = = = = = = =
+
 
 
   = = = = = = =
@@ -29,5 +29,8 @@
 
 
 ------------------
-time_sec = 180
+class = Tutorial
+level_time_sec = -1
+ball_joint_threshold = 0.0005
 box_joint_threshold = 0.02
+ball_respawn_mode = after_death

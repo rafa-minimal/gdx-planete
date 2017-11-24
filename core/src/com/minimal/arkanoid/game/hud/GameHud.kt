@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.wrap.WrapCtx
 
-class GameHud(val stage: Stage, val ctx: Context) {
+class GameHud(stage: Stage, val ctx: Context) {
     val skin = WrapCtx.skin
     val root = Table(skin)
     var lastBallsCount = ctx.balls
@@ -20,9 +20,12 @@ class GameHud(val stage: Stage, val ctx: Context) {
         root.pad(5f)
 
         top = Table(skin)
-        repeat(lastBallsCount) {
-            top.add(Image(skin.getDrawable("circle"))).size(20f)
+        if (ctx.balls != -1) {
+            repeat(lastBallsCount) {
+                top.add(Image(skin.getDrawable("circle"))).size(20f)
+            }
         }
+
         top.add().expandX()
         root.add(top).fillX().row()
 
@@ -45,15 +48,17 @@ class GameHud(val stage: Stage, val ctx: Context) {
             top.add().expandX()
         }
 
-        val timeSec = (ctx.levelTimeMs - ctx.timeMs) / 1000
-        if (timeSec != lastTimeSec) {
-            val min = timeSec / 60
-            val sec = timeSec - (min * 60)
-            if (sec < 10)
-                timeLabel.setText(min.toString() + ":0" + sec)
-            else
-                timeLabel.setText(min.toString() + ":" + sec)
-            lastTimeSec = timeSec
+        if (ctx.levelTimeMs != -1) {
+            val timeSec = (ctx.levelTimeMs - ctx.timeMs) / 1000
+            if (timeSec != lastTimeSec) {
+                val min = timeSec / 60
+                val sec = timeSec - (min * 60)
+                if (sec < 10)
+                    timeLabel.setText(min.toString() + ":0" + sec)
+                else
+                    timeLabel.setText(min.toString() + ":" + sec)
+                lastTimeSec = timeSec
+            }
         }
     }
 }

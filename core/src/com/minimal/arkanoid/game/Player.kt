@@ -108,7 +108,7 @@ class PlayerSystem(val ctx: Context) : System {
     }
 }
 
-fun createPlayer(ctx: Context, width: Float, playerY: Float) {
+fun createPlayer(ctx: Context, width: Float, playerY: Float): MyEntity {
     val pos = vec2(width / 2, playerY)
 
     val body = ctx.world.body(DynamicBody) {
@@ -155,6 +155,8 @@ fun createPlayer(ctx: Context, width: Float, playerY: Float) {
         lowerTranslation = -limit
         upperTranslation = limit
     }
+
+    return player
 }
 
 class PowerUpCollector(val ctx: Context) : Script {

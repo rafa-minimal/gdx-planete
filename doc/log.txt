@@ -1,3 +1,18 @@
+* nie widać ile zostało piłek
+* bug: nie łapie raz złapanej piłki, musi wyjść i wejść do range
+
+
+24.11.2017
+----------
+* czcionki - poprawka - wybór w zależności od szerokości ekranu
+* edge - schowane tuż za ekranem, widoczne tylko przy "screen shake"
+* tutorial level, brakuje wskazania, który przycisk nacisnąć
+
+22.11.2017
+----------
+* "wybuchające" przełączanie leveli (level screen)
+* level - proporcje itp (level.txt)
+
 21.11.2017
 ----------
 * level - poprawne wczytywanie, proporcje

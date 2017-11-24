@@ -16,7 +16,7 @@ import com.minimal.utils.rnd
 import ktx.box2d.body
 import ktx.box2d.filter
 import ktx.math.vec2
-import java.lang.Math.*
+import java.lang.Math.min
 import java.util.*
 
 enum class LevelResult {
@@ -44,7 +44,7 @@ fun loadLevelMap(level: String): LevelMap {
 fun loadLevel(levelNumber: String): Level {
     try {
         return loadLevelInternal(levelNumber)
-    } catch(e: Throwable) {
+    } catch (e: Throwable) {
         throw RuntimeException("Error reading level " + levelNumber, e)
     }
 }
@@ -98,7 +98,14 @@ fun loadLevelInternal(levelNumber: String): Level {
         }
         //println("|")
     }
-    return Level(map, props)
+    if (props.containsKey("class")) {
+        val className = "com.minimal.arkanoid.game.level." + props.getProperty("class")
+        val levelClass = Class.forName(className)
+        return levelClass.getConstructor(LevelMap::class.java, Properties::class.java)
+                .newInstance(map, props) as Level
+    } else {
+        return Level(map, props)
+    }
 }
 
 fun randomMap(): LevelMap {
@@ -145,16 +152,13 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
                     }
                 }
             })
-            val width = max(abs(from.x - to.x), 1f)
-            val height = max(abs(from.y - to.y), 1f)
-            texture(ctx.atlas.findRegion("fill"), width, height)
             script(ShakeScript(ctx))
         }
     }
 
     var lastBallLeftRangeTime = 0
     var ballsInRange = 0
-    val entityCounScript = object : Script {
+    val entityCountScript = object : Script {
 
         override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
             if (other.contains(ball)) {
@@ -182,20 +186,28 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
 
         ctx.engine.entity {
             body(ctx.world.body(StaticBody) {
-                position.set(width/2f, Params.player_y)
+                position.set(width / 2f, Params.player_y)
                 box(width, 2 * Params.player_range) {
                     isSensor = true
                 }
             })
-            script(entityCounScript)
+            script(entityCountScript)
         }
 
         // edges (box)
-        edge(vec2(0f, -height), vec2(0f, height))
-        edge(vec2(width, -height), vec2(width, height))
-        edge(vec2(0f, height), vec2(width, height))
+        buildEdges()
 
         // create boxes
+        buildBoxes()
+
+        // create player
+        createPlayer(ctx, width, Params.player_y)
+
+        // ball
+        createBallHooked(ctx)
+    }
+
+    fun buildBoxes() {
         for (y in 0 until map.h) {
             //print("|")
             for (x in 0 until map.w) {
@@ -212,22 +224,25 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
             }
             //println("|")
         }
-
-        // create player
-        createPlayer(ctx, width, Params.player_y)
-
-        // ball
-        createBall(ctx)
     }
 
-    fun result(): LevelResult {
+    fun buildEdges() {
+        val left = edge(vec2(0f, -height), vec2(0f, height))
+        left.add(texture, Texture(ctx.atlas.findRegion("fill"), 2f, 2 * height, vec2(-1f, 0f)))
+        val right = edge(vec2(width, -height), vec2(width, height))
+        right.add(texture, Texture(ctx.atlas.findRegion("fill"), 2f, 2 * height, vec2(1f, 0f)))
+        val top = edge(vec2(0f, height), vec2(width, height))
+        top.add(texture, Texture(ctx.atlas.findRegion("fill"), width + 4f, 2f, vec2(0f, 1f)))
+    }
+
+    open fun result(): LevelResult {
         var count = 0
         ctx.engine.family(box).foreach { entity, box -> count++ }
         if (count == 0) {
             return Complete
         }
 
-        if (ctx.timeMs >= ctx.levelTimeMs) {
+        if (ctx.levelTimeMs != -1 && ctx.timeMs >= ctx.levelTimeMs) {
             return TimesUp
         }
 

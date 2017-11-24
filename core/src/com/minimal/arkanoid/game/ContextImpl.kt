@@ -83,6 +83,17 @@ class Context(val level: Level) {
     fun dispose() {
 
     }
+
+    fun takeBall(): Boolean {
+        if (balls == -1) {
+            return true
+        }
+        if (balls > 0) {
+            balls--
+            return true
+        }
+        return false
+    }
 }
 
 class PlayerControl {
