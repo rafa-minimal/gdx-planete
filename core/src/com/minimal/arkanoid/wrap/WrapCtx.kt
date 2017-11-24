@@ -30,25 +30,28 @@ object WrapCtx {
         val dim = Math.min(Gdx.graphics.height, Gdx.graphics.width)
 
         if (dim <= 480) {
-            loadFonts(17, 26)
+            font = loadFont(17)
+            bigFont = loadFont(26)
 //            loadAtlas("mdpi")
         } else if (dim <= 480 * 1.5) {
-            loadFonts(22, 34)
+            font = loadFont(22)
+            bigFont = loadFont(34)
 //            loadAtlas("hdpi")
         } else if (dim <= 480 * 2) {
-            loadFonts(34, 51)
+            font = loadFont(34)
+            bigFont = loadFont(51)
 //            loadAtlas("xhdpi")
         } else if (dim <= 480 * 3) {
-            loadFonts(44, 68)
+            font = loadFont(44)
+            bigFont = loadFont(68)
 //            loadAtlas("xxhdpi")
         } else {
-            loadFonts(44, 68)
+            font = loadFont(44)
+            bigFont = loadFont(68)
 //            loadAtlas("xxxhdpi")
         }
 
         atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
-        font = BitmapFont(Gdx.files.internal("fonts/century-gothic-17.fnt"))
-        bigFont = BitmapFont(Gdx.files.internal("fonts/century-gothic-26.fnt"))
 
         skin = Skin(atlas)
         skin.add("small-font", font)
@@ -69,10 +72,7 @@ object WrapCtx {
         atlas = TextureAtlas(Gdx.files.internal(dir + "/asteroids.atlas"))
     }*/
 
-    private fun loadFonts(smallSize: Int, bigSize: Int) {
-        font = BitmapFont(Gdx.files.internal("fonts/century-gothic-$smallSize.fnt"))
-        bigFont = BitmapFont(Gdx.files.internal("fonts/century-gothic-$bigSize.fnt"))
-    }
+    private fun loadFont(size: Int) = BitmapFont(Gdx.files.internal("fonts/century-gothic-$size.fnt"))
 
     fun dispose() {
         batch.dispose()
