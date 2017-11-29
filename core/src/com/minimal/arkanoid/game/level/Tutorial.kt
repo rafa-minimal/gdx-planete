@@ -4,6 +4,7 @@ import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
+import com.minimal.arkanoid.game.hud.ControlsHud
 import com.minimal.arkanoid.game.level.LevelResult.None
 import com.minimal.arkanoid.game.level.Tutorial.State.*
 import com.minimal.arkanoid.game.script.Script
@@ -12,8 +13,13 @@ import java.util.*
 class Tutorial(map: LevelMap, props: Properties) : Level(map, props) {
     var complete = false
     private var state = INIT
-    //val stage = Wrap
     lateinit private var playe: MyEntity
+
+    private var controlsHud: ControlsHud? = null
+
+    fun setControlsHud(controlsHud: ControlsHud) {
+        this.controlsHud = controlsHud
+    }
 
     private enum class State {
         INIT,
@@ -25,32 +31,35 @@ class Tutorial(map: LevelMap, props: Properties) : Level(map, props) {
         WAIT
     }
 
-    fun emphasize() {
-
-    }
-
-    private var initialBricksCount = 0
+    private var initialBricksCount = 7
 
     fun tutorial_update() {
         when (state) {
             INIT -> {
-                emphasize() // left button
-                state = GO_LEFT
+                state = WAIT
+                Actions.schedule(0.5f) {
+                    controlsHud?.emphasizeLeft()
+                    state = GO_LEFT
+                }
             }
             GO_LEFT -> {
                 if (playe[body].position.x <= 4f) {
-                    emphasize() // right button
-                    state = GO_RIGHT
+                    controlsHud?.emphasizeEnd()
+                    state = WAIT
+                    Actions.schedule(0.5f) {
+                        controlsHud?.emphasizeRight()
+                        state = GO_RIGHT
+                    }
                 }
             }
             GO_RIGHT -> {
                 if (playe[body].position.x >= width / 2f) {
+                    controlsHud?.emphasizeEnd()
                     buildBoxes()
-                    initialBricksCount = ctx.engine.family(box).count()
                     state = WAIT
-                    Actions.schedule(0.5f) {
+                    Actions.schedule(1f) {
                         createBallHooked(ctx)
-                        Actions.schedule(0.5f) {
+                        Actions.schedule(1f) {
                             state = HIT_BRICK
                         }
                     }
@@ -58,14 +67,15 @@ class Tutorial(map: LevelMap, props: Properties) : Level(map, props) {
             }
             HIT_BRICK -> {
                 if (playe[player].entsInRange.size > 0) {
-                    emphasize() // fire button
+                    controlsHud?.emphasizeFire()
                     // slow down, setTimeScale(0.5)
                 } else {
-                    // don't emphasize
+                    controlsHud?.emphasizeEnd()
                     // speed up: setTimeScale(1)
                 }
                 if (ctx.engine.family(box).count() != initialBricksCount) {
                     // print "great!"
+                    controlsHud?.emphasizeEnd()
                     state = FINISH_IT
                 }
             }

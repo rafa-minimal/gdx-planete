@@ -1,7 +1,7 @@
 package com.minimal.arkanoid.game
 
-import java.util.PriorityQueue
 import com.minimal.ecs.System
+import java.util.*
 
 class Action(var time: Int, val action: () -> Unit, val repeat: (() -> Int)? = null)
 
@@ -44,6 +44,11 @@ object Actions {
                 queue.add(action)
             }
         }
+    }
+
+    fun reset() {
+        queue.clear()
+        currentTime = 0
     }
 }
 

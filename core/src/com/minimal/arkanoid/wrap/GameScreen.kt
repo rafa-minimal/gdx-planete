@@ -10,6 +10,7 @@ import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
 import com.minimal.arkanoid.game.hud.GameHud
 import com.minimal.arkanoid.game.level.LevelResult
+import com.minimal.arkanoid.game.level.Tutorial
 import com.minimal.arkanoid.game.level.loadLevel
 import com.minimal.gdx.glClear
 import com.minimal.gdx.justPressed
@@ -29,6 +30,10 @@ class GameScreen(val level: String) : ScreenAdapter() {
         ctx.cameraSystem.resize(Gdx.graphics.width, Gdx.graphics.height)
         controlsHud = ControlsHud(stage, ctx.playerControl)
         gameHud = GameHud(stage, ctx)
+        val level = ctx.level
+        if (level is Tutorial) {
+            level.setControlsHud(controlsHud)
+        }
         WrapCtx.mux.addProcessor(stage)
     }
 

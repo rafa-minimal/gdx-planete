@@ -1,6 +1,10 @@
 * nie widać ile zostało piłek
 * bug: nie łapie raz złapanej piłki, musi wyjść i wejść do range
 
+29.11.2017
+----------
+* poprawione kontrolki - działa dotykowo, a nie tak jak przycisk
+* tutorial - pulsujące kontrolki
 
 24.11.2017
 ----------

@@ -52,6 +52,7 @@ class Context(val level: Level) {
     }
 
     fun start() {
+        Actions.reset()
         // level ustawia parametry (Params), więc musi być na początku
         Params = ParamsDefaults()
         level.start(this)
