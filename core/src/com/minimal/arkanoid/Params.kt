@@ -8,7 +8,9 @@ var Params = ParamsDefaults()
 class ParamsDefaults {
     var color_bg = Color.valueOf("5f0f0f")
     var color_ball = Color.valueOf("ffffff")
+    var color_tail = Color.valueOf("f05545")
     var color_box = Color.valueOf("f05545")
+    var color_hud = Color.valueOf("f05545")
     var box_width = 1.8f
     var box_height = 0.9f
     var box_render_width = 1.8f
@@ -25,13 +27,20 @@ class ParamsDefaults {
                 val setter = Params::class.java.methods.firstOrNull { method ->
                     method.name == setterName
                 }
-                if (setter != null) {
+
+                val getterName = "get" + key.toString()[0].toUpperCase() + key.toString().substring(1)
+                val getter = Params::class.java.methods.firstOrNull { method ->
+                    method.name == getterName
+                }
+
+                if (setter != null && getter != null) {
                     val field = Params::class.java.getDeclaredField(key.toString())
                     when(field.type) {
                         Color::class.java -> {
                             val color = parseColorHex(valStr)
                             if (color != null)
-                                setter.invoke(Params, color)
+                                (getter.invoke(Params) as Color).set(color)
+                                //setter.invoke(Params, color)
                         }
                         String::class.java -> setter.invoke(Params, valStr)
                         Int::class.java -> {

@@ -12,6 +12,8 @@ import com.minimal.arkanoid.game.level.LevelResult.*
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.script.ShakeScript
 import com.minimal.utils.getInt
+import com.minimal.utils.hsv
+import com.minimal.utils.parseInt
 import com.minimal.utils.rnd
 import ktx.box2d.body
 import ktx.box2d.filter
@@ -101,10 +103,10 @@ fun loadLevelInternal(levelNumber: String): Level {
     if (props.containsKey("class")) {
         val className = "com.minimal.arkanoid.game.level." + props.getProperty("class")
         val levelClass = Class.forName(className)
-        return levelClass.getConstructor(LevelMap::class.java, Properties::class.java)
-                .newInstance(map, props) as Level
+        return levelClass.getConstructor(LevelMap::class.java, Properties::class.java, Int::class.java)
+                .newInstance(map, props, parseInt(levelNumber, 0)) as Level
     } else {
-        return Level(map, props)
+        return Level(map, props, parseInt(levelNumber, 0))
     }
 }
 
@@ -132,7 +134,7 @@ fun randomMap(): LevelMap {
     return map
 }
 
-open class Level(val map: LevelMap, val props: Properties = Properties()) {
+open class Level(val map: LevelMap, val props: Properties = Properties(), val levelNumber: Int) {
     lateinit var ctx: Context
 
     val width = map.w.toFloat()
@@ -182,6 +184,18 @@ open class Level(val map: LevelMap, val props: Properties = Properties()) {
         ctx.levelTimeMs = props.getInt("time_sec", 60) * 1000
 
         Params.override(props)
+        val hue = levelNumber * 10f / 360f
+        val c1 = hsv(hue, 1f/3f, 1f)
+        val c2 = hsv(hue, 0.5f, 0.83f)
+        val c3 = hsv(hue, 2f/3f, 2f/3f)
+        val c4 = hsv(hue, 0.83f, 0.5f)
+        val c5 = hsv(hue, 1f, 1/3f)
+
+        Params.color_bg.set(c5)
+        Params.color_ball.set(c1)
+        Params.color_tail.set(c2)
+        Params.color_box.set(c3)
+        Params.color_hud.set(c4)
 
 
         ctx.engine.entity {

@@ -1,5 +1,8 @@
-* nie widać ile zostało piłek
 * bug: nie łapie raz złapanej piłki, musi wyjść i wejść do range
+
+05.12.2017
+----------
+* kolory - automatyczna skala monochromatyczna
 
 29.11.2017
 ----------

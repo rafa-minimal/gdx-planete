@@ -62,7 +62,7 @@ fun createBallHooked(ctx: Context) {
         // bullet(5f) // BallScript spełnia tę rolę
         texture(ctx.atlas.findRegion("circle"), 1f, 1f, scale = 0f, color = Params.color_ball)
         script(ScaleScript(1f))
-        tail(SnakeTail(TextureRegion(ctx.tailTex), 0.5f, 60))
+        tail(SnakeTail(TextureRegion(ctx.tailTex), 0.5f, 60, Params.color_tail))
         script(RespawnScript(ctx))
         script(BallSpeedLimit)
         script(BallScript())

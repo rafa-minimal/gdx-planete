@@ -9,13 +9,13 @@ import com.minimal.utils.FloatArray3d
 import com.minimal.utils.FloatCircularBuffer
 import ktx.math.vec2
 
-class SnakeTail(val tex: TextureRegion, val tailWidth: Float, SEGMENTS: Int) {
+class SnakeTail(val tex: TextureRegion, val tailWidth: Float, SEGMENTS: Int, color: Color) {
     val lastPoint = vec2()
     var hasLastPoint = false
 
     val VERTS_PER_SEGMENT = 4
     val POINTS_PER_VERT = 5
-    val white = Color.WHITE.toFloatBits()
+    val colorFloat = color.toFloatBits()
 
     val u = tex.u
     val v = tex.v2
@@ -33,7 +33,7 @@ class SnakeTail(val tex: TextureRegion, val tailWidth: Float, SEGMENTS: Int) {
         val texY = arrayOf(v, v2, v2, v)
         for (i in 0 until SEGMENTS) {
             for (j in 0 .. 3) {
-                vertices[i, j, 2] = white
+                vertices[i, j, 2] = colorFloat
                 vertices[i, j, 3] = texX[j]
                 vertices[i, j, 4] = texY[j]
             }

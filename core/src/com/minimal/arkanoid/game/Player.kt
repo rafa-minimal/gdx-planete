@@ -135,7 +135,7 @@ fun createPlayer(ctx: Context, width: Float, playerY: Float): MyEntity {
     val player = ctx.engine.entity {
         body(body)
         player(rangeFixture, ctx.playerControl)
-        texture(ctx.atlas.findRegion("circle2"), 1f, 1f)
+        texture(ctx.atlas.findRegion("circle2"), 1f, 1f, color = Params.color_ball)
         script(PlayerRangeScript)
         script(PowerUpCollector(ctx))
         script(SpeedScaleScript)

@@ -1,9 +1,9 @@
 package com.minimal.arkanoid.game.system
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.body
 import com.minimal.arkanoid.game.player
@@ -57,7 +57,7 @@ class RangeDrawSystem(val ctx: Context) : System {
             tmp.rotateRad(MathUtils.PI2 / N)
         }
 
-        ctx.batch.render(ctx.worldCamera, Color.WHITE) {
+        ctx.batch.render(ctx.worldCamera, Params.color_ball) {
             for (point in points) {
                 ctx.batch.draw(circle, point.x - 0.1f, point.y - 0.1f, 0.2f, 0.2f)
             }

@@ -58,12 +58,13 @@ fun boxDiament(ctx: Context, x: Float, y: Float) {
     boxOneShot(ctx, x, y).add(BoxDiamondScript(ctx))
 }
 
-val onBreak: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
+val onBreak: (Context, MyEntity) -> Unit = { ctx: Context, ent: MyEntity ->
     for (fix in ent[body].fixtureList) {
         fix.restitution = Params.ball_restitution
     }
     if (ent[body].jointList.isEmpty()) {
         ent.add(ball, Ball(BOX_PRIORITY))
+        ent[body].linearDamping = 0f
     }
 }
 
@@ -96,7 +97,7 @@ fun boxNaZawiasach(ctx: Context, x: Float, y: Float) {
     }
     ctx.engine.entity {
         body(bod)
-        if(Params.box_energy > 0f) {
+        if (Params.box_energy > 0f) {
             energy(Params.box_energy)
             crash(1f, 1f)
             script(CrashScript)

@@ -10,7 +10,7 @@ import com.minimal.arkanoid.game.level.Tutorial.State.*
 import com.minimal.arkanoid.game.script.Script
 import java.util.*
 
-class Tutorial(map: LevelMap, props: Properties) : Level(map, props) {
+class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, props, levelNumber) {
     var complete = false
     private var state = INIT
     lateinit private var playe: MyEntity

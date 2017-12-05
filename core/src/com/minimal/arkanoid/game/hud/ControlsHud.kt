@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.PlayerControl
 import com.minimal.arkanoid.wrap.WrapCtx
 import com.minimal.gdx.alphaButton
@@ -47,6 +48,9 @@ class ControlsHud(stage: Stage, val player: PlayerControl) {
         right.setOrigin(unit/2f, unit/2f)
         fire = Image(skin, "fire")
         fire.setOrigin(unit/2f, unit/2f)
+        left.color.set(Params.color_hud)
+        right.color.set(Params.color_hud)
+        fire.color.set(Params.color_hud)
 
         /*left.setBounds(pad, pad, unit, unit)
         right.setBounds(2*pad + unit, pad, unit, unit)

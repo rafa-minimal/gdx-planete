@@ -87,6 +87,7 @@ class LevelPreview(level: String) {
         val t = 0.4f + rnd(0.2f)
 
         val box = Image(boxDrawable)
+        box.setOrigin(1f, 0.5f)
         box.alpha = 0f
         box.setSize(2f, 1f)
         box.setPosition(direction * w, y + rnd(-h, h))
