@@ -34,6 +34,7 @@ open class Ctx {
     val level = Level()
 
     val worldCamera = OrthographicCamera();
+    val hudCamera = OrthographicCamera();
 
     val batch = SpriteBatch()
     val debugRenderer = Box2DDebugRenderer()

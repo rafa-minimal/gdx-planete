@@ -9,7 +9,7 @@ import com.minimal.planet.game.systems.Sprite
 class Energy(var total: Float,
              var energy: Float = total) {
     operator fun minusAssign(amount: Float) {
-        energy = java.lang.Float.max(0f, energy - amount)
+        energy = Math.max(0f, energy - amount)
     }
 }
 
