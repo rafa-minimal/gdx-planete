@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.minimal.ecs.Entity
 import com.minimal.planet.game.HeroControl
 import com.minimal.planet.game.ents.Hero
+import com.minimal.planet.game.systems.Sprite
+import ktx.collections.GdxArray
 
 interface Script {
     fun update(me: MyEntity, timeStepSec: Float) {}
@@ -20,7 +22,7 @@ object bulletScript : Script {
     override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
         if(other.contains(energy))
             other[energy] -= me[bullet].hitPoints
-        me.dead = true
+        me.die()
     }
 }
 
@@ -31,15 +33,28 @@ object crashScript : Script {
             if(me.contains(energy))
                 me[energy] -= force * me[crash].factor
             else
-                me.dead = true
+                me.die()
         }
     }
 }
 
 class MyEntity : Entity() {
     val scripts = mutableListOf<Script>()
+    var children: GdxArray<MyEntity>? = null
     fun add(s: Script) {
         scripts.add(s)
+    }
+
+    fun addChild(e: MyEntity) {
+        if (children == null) {
+            children = GdxArray(1)
+        }
+        children!!.add(e)
+    }
+
+    override fun die() {
+        super.die()
+        children?.map {e -> e.die()}
     }
 }
 
@@ -80,6 +95,19 @@ class EntityBuilder() {
     }
     fun script(script: Script) {
         e.add(script)
+    }
+    fun sprite(texName: String, faceUp: Boolean = false) {
+        /*val t = wrap().atlas.findRegion(texName) ?: throw IllegalStateException("Texture not found in game atlas: " + texName)
+        val s = Sprite(t)
+        s.setOrigin(t.regionWidth / 2f, t.regionHeight / 2f)
+        s.setSize(size, size)
+        e.add(sprite, s)*/
+        e.add(sprite, Sprite(texName, faceUp))
+    }
+
+    fun parent(p: MyEntity) {
+        e.add(parent, p)
+        p.addChild(e)
     }
 }
 

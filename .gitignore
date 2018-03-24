@@ -114,3 +114,9 @@ gradle-app.setting
 ## OS Specific
 .DS_Store
 Thumbs.db
+
+## atlas is generated
+android/assets/game.atlas
+android/assets/game.png
+android/assets/menu.atlas
+android/assets/menu.png

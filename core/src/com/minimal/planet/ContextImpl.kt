@@ -10,6 +10,7 @@ import com.minimal.ecs.Engine
 import com.minimal.planet.game.InputUpdateSystem
 import com.minimal.planet.game.SinglePlayerHeroControl
 import com.minimal.planet.game.ents.HeroSystem
+import com.minimal.planet.game.systems.SpriteSystem
 import com.minimal.planet.level.Level
 import ktx.math.vec2
 
@@ -52,6 +53,7 @@ open class Ctx {
                 //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
                 CameraSystem(this),
+                SpriteSystem(),
                 WorldRenderSystem(this),
                 DebugRenderSystem(this),
                 ScriptSystem(this),
@@ -71,4 +73,12 @@ fun Float.toRad(): Float {
 
 fun Int.toRad(): Float {
     return this * 2f * MathUtils.PI / 360f
+}
+
+fun Float.toDeg(): Float {
+    return this / (2f * MathUtils.PI / 360f)
+}
+
+fun Int.toDeg(): Float {
+    return this / (2f * MathUtils.PI / 360f)
 }

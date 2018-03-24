@@ -5,4 +5,5 @@ object Params {
     var heroMoveDamping = 1.2f
     var heroStopDamping = 5f
     val heroJumpForce = 100f
+    val heroSpeed = 4f
 }

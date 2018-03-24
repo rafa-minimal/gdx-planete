@@ -87,7 +87,7 @@ class EnergySystem(val engine: MyEngine) : System {
         family.foreach {
             ent, energy ->
             if (energy.energy <= 0f) {
-                ent.dead = true
+                ent.die()
             }
         }
     }
@@ -133,7 +133,7 @@ fun LifetimeSystem(engine: MyEngine) = system(engine, lifetime) {
     ent, lifetime, timeStepSec ->
     lifetime.lifetime -= timeStepSec
     if (lifetime.lifetime <= 0) {
-        ent.dead = true
+        ent.die()
     }
 }
 

@@ -4,9 +4,12 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.GL20
+import com.minimal.planet.wrap.WrapCtx
+import com.minimal.planet.wrap.wrap
 
 class Planet : ApplicationAdapter() {
     override fun create() {
+        wrap(WrapCtx())
         ctx(Ctx())
         ctx().level.start(ctx())
     }

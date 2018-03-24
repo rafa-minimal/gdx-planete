@@ -6,6 +6,8 @@ object NoComp
 
 open class Entity {
     var dead: Boolean = false
+    private set
+
     val comps = Array<Any>(32) { NoComp }
 
     fun <T: Any> add(tag: CT<T>, c: T) {
@@ -18,6 +20,10 @@ open class Entity {
 
     fun <T> contains(tag: CT<T>): Boolean {
         return comps[tag.index] !is NoComp
+    }
+
+    open fun die() {
+        dead = true
     }
 }
 

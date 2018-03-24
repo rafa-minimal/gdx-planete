@@ -1,8 +1,6 @@
 package com.minimal
 
-import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector
 import com.badlogic.gdx.math.Vector2
 
 object VecPool {
@@ -59,3 +57,16 @@ fun Vector2.boxang(): Float = Math.atan2(-this.x.toDouble(), this.y.toDouble()).
 operator fun Vector2.component1(): Float = this.x
 
 operator fun Vector2.component2(): Float = this.y
+
+/**
+ * Znormalizuj do przedziału [-pi, pi] (tylko raz, tzn. zakładamy, że nie wykracza poza [-2pi, 2pi]
+ */
+fun Float.normAngleRad(): Float {
+    return if(this > MathUtils.PI) {
+        this - MathUtils.PI
+    } else if (this < -MathUtils.PI) {
+        this + MathUtils.PI
+    } else {
+        this
+    }
+}
