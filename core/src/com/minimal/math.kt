@@ -21,6 +21,8 @@ fun rndBall(radius: Float) = vec(MathUtils.random(radius), 0f).rotate(MathUtils.
 
 fun rndBox(w: Float, h: Float) = vec(MathUtils.random(-w/2, w/2), MathUtils.random(-h/2, h/2))
 
+fun rndAngle() = MathUtils.random(MathUtils.PI2)
+
 
 fun vec(): Vector2 {
     return VecPool.get().setZero()

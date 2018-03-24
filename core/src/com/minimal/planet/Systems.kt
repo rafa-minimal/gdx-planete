@@ -1,6 +1,7 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
@@ -189,8 +190,14 @@ class GravitySystem(val ctx: Ctx) : System {
 }
 
 class WorldRenderSystem(val ctx: Ctx) : System {
+    var draw = true
     override fun update(timeStepSec: Float) {
-        ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
+        if (Keys.D.justPressed()) {
+            draw = !draw
+        }
+        if (draw) {
+            ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
+        }
     }
 }
 
@@ -221,16 +228,22 @@ private fun Vector3.set(vec: Vector2) {
 }
 
 class DebugRenderSystem(val ctx: Ctx) : System {
+    var draw = true
+
     override fun update(timeStepSec: Float) {
-        ctx.renderer.setProjectionMatrix(ctx.worldCamera.combined)
-        ctx.renderer.begin(ShapeType.Line)
-        ctx.engine.ents.forEach {
-            e ->
-            e.scripts.forEach {
-                it.debugDraw(e, ctx.renderer)
-            }
+        if (Keys.D.justPressed()) {
+            draw = ! draw
         }
-        ctx.renderer.end()
+        if (draw) {
+            ctx.renderer.setProjectionMatrix(ctx.worldCamera.combined)
+            ctx.renderer.begin(ShapeType.Line)
+            ctx.engine.ents.forEach { e ->
+                e.scripts.forEach {
+                    it.debugDraw(e, ctx.renderer)
+                }
+            }
+            ctx.renderer.end()
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
@@ -113,6 +114,9 @@ class EntityBuilder() {
     fun parent(p: MyEntity) {
         e.add(parent, p)
         p.addChild(e)
+    }
+    fun position(pos: Vector2) {
+        e.add(position, Vector2(pos))
     }
 }
 

@@ -9,3 +9,4 @@ val all = 0xffff.toShort()
 
 val ziemia: Short = 1
 val heroCat: Short = 2
+val invaderCat: Short = 16

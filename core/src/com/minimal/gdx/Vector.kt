@@ -30,16 +30,6 @@ fun Vector2.boxAngleRad(): Float {
     return this.angleRad() - MathUtils.PI / 2f
 }
 
-fun Vector2.toPolar(): Vector2 {
-    this.x = this.angleRad()
-    this.y = this.len()
-    return this
-}
-
-fun Vector2.toEuclid(): Vector2 {
-    val angle = this.x
-    val len = this.y
-    val x = len * angle
-    this.y = this.len()
-    return this
+fun polarToEuclid(boxAngleRad: Float, radius: Float): Vector2 {
+    return Vector2(0f, radius).rotateRad(boxAngleRad)
 }

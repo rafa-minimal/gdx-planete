@@ -42,22 +42,22 @@ private val safePosition = vec2()
 
 fun bullet(pos: Vector2, vel: Vector2) {
     val e = ctx().engine.entity {
-        body(
-                ctx().world.body(DynamicBody) {
-                    position.set(pos)
-                    linearVelocity.set(vel)
-                    circle(radius = 0.1f) {
-                        density = 2f
-                        restitution = 1f
-                        filter {
-                            categoryBits = ziemia
-                            groupIndex = -2
-                        }
-                    }
+        body(ctx().world.body(DynamicBody) {
+            position.set(pos)
+            linearVelocity.set(vel)
+            gravityScale = 0f
+            circle(radius = 0.1f) {
+                density = 2f
+                restitution = 1f
+                filter {
+                    categoryBits = ziemia
+                    groupIndex = -2
                 }
-        )
+            }
+        })
         bullet(1f)
         lifetime(5f)
+        sprite("bullet")
     }
 }
 

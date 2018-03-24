@@ -1,12 +1,16 @@
 package com.minimal.planet.level
 
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.MathUtils.PI2
+import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.*
+import com.minimal.gdx.polarToEuclid
 import com.minimal.planet.*
 import com.minimal.planet.game.ents.createHero
+import com.minimal.planet.game.ents.createInvader
 import ktx.box2d.body
 import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
@@ -43,10 +47,7 @@ class Level {
             }
         }
 
-        /*Actions.every(5f) {
-            createHero(ctx, vec2(MathUtils.random(-100f, 100f), 5f))
-        }*/
-        val cityWidth = MathUtils.random(5f, 10f)
+        /*val cityWidth = MathUtils.random(5f, 10f)
         repeat(4) {
             val pos = randomPos(0f, cityWidth)
             randomBuilding(pos)
@@ -61,7 +62,16 @@ class Level {
 
         repeat(20) {
             randomTree(randomPosOnSurface())
+        }*/
+
+        repeat(8) {
+            createInvader(rndAngle(), 10f, 1)
         }
+        Actions.every(4f) {
+            createInvader(rndAngle(), 10f, 1)
+        }
+
+        createStars(worldRadius)
 
         createHero(vec(0f, worldRadius + 1f), ctx().heroControl)
     }
@@ -178,5 +188,27 @@ class Level {
         val widthDeg = widthMeters / (2 * MathUtils.PI * worldRadius) * 360f
         val da = MathUtils.random(-widthDeg/2f, widthDeg/2f)
         return vec(0f, worldRadius).rotate(angleDeg + da)
+    }
+}
+
+fun createStars(worldRadius: Float) {
+    repeat(60) {
+        val pos = polarToEuclid(random(PI2), worldRadius + random(20f))
+        ctx().engine.entity {
+            sprite("star-1") {
+                size(MathUtils.random(0.1f, 0.2f))
+            }
+            position(pos)
+        }
+    }
+    repeat(20) {
+        ctx().engine.entity {
+            val pos = polarToEuclid(random(PI2), worldRadius + random(20f))
+            sprite("star-2") {
+                size(MathUtils.random(0.2f, 0.5f))
+                //posOffset(pos)
+            }
+            position(pos)
+        }
     }
 }

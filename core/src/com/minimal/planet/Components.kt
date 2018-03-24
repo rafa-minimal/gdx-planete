@@ -1,5 +1,6 @@
 package com.minimal.planet
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.minimal.ecs.ComponentTag
 import com.minimal.planet.game.ents.Hero
@@ -33,3 +34,4 @@ val asteroid = ComponentTag<Int>(8)
 val hero = ComponentTag<Hero>(9)
 val sprite = ComponentTag<Sprite>(10)
 val parent = ComponentTag<MyEntity>(11)
+val position = ComponentTag<Vector2>(12)

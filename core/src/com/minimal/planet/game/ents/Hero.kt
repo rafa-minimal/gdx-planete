@@ -36,7 +36,7 @@ class Hero(val control: HeroControl) {
     var state: HeroState = HeroState.Stop
 }
 
-object LemingoDebugDraw : Script {
+object HeroDebugDraw : Script {
     val from = vec2()
     val to = vec2()
     override fun debugDraw(me: MyEntity, renderer: ShapeRenderer) {
@@ -110,7 +110,6 @@ class HeroSystem : System {
 fun createHero(pos: Vector2, control: HeroControl) {
     val body = ctx().world.body(DynamicBody) {
         position.set(pos)
-        // todo czy używamy gravity scale?
         gravityScale = 10f
         fixedRotation = true
         linearDamping = Params.heroStopDamping
@@ -130,7 +129,7 @@ fun createHero(pos: Vector2, control: HeroControl) {
         hero(control)
         energy(5f)
         cameraMagnet(1f)
-        script(LemingoDebugDraw)
+        script(HeroDebugDraw)
         sprite("hero-body-1", true)
     }
 
