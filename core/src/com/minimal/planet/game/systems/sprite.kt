@@ -53,8 +53,8 @@ class SpriteSystem : System {
         }
 
         wrap().batch.draw(sprite.textureRegion,
-                body.position.x - sprite.width / 2,
-                body.position.y - sprite.height / 2,
+                body.position.x + sprite.offsetX - sprite.width / 2,
+                body.position.y + sprite.offsetY - sprite.height / 2,
                 sprite.rotOrigX + sprite.width / 2,
                 sprite.rotOrigY + sprite.height / 2,
                 sprite.width, sprite.height,

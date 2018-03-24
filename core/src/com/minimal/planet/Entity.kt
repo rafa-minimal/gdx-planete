@@ -104,6 +104,11 @@ class EntityBuilder() {
         e.add(sprite, s)*/
         e.add(sprite, Sprite(texName, faceUp))
     }
+    fun sprite(texName: String, init: Sprite.() -> Unit) {
+        val s = Sprite(texName)
+        s.init()
+        e.add(sprite, s)
+    }
 
     fun parent(p: MyEntity) {
         e.add(parent, p)

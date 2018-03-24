@@ -14,14 +14,13 @@ import ktx.box2d.revoluteJointWith
 import kotlin.experimental.xor
 
 class Level {
-    val worldRadius = 20f
+    val worldRadius = 10f
     lateinit var ctx : Ctx
 
     fun start(ctx: Ctx) {
         this.ctx = ctx
 
-        // planeta
-        ctx.engine.entity {
+        val planet = ctx.engine.entity {
             body(ctx.world.body {
                 circle(radius = worldRadius) {
                     restitution = 0f
@@ -31,6 +30,17 @@ class Level {
                 }
             })
             gravity(100f)
+        }
+
+        for (i in 0..11) {
+            ctx.engine.entity {
+                parent(planet)
+                sprite("planet") {
+                    angleRad = i * MathUtils.PI2 / 12f
+                    rotOrigY = - worldRadius + height / 2f
+                    offsetY = worldRadius - height / 2f
+                }
+            }
         }
 
         /*Actions.every(5f) {
