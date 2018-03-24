@@ -14,13 +14,9 @@ open class Entity {
         comps[tag.index] = c
     }
 
-    operator fun <T> get(tag: CT<T>): T {
-        return comps[tag.index] as T
-    }
+    operator fun <T> get(tag: CT<T>): T = comps[tag.index] as T
 
-    fun <T> contains(tag: CT<T>): Boolean {
-        return comps[tag.index] !is NoComp
-    }
+    fun <T> contains(tag: CT<T>): Boolean = comps[tag.index] !is NoComp
 
     open fun die() {
         dead = true
@@ -60,7 +56,7 @@ class Engine<E: Entity> {
         for (s in systems) {
             s.update(timeStepSec)
         }
-        ents.removeIf{ it.dead }
+        ents.retainAll(ents.filter { !it.dead })
         updating = false
         ents.addAll(entsToAdd)
         entsToAdd.clear()
