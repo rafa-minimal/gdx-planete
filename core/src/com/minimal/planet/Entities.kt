@@ -1,16 +1,12 @@
 package com.minimal.planet
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.KinematicBody
-import com.minimal.ecs.Family2
-import ktx.box2d.*
-import ktx.math.plus
+import ktx.box2d.body
+import ktx.box2d.filter
 import ktx.math.vec2
-import kotlin.experimental.xor
 
 private val asterVel = vec2()
 
@@ -44,10 +40,10 @@ fun vertices(level: Int): FloatArray {
 
 private val safePosition = vec2()
 
-fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
-    val e = ctx.engine.entity {
+fun bullet(pos: Vector2, vel: Vector2) {
+    val e = ctx().engine.entity {
         body(
-                ctx.world.body(DynamicBody) {
+                ctx().world.body(DynamicBody) {
                     position.set(pos)
                     linearVelocity.set(vel)
                     circle(radius = 0.1f) {
@@ -65,7 +61,7 @@ fun bullet(ctx: Context, pos: Vector2, vel: Vector2) {
     }
 }
 
-fun planet(ctx: Context, radius: Float, pos: Vector2, omega: Float) {
+fun planet(ctx: Ctx, radius: Float, pos: Vector2, omega: Float) {
     val e = ctx.engine.entity {
         body(
                 ctx.world.body(KinematicBody) {
@@ -84,7 +80,7 @@ fun planet(ctx: Context, radius: Float, pos: Vector2, omega: Float) {
     }
 }
 
-fun edge(ctx: Context, from: Vector2, to: Vector2) {
+fun edge(ctx: Ctx, from: Vector2, to: Vector2) {
     val e = ctx.engine.entity {
         body(
                 ctx.world.body {

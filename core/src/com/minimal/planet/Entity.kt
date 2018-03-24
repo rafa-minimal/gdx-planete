@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
-import com.badlogic.gdx.physics.box2d.Fixture
-import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint
-import com.badlogic.gdx.physics.box2d.joints.WheelJoint
-import com.minimal.ecs.Engine
 import com.minimal.ecs.Entity
+import com.minimal.planet.game.HeroControl
+import com.minimal.planet.game.ents.Hero
 
 interface Script {
     fun update(me: MyEntity, timeStepSec: Float) {}
@@ -77,8 +75,11 @@ class EntityBuilder() {
     fun asteroid(level: Int) {
         e.add(asteroid, level)
     }
-    fun lemingo() {
-        e.add(lemingo, Lemingo())
+    fun hero(control: HeroControl) {
+        e.add(hero, Hero(control))
+    }
+    fun script(script: Script) {
+        e.add(script)
     }
 }
 

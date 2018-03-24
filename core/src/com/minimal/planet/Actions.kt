@@ -1,7 +1,7 @@
 package com.minimal.planet
 
-import java.util.PriorityQueue
 import com.minimal.ecs.System
+import java.util.*
 
 class Action(var time: Int, val action: () -> Unit, val repeat: (() -> Int)? = null)
 
@@ -47,7 +47,7 @@ object Actions {
     }
 }
 
-class ActionsSystem(val ctx: Context) : System {
+class ActionsSystem(val ctx: Ctx) : System {
     override fun update(timeStepSec: Float) {
         Actions.update(ctx.timeMs)
     }

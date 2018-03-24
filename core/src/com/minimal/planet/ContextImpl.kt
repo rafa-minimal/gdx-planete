@@ -1,6 +1,5 @@
 package com.minimal.planet
 
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -8,42 +7,46 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.minimal.ecs.Engine
+import com.minimal.planet.game.InputUpdateSystem
+import com.minimal.planet.game.SinglePlayerHeroControl
+import com.minimal.planet.game.ents.HeroSystem
 import com.minimal.planet.level.Level
 import ktx.math.vec2
 
-
 typealias MyEngine = Engine<MyEntity>
 
-interface Context {
-    val engine: MyEngine
-    val world: World
-    val level: Level
-    val worldCamera: Camera
-    val renderer: ShapeRenderer
-    val debugRenderer: Box2DDebugRenderer
-    var timeMs: Int
+private var ctx: Ctx? = null
+
+fun ctx(): Ctx {
+    return ctx!!
 }
 
-class ContextImpl : Context {
-    override var timeMs = 0
+fun ctx(newCtx: Ctx) {
+    ctx = newCtx
+}
 
-    override val world = World(vec2(0f, 0f), true)
-    override val engine = MyEngine()
-    override val level = Level()
+open class Ctx {
+    var timeMs = 0
 
-    override val worldCamera = OrthographicCamera();
+    val world = World(vec2(0f, 0f), true)
+    val engine = MyEngine()
+    val level = Level()
+
+    val worldCamera = OrthographicCamera();
 
     val batch = SpriteBatch()
-    override val debugRenderer = Box2DDebugRenderer()
-    override val renderer = ShapeRenderer()
+    val debugRenderer = Box2DDebugRenderer()
+    val renderer = ShapeRenderer()
+
+    val heroControl = SinglePlayerHeroControl();
 
     init {
         engine.add(
+                InputUpdateSystem(),
                 GravitySystem(this),
                 WorldSystem(this),
                 EnergySystem(engine),
-                LemingoLeaderSystem(this),
-                LemingoSystem(this),
+                HeroSystem(),
                 //GravitySystem(this),
                 LifetimeSystem(engine),
                 //AsteroidSpawnSystem(this),
@@ -55,7 +58,6 @@ class ContextImpl : Context {
                 BodyDisposeSystem(engine))
         //engine.add()
 
-        level.start(this)
     }
 
     fun dispose() {
@@ -63,10 +65,10 @@ class ContextImpl : Context {
     }
 }
 
-fun Float.deg(): Float {
+fun Float.toRad(): Float {
     return this * 2f * MathUtils.PI / 360f
 }
 
-fun Int.deg(): Float {
+fun Int.toRad(): Float {
     return this * 2f * MathUtils.PI / 360f
 }

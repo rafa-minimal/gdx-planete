@@ -1,7 +1,6 @@
 package com.minimal.planet
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
@@ -16,7 +15,7 @@ import ktx.math.minus
 import ktx.math.unaryMinus
 import ktx.math.vec2
 
-class WorldSystem(val ctx: Context) : System, ContactListener {
+class WorldSystem(val ctx: Ctx) : System, ContactListener {
     override fun endContact(contact: Contact?) {
         if (contact != null) {
             val firstEntity = contact.fixtureA.body.userData as MyEntity
@@ -160,7 +159,7 @@ fun Int.justPressed(): Boolean {
     return Gdx.input.isKeyJustPressed(this)
 }
 
-class EdgeForceSystem(val ctx: Context) : System {
+class EdgeForceSystem(val ctx: Ctx) : System {
     val factor = 1f
     val family = ctx.engine.family(body)
     override fun update(timeStepSec: Float) {
@@ -174,7 +173,7 @@ class EdgeForceSystem(val ctx: Context) : System {
     }
 }
 
-class GravitySystem(val ctx: Context) : System {
+class GravitySystem(val ctx: Ctx) : System {
     val factor = 1f
     val planets = ctx.engine.family(body, gravity)
     val bodies = ctx.engine.family(body)
@@ -189,7 +188,7 @@ class GravitySystem(val ctx: Context) : System {
     }
 }
 
-class WorldRenderSystem(val ctx: Context) : System {
+class WorldRenderSystem(val ctx: Ctx) : System {
     override fun update(timeStepSec: Float) {
         ctx.debugRenderer.render(ctx.world, ctx.worldCamera.combined)
     }
@@ -201,7 +200,7 @@ fun Vector2.rnd(radius: Float): Vector2 {
     return set(rad * MathUtils.cos(phi), rad * MathUtils.sin(phi))
 }
 
-class CameraSystem(val ctx: Context) : System {
+class CameraSystem(val ctx: Ctx) : System {
     val family = ctx.engine.family(body, cameraMagnet)
     val pos = vec2()
 
@@ -221,7 +220,7 @@ private fun Vector3.set(vec: Vector2) {
     this.set(vec.x, vec.y, 0f)
 }
 
-class DebugRenderSystem(val ctx: Context) : System {
+class DebugRenderSystem(val ctx: Ctx) : System {
     override fun update(timeStepSec: Float) {
         ctx.renderer.setProjectionMatrix(ctx.worldCamera.combined)
         ctx.renderer.begin(ShapeType.Line)
@@ -235,7 +234,7 @@ class DebugRenderSystem(val ctx: Context) : System {
     }
 }
 
-class ScriptSystem(val ctx: Context) : System {
+class ScriptSystem(val ctx: Ctx) : System {
     override fun update(timeStepSec: Float) {
         ctx.engine.ents.forEach {
             e ->

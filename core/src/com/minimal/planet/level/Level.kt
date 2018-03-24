@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.minimal.*
 import com.minimal.planet.*
+import com.minimal.planet.game.ents.createHero
 import ktx.box2d.body
 import ktx.box2d.distanceJointWith
 import ktx.box2d.filter
@@ -14,9 +15,9 @@ import kotlin.experimental.xor
 
 class Level {
     val worldRadius = 20f
-    lateinit var ctx : Context
+    lateinit var ctx : Ctx
 
-    fun start(ctx: Context) {
+    fun start(ctx: Ctx) {
         this.ctx = ctx
 
         // planeta
@@ -33,7 +34,7 @@ class Level {
         }
 
         /*Actions.every(5f) {
-            lemingo(ctx, vec2(MathUtils.random(-100f, 100f), 5f))
+            createHero(ctx, vec2(MathUtils.random(-100f, 100f), 5f))
         }*/
         val cityWidth = MathUtils.random(5f, 10f)
         repeat(4) {
@@ -52,7 +53,7 @@ class Level {
             randomTree(randomPosOnSurface())
         }
 
-        lemingo(ctx, vec(0f, worldRadius + 1f))
+        createHero(vec(0f, worldRadius + 1f), ctx().heroControl)
     }
 
     private fun randomTree(root: Vector2) {
@@ -140,7 +141,7 @@ class Level {
                     density = 1f
                     filter {
                         categoryBits = ziemia
-                        maskBits = all xor hero
+                        maskBits = all xor heroCat
                     }
                 }
             })

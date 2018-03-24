@@ -1,16 +1,6 @@
 package com.minimal.planet
 
-import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.badlogic.gdx.physics.box2d.World
-import com.minimal.planet.level.Level
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.specs.StringSpec
-import ktx.box2d.body
-import ktx.math.vec2
-
-class TestContext : Context {
+/*class TestContext : Ctx {
     override val world = World(vec2(), true)
     override val engine = MyEngine()
     override val level = Level()
@@ -60,5 +50,5 @@ class SystemsTest : StringSpec() {
             ctx.engine.ents.size shouldBe 0
         }
     }
-}
+}*/
 

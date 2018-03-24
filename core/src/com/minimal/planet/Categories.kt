@@ -8,4 +8,4 @@ val planetCat = 8.toShort()
 val all = 0xffff.toShort()
 
 val ziemia: Short = 1
-val hero: Short = 2
+val heroCat: Short = 2

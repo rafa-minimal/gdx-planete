@@ -6,10 +6,9 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.GL20
 
 class Planet : ApplicationAdapter() {
-    lateinit var ctx: ContextImpl
-
     override fun create() {
-        ctx = ContextImpl()
+        ctx(Ctx())
+        ctx().level.start(ctx())
     }
 
     private var running = true
@@ -22,8 +21,9 @@ class Planet : ApplicationAdapter() {
             Gdx.app.exit()
         }
         if(Keys.R.justPressed()) {
-            ctx.dispose()
-            ctx = ContextImpl()
+            ctx().dispose()
+            ctx(Ctx())
+            ctx().level.start(ctx())
             resize(Gdx.graphics.width, Gdx.graphics.height)
         }
         var step = 0f
@@ -34,33 +34,33 @@ class Planet : ApplicationAdapter() {
             running = !running
         }
         if(Keys.P.justPressed()) {
-            ctx.worldCamera.zoom *= 2f
-            ctx.worldCamera.update()
+            ctx().worldCamera.zoom *= 2f
+            ctx().worldCamera.update()
         }
         if(Keys.O.justPressed()) {
-            ctx.worldCamera.zoom /= 2f
-            ctx.worldCamera.update()
+            ctx().worldCamera.zoom /= 2f
+            ctx().worldCamera.update()
         }
-        ctx.engine.update(step)
+        ctx().engine.update(step)
     }
 
     override fun dispose() {
-        ctx.dispose()
+        ctx().dispose()
     }
 
     override fun resize(width: Int, height: Int) {
-        ctx.worldCamera.position.y = ctx.level.worldRadius
+        ctx().worldCamera.position.y = ctx().level.worldRadius
 
-        val refworldRadius = ctx.level.worldRadius/2
+        val refworldRadius = ctx().level.worldRadius/2
         val xScale = refworldRadius * 2f / width
         val yScale = refworldRadius * 2f / height
         if (xScale < yScale) {
-            ctx.worldCamera.viewportWidth = width * xScale
-            ctx.worldCamera.viewportHeight = height * xScale
+            ctx().worldCamera.viewportWidth = width * xScale
+            ctx().worldCamera.viewportHeight = height * xScale
         } else {
-            ctx.worldCamera.viewportWidth = width * yScale
-            ctx.worldCamera.viewportHeight = height * yScale
+            ctx().worldCamera.viewportWidth = width * yScale
+            ctx().worldCamera.viewportHeight = height * yScale
         }
-        ctx.worldCamera.update()
+        ctx().worldCamera.update()
     }
 }
