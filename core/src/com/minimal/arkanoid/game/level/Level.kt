@@ -8,7 +8,7 @@ import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
-import com.minimal.arkanoid.game.level.LevelResult.*
+import com.minimal.arkanoid.game.level.LevelResult.None
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.script.ShakeScript
 import com.minimal.utils.getInt
@@ -18,6 +18,7 @@ import com.minimal.utils.rnd
 import ktx.box2d.body
 import ktx.box2d.filter
 import ktx.math.vec2
+import java.io.BufferedReader
 import java.lang.Math.min
 import java.util.*
 
@@ -53,6 +54,10 @@ fun loadLevel(levelNumber: String): Level {
 
 fun loadLevelInternal(levelNumber: String): Level {
     val reader = Gdx.files.internal(levelFile(levelNumber)).reader(1024)
+    return loadLevelInternal(reader, levelNumber)
+}
+
+fun loadLevelInternal(reader: BufferedReader, levelNumber: String): Level {
     var line: String? = reader.readLine()
     var width: Int
     var height: Int
@@ -85,8 +90,8 @@ fun loadLevelInternal(levelNumber: String): Level {
     props.load(reader)
 
     reader.close()
-    while (lines.size < height) {
-        lines += ""
+    if (lines.size < height) {
+        lines = List(height - lines.size){""} + lines
     }
     lines = lines.subList(0, height)
     lines = lines.map { it.trimEnd() }.reversed()
@@ -197,7 +202,6 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         Params.color_box.set(c3)
         Params.color_hud.set(c4)
 
-
         ctx.engine.entity {
             body(ctx.world.body(StaticBody) {
                 position.set(width / 2f, Params.player_y)
@@ -227,13 +231,9 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
             for (x in 0 until map.w) {
                 //print(map[x, y])
                 when (map[x, y]) {
-                    '#' -> boxOneShot(ctx, x + 1f, y + 0.5f)
-                    '=' -> {
-                        if (x % 2 == 0) {
-                            boxNaZawiasach(ctx, x + 1f, y + 0.5f)
-                        }
-                    }
-                    'V' -> boxDiament(ctx, x + 1f, y + 0.5f)
+                    '#' -> box(ctx, x + 0.5f, y + 0.5f)
+                    '=' -> floor(ctx, x + 0.5f, y + 0.5f)
+                    'A' -> house(ctx, x + 0.5f, y + 0.5f)
                 }
             }
             //println("|")
@@ -250,7 +250,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
     }
 
     open fun result(): LevelResult {
-        var count = 0
+        /*var count = 0
         ctx.engine.family(box).foreach { entity, box -> count++ }
         if (count == 0) {
             return Complete
@@ -274,7 +274,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
                 println("Nie ma piłek w zasięgu gracza od $Params.level_no_balls_in_range_timeout ms - Level Failed")
                 return Failed
             }
-        }
+        }*/
 
         return None
     }

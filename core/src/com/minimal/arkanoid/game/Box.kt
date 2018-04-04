@@ -36,26 +36,55 @@ object BoxDeadEffectScript : Script {
     }
 }
 
-fun boxOneShot(ctx: Context, x: Float, y: Float): MyEntity {
+fun box(ctx: Context, x: Float, y: Float): MyEntity {
     return ctx.engine.entity {
         body(ctx.world.body(StaticBody) {
             position.set(x, y)
-            box(Params.box_width, Params.box_height) {
+            box(1f, 1f) {
                 density = 1f
-                restitution = 0.4f
+                restitution = 0f
                 filter {
-                    categoryBits = com.minimal.arkanoid.game.default
+                    categoryBits = default
                 }
             }
         })
         energy(10f)
-        texture(ctx.atlas.findRegion("box"), Params.box_render_width, Params.box_render_height, color = Params.color_box)
-        box()
+        texture(ctx.atlas.findRegion("box"), 1f, 1f, color = Params.color_box)
     }
 }
 
-fun boxDiament(ctx: Context, x: Float, y: Float) {
-    boxOneShot(ctx, x, y).add(BoxDiamondScript(ctx))
+fun floor(ctx: Context, x: Float, y: Float): MyEntity {
+    return ctx.engine.entity {
+        body(ctx.world.body(StaticBody) {
+            position.set(x, y)
+            box(1f, 1f) {
+                density = 1f
+                restitution = 0f
+                filter {
+                    categoryBits = default
+                }
+            }
+        })
+        texture(ctx.atlas.findRegion("box"), 1f, 1f, color = Params.color_box)
+    }
+}
+
+fun house(ctx: Context, x: Float, y: Float): MyEntity {
+    return ctx.engine.entity {
+        body(ctx.world.body(StaticBody) {
+            position.set(x, y)
+            box(1f, 1f) {
+                density = 1f
+                restitution = 0f
+                filter {
+                    categoryBits = default
+                }
+            }
+        })
+        energy(1f)
+        texture(ctx.atlas.findRegion("box"), 1f, 1f, color = Params.color_box)
+        box() // house - żeby zliczać, czy wszystkie stoją
+    }
 }
 
 val onBreak: (Context, MyEntity) -> Unit = { ctx: Context, ent: MyEntity ->
