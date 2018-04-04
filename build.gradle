@@ -1,4 +1,5 @@
 buildscript {
+    ext.kotlin_version = '1.1.60'
     repositories {
         mavenLocal()
         mavenCentral()
@@ -7,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -46,12 +48,19 @@ project(":desktop") {
 }
 
 project(":core") {
-    apply plugin: "java"
-
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        compile group: 'io.github.libktx', name: 'ktx-app', version: '1.9.6-b6'
+        compile group: 'io.github.libktx', name: 'ktx-math', version: '1.9.6-b6'
+        compile group: 'io.github.libktx', name: 'ktx-box2d', version: '1.9.6-b6'
+        compile group: 'io.github.libktx', name: 'ktx-collections', version: '1.9.6-b6'
+        compile group: 'io.github.libktx', name: 'ktx-actors', version: '1.9.6-b6'
+        testCompile 'io.kotlintest:kotlintest:2.0.4'
     }
 }
 
