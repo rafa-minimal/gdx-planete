@@ -1,0 +1,25 @@
+invaders
+ + najłatwiej: liczba kolumn i odległośc wyliczana dla levelu (szerokość) - stałe ustawienie
+
+hero
+ + skakanie, nie jumpJustPressed, tylko delay
+ + sensor na podłogę
+ ? "śliski" żeby łatwiej wskakiwać przez wąskie studnie
+ + strzelanie - delay + autofire?
+ - double jump?
+ - longjump (tak długo jak trzymamy jump, grawitacja łagodniejsza)
+
+level
+ - życia
+ - respawn (mryganie)
+ - result
+   - all killed -> delay -> next day (build mode)
+   - all hauses destroyed || brak żyć -> failed
+
+budowanie
+ - level mode (żeby result zwracał coś sensownego)
+   - przejście -> znika hero, znika control
+   - na środku klocek (stage actor)
+   - touchDown - podnosimy, przesuwamy nad palec
+   - drag, przesuwamy nad palec, w tle rysuj w najbliższym wolnym miejscu
+   - release - jeśli miejsce poprawne, postaw, jeśli nie - wróć do początku
