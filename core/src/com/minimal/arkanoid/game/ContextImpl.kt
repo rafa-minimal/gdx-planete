@@ -42,7 +42,7 @@ class Context(val level: Level) {
     val tailTex = Texture("tail.png")
 
     val heroControl = SinglePlayerHeroControl()
-    var balls: Int = 0
+    var lives: Int = 0
 
     fun displayWorldHeight(levelWidth: Float, levelHeight: Float): Float {
         // Preferowana wysokość, która pasuje do aspect ratio urządzenia
@@ -86,12 +86,12 @@ class Context(val level: Level) {
 
     }
 
-    fun takeBall(): Boolean {
-        if (balls == -1) {
+    fun takeLive(): Boolean {
+        if (lives == -1) {
             return true
         }
-        if (balls > 0) {
-            balls--
+        if (lives > 0) {
+            lives--
             return true
         }
         return false

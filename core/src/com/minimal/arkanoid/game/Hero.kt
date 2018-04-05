@@ -53,10 +53,17 @@ class HeroControlScript(val ctx: Context, val sensor: Fixture) : Script {
             bodiesUnderFeet--
         }
     }
+
+    override fun beforeDestroy(me: MyEntity) {
+        Actions.schedule(2f) {
+            if (ctx.takeLive())
+                createHero(ctx, ctx.level.width, 1.5f, me[hero].control)
+        }
+    }
 }
 
 
-fun createPlayer(ctx: Context, width: Float, playerY: Float, control: HeroControl): MyEntity {
+fun createHero(ctx: Context, width: Float, playerY: Float, control: HeroControl): MyEntity {
     val body = ctx.world.body(DynamicBody) {
         position.set(width / 2f, playerY)
         gravityScale = 10f

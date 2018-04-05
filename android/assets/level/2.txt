@@ -9,3 +9,4 @@
 ----------
 time_sec = 180
 box_joint_threshold = 0.02
+lives = 2

@@ -11,7 +11,7 @@ import com.minimal.arkanoid.wrap.WrapCtx
 class GameHud(stage: Stage, val ctx: Context) {
     val skin = WrapCtx.skin
     val root = Table(skin)
-    var lastBallsCount = ctx.balls
+    var lastBallsCount = ctx.lives
     var lastTimeSec = 0
     val timeLabel = Label("", skin)
     val top: Table
@@ -21,7 +21,7 @@ class GameHud(stage: Stage, val ctx: Context) {
         root.pad(5f)
 
         top = Table(skin)
-        if (ctx.balls != -1) {
+        if (ctx.lives != -1) {
             repeat(lastBallsCount) {
                 val image = Image(skin.getDrawable("circle"))
                 image.color.set(Params.color_hud)
@@ -43,8 +43,8 @@ class GameHud(stage: Stage, val ctx: Context) {
     }
 
     fun update() {
-        if (ctx.balls != lastBallsCount) {
-            lastBallsCount = ctx.balls
+        if (ctx.lives != lastBallsCount) {
+            lastBallsCount = ctx.lives
             top.clear()
             repeat(lastBallsCount) {
                 top.add(Image(skin.getDrawable("circle"))).size(20f)

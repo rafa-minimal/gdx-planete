@@ -25,7 +25,7 @@ val activateBall: (Context, MyEntity) -> Unit = {ctx: Context, ent: MyEntity ->
 
     if (Params.ball_respawn_mode == "after_taken") {
         Actions.schedule(Params.ball_respawn_after_taken_delay) {
-            if (ctx.takeBall()) {
+            if (ctx.takeLive()) {
                 createBallHooked(ctx)
             }
         }
@@ -82,7 +82,7 @@ object BallSpeedLimit : Script {
 class RespawnScript(val ctx: Context) : Script {
     override fun beforeDestroy(me: MyEntity) {
         if (Params.ball_respawn_mode == "after_death") {
-            if (ctx.takeBall()) {
+            if (ctx.takeLive()) {
                 createBallHooked(ctx)
             }
         }

@@ -10,8 +10,9 @@ hero
  - longjump (tak długo jak trzymamy jump, grawitacja łagodniejsza)
 
 level
- - życia
- - respawn (mryganie)
+ + życia
+ + respawn
+ + mryganie po respawnie
  - result
    - all killed -> delay -> next day (build mode)
    - all hauses destroyed || brak żyć -> failed

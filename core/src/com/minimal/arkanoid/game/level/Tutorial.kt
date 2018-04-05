@@ -96,7 +96,7 @@ class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, 
 
     override fun start(ctx: Context) {
         this.ctx = ctx
-        ctx.balls = -1
+        ctx.lives = -1
         ctx.levelTimeMs = -1
 
         ctx.engine.entity {
@@ -107,7 +107,7 @@ class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, 
 
         buildEdges()
 
-        //playe = createPlayer(ctx, width, Params.player_y)
+        //playe = createHero(ctx, width, Params.player_y)
     }
 
     override fun result(): LevelResult =

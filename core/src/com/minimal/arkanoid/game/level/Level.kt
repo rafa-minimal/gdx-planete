@@ -184,7 +184,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
 
     open fun start(ctx: Context) {
         this.ctx = ctx
-        ctx.balls = props.getInt("balls", 2)
+        ctx.lives = props.getInt("lives", 2)
         ctx.levelTimeMs = props.getInt("time_sec", 60) * 1000
         val invaderRows = props.getInt("invader_rows", 4)
         val invadersPerRow = props.getInt("invaders_per_row", 5)
@@ -222,7 +222,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         createInvaders(invaderRows,  invadersPerRow)
 
         // create player
-        createPlayer(ctx, width, Params.player_y, ctx.heroControl)
+        createHero(ctx, width, Params.player_y, ctx.heroControl)
 
         // ball
         //createBallHooked(ctx)
@@ -274,7 +274,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
             return TimesUp
         }
 
-        if (ctx.balls == 0) {
+        if (ctx.lives == 0) {
             // jeśli liczba piłek w grze = 0
             var ballCount = 0
             ctx.engine.family(ball).foreach { entity, ball -> ballCount++ }
