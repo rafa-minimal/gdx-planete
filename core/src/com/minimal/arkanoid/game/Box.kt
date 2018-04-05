@@ -16,7 +16,7 @@ fun box(ctx: Context, x: Float, y: Float): MyEntity {
                 density = 1f
                 restitution = 0f
                 filter {
-                    categoryBits = default
+                    categoryBits = cat.default
                 }
             }
         })
@@ -33,7 +33,7 @@ fun floor(ctx: Context, x: Float, y: Float): MyEntity {
                 density = 1f
                 restitution = 0f
                 filter {
-                    categoryBits = default
+                    categoryBits = cat.default
                 }
             }
         })

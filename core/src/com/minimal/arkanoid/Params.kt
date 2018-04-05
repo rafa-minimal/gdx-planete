@@ -115,4 +115,6 @@ class ParamsDefaults {
     val hero_jump_impulse = 14f
     val hero_bullet_velocity = 20f
     val invader_velocity = 0.5f
+    val jump_delay_ms = 200
+    val fire_delay_ms = 200
 }

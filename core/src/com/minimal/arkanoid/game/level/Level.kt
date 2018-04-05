@@ -186,6 +186,8 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         this.ctx = ctx
         ctx.balls = props.getInt("balls", 2)
         ctx.levelTimeMs = props.getInt("time_sec", 60) * 1000
+        val invaderRows = props.getInt("invader_rows", 4)
+        val invadersPerRow = props.getInt("invaders_per_row", 5)
 
         Params.override(props)
         val hue = levelNumber * 10f / 360f
@@ -217,7 +219,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         // create boxes
         buildBoxes()
 
-        createInvaders()
+        createInvaders(invaderRows,  invadersPerRow)
 
         // create player
         createPlayer(ctx, width, Params.player_y, ctx.heroControl)
@@ -226,10 +228,13 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         //createBallHooked(ctx)
     }
 
-    private fun createInvaders() {
-        for (xi in 1..5) {
-            for (yi in 1..4) {
-                invader(ctx, xi * 1.2f + 0.5f, yi * 1.2f + height/2f, yi)
+    private fun createInvaders(invaderRows: Int, invadersPerRow: Int) {
+        // spacing between invaders
+        val s = (width - 2f) / invadersPerRow
+
+        for (xi in 1..invadersPerRow) {
+            for (yi in 1..invaderRows) {
+                invader(ctx, (xi -1) * s + s/2f, yi * s + height/2f, yi)
             }
         }
     }

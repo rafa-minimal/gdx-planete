@@ -17,6 +17,7 @@ fun bullet(ctx: Context, pos: Vector2, velx: Float, vely: Float, catBits: Short,
             gravityScale = 0f
             linearVelocity.set(velx, vely)
             linearDamping = 0f
+            fixedRotation = true
             box(0.2f, 0.5f) {
                 density = 1f
                 restitution = 0f

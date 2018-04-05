@@ -12,3 +12,14 @@ fun Properties.getInt(key: String, default: Int): Int {
     }
     return default
 }
+
+fun Properties.getFloat(key: String, default: Float): Float {
+    val value = this.getProperty(key)
+    if (value != null) {
+        try {
+            return java.lang.Float.parseFloat(value)
+        } catch (e: NumberFormatException) {
+        }
+    }
+    return default
+}

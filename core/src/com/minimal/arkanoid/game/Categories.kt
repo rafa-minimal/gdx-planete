@@ -7,6 +7,7 @@ val default: Short = 2
 
 object cat {
     val all: Short = 0xffff.toShort()
+    val default: Short = 2
     val hero: Short = 4
     val house: Short = 8
     val heroBullet: Short = 16
