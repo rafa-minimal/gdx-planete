@@ -10,7 +10,6 @@ import com.minimal.arkanoid.game.Context
 import com.minimal.arkanoid.game.hud.ControlsHud
 import com.minimal.arkanoid.game.hud.GameHud
 import com.minimal.arkanoid.game.level.LevelResult
-import com.minimal.arkanoid.game.level.Tutorial
 import com.minimal.arkanoid.game.level.loadLevel
 import com.minimal.gdx.glClear
 import com.minimal.gdx.justPressed
@@ -28,12 +27,12 @@ class GameScreen(val level: String) : ScreenAdapter() {
     override fun show() {
         ctx.start()
         ctx.cameraSystem.resize(Gdx.graphics.width, Gdx.graphics.height)
-        controlsHud = ControlsHud(stage, ctx.playerControl)
+        //controlsHud = ControlsHud(stage, ctx.heroControl)
         gameHud = GameHud(stage, ctx)
         val level = ctx.level
-        if (level is Tutorial) {
+        /*if (level is Tutorial) {
             level.setControlsHud(controlsHud)
-        }
+        }*/
         WrapCtx.mux.addProcessor(stage)
     }
 
@@ -46,7 +45,7 @@ class GameScreen(val level: String) : ScreenAdapter() {
         //glClear(WrapCtx.tuning.getColorHex("bg.color", Color.BLACK))
         glClear(Params.color_bg)
 
-        controlsHud.update()
+        //controlsHud.update()
         gameHud.update()
 
         /*ctx.batch.render(WrapCtx.camera, Color.WHITE) {

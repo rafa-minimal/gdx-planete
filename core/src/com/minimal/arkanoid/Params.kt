@@ -110,4 +110,8 @@ class ParamsDefaults {
     var box_restitution = 1f
     var ball_restitution = 0.8f
     var edge_restitution = 0.8f
+    val heroStopDamping = 0.5f
+    val hero_velocity = 8f
+    val hero_jump_impulse = 14f
+    val hero_bullet_velocity = 20f
 }

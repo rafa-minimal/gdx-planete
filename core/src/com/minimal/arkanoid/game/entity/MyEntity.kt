@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.Fixture
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.script.BulletScript
 import com.minimal.arkanoid.game.script.CrashScript
@@ -50,9 +49,6 @@ class EntityBuilder() {
     fun cameraMagnet(magnet: Float) {
         e.add(cameraMagnet, magnet)
     }
-    fun player(rangeFixture: Fixture, playerControl: PlayerControl) {
-        e.add(player, Player(rangeFixture, playerControl))
-    }
 
     fun script(script: Script) {
         e.add(script)
@@ -64,6 +60,10 @@ class EntityBuilder() {
 
     fun powerUp(powerUp: PowerUp) {
         e.add(pup, powerUp)
+    }
+
+    fun hero(control: HeroControl) {
+        e.add(hero, Hero(control))
     }
 
     fun box() {

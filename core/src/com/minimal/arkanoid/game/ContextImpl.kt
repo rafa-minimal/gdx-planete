@@ -41,7 +41,7 @@ class Context(val level: Level) {
     val atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
     val tailTex = Texture("tail.png")
 
-    val playerControl = PlayerControl()
+    val heroControl = SinglePlayerHeroControl()
     var balls: Int = 0
 
     fun displayWorldHeight(levelWidth: Float, levelHeight: Float): Float {
@@ -63,9 +63,9 @@ class Context(val level: Level) {
                 WorldSystem(this),
                 EnergySystem(engine),
                 TailSystem(this),
-                PlayerSystem(this),
                 //GravitySystem(this),
                 LifetimeSystem(engine),
+                InputUpdateSystem(this),
                 ScriptUpdateSystem(this),
                 //AsteroidSpawnSystem(this),
                 ActionsSystem(this),
@@ -73,7 +73,7 @@ class Context(val level: Level) {
                 TailRenderSystem(this),
                 SpriteRenderSystem(this),
                 WorldRenderSystem(this),
-                RangeDrawSystem(this),
+                //RangeDrawSystem(this),
                 DebugRenderSystem(this),
                 CleanUpSystem(this),
                 ScriptBeforeDestroySystem(this),

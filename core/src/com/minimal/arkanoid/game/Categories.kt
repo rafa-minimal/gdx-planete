@@ -6,6 +6,8 @@ val static: Short = 1
 val default: Short = 2
 
 object cat {
-    //val box: Short = 4
-    val range: Short = 8
+    val all: Short = 0xffff.toShort()
+    val hero: Short = 4
+    val house: Short = 8
+    val heroBullet: Short = 16
 }

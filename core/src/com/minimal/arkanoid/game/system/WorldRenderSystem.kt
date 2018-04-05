@@ -7,7 +7,7 @@ import com.minimal.gdx.justPressed
 import com.minimal.utils.BoxPainter
 
 class WorldRenderSystem(val ctx: Context) : System {
-    var render = false
+    var render = true
     val painter = BoxPainter(ctx)
     override fun update(timeStepSec: Float) {
         if (Keys.D.justPressed()) {

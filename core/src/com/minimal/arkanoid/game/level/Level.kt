@@ -2,7 +2,6 @@ package com.minimal.arkanoid.game.level
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.badlogic.gdx.physics.box2d.Contact
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
@@ -202,7 +201,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         Params.color_box.set(c3)
         Params.color_hud.set(c4)
 
-        ctx.engine.entity {
+        /*ctx.engine.entity {
             body(ctx.world.body(StaticBody) {
                 position.set(width / 2f, Params.player_y)
                 box(width, 2 * Params.player_range) {
@@ -210,7 +209,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
                 }
             })
             script(entityCountScript)
-        }
+        }*/
 
         // edges (box)
         buildEdges()
@@ -219,10 +218,10 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         buildBoxes()
 
         // create player
-        createPlayer(ctx, width, Params.player_y)
+        createPlayer(ctx, width, Params.player_y, ctx.heroControl)
 
         // ball
-        createBallHooked(ctx)
+        //createBallHooked(ctx)
     }
 
     fun buildBoxes() {

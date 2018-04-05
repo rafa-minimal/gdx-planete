@@ -45,7 +45,6 @@ fun createBallHooked(ctx: Context) {
             friction = 0f
             filter {
                 categoryBits = com.minimal.arkanoid.game.default
-                maskBits = cat.range
             }
         }
     }

@@ -66,13 +66,13 @@ class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, 
                 }
             }
             HIT_BRICK -> {
-                if (playe[player].entsInRange.size > 0) {
+                /*if (playe[hero].entsInRange.size > 0) {
                     controlsHud?.emphasizeFire()
                     // slow down, setTimeScale(0.5)
                 } else {
                     controlsHud?.emphasizeEnd()
                     // speed up: setTimeScale(1)
-                }
+                }*/
                 if (ctx.engine.family(box).count() != initialBricksCount) {
                     // print "great!"
                     controlsHud?.emphasizeEnd()
@@ -107,7 +107,7 @@ class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, 
 
         buildEdges()
 
-        playe = createPlayer(ctx, width, Params.player_y)
+        //playe = createPlayer(ctx, width, Params.player_y)
     }
 
     override fun result(): LevelResult =
