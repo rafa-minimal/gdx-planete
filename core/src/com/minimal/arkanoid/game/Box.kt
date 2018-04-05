@@ -53,7 +53,7 @@ fun house(ctx: Context, x: Float, y: Float): MyEntity {
                 }
             }
         })
-        energy(1f)
+        energy(10f)
         texture(ctx.atlas.findRegion("box"), 1f, 1f, color = Params.color_box)
         box() // house - żeby zliczać, czy wszystkie stoją
         script(DieOnContact(cat.invader or cat.invaderBullet))

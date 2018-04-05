@@ -7,6 +7,8 @@ import com.minimal.arkanoid.game.entity.MyEntity
 
 object BulletScript : Script {
     override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
+        if (me.dead)
+            return
         if(other.contains(energy)) {
             other[energy] -= me[bullet].hitPoints
         }

@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
-import com.minimal.arkanoid.game.script.BulletScript
 import ktx.box2d.body
 import ktx.box2d.filter
 import kotlin.experimental.or
@@ -27,8 +26,7 @@ fun bullet(ctx: Context, pos: Vector2, velx: Float, vely: Float, catBits: Short,
                 }
             }
         })
-        bullet(5f)
-        script(BulletScript)
+        bullet(3f)
     }
 }
 
