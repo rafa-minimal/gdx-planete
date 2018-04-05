@@ -8,6 +8,7 @@ import com.minimal.arkanoid.game.entity.entity
 import com.minimal.arkanoid.game.script.Script
 import ktx.box2d.body
 import ktx.box2d.filter
+import kotlin.experimental.and
 import kotlin.experimental.or
 import kotlin.experimental.xor
 
@@ -19,7 +20,7 @@ class Hero(val control: HeroControl) {
 class HeroControlScript(val ctx: Context) : Script {
     override fun update(me: MyEntity, timeStepSec: Float) {
         if (me[hero].control.fireJustPressed) {
-            bullet(ctx, me[body].position, 0f, Params.hero_bullet_velocity)
+            heroBullet(ctx, me[body].position, 0f, Params.hero_bullet_velocity)
         }
         if (me[hero].control.jumpJustPressed) {
             me[body].applyLinearImpulse(0f, Params.hero_jump_impulse, 0f, 0f, true)
@@ -56,9 +57,21 @@ fun createPlayer(ctx: Context, width: Float, playerY: Float, control: HeroContro
         cameraMagnet(1f)
         //sprite("hero-body-1", true)
         script(HeroControlScript(ctx))
-        texture(ctx.atlas.findRegion("circle"), 1f, 1f, scale = 0f, color = Params.color_ball)
+        //texture(ctx.atlas.findRegion("circle"), 1f, 1f, scale = 0f, color = Params.color_ball)
+        sprite("circle")
+        script(DieOnContact(cat.invader or cat.invaderBullet))
     }
     return hero
+}
+
+class DieOnContact(val mask: Short) : Script {
+    override fun beginContact(me: MyEntity, other: MyEntity, contact: Contact) {
+        for (fixture in other[body].fixtureList) {
+            if (fixture.filterData.categoryBits and mask != 0.toShort()) {
+                me.dead = true
+            }
+        }
+    }
 }
 
 class PowerUpCollector(val ctx: Context) : Script {

@@ -8,6 +8,7 @@ import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.script.BulletScript
 import com.minimal.arkanoid.game.script.CrashScript
 import com.minimal.arkanoid.game.script.Script
+import com.minimal.arkanoid.game.system.Sprite
 import com.minimal.ecs.Entity
 import com.minimal.fx.SnakeTail
 
@@ -85,6 +86,19 @@ class EntityBuilder() {
     }
     fun tail(t: SnakeTail) {
         e.add(tail, t)
+    }
+    fun sprite(texName: String, faceUp: Boolean = false) {
+        /*val t = wrap().atlas.findRegion(texName) ?: throw IllegalStateException("Texture not found in game atlas: " + texName)
+        val s = Sprite(t)
+        s.setOrigin(t.regionWidth / 2f, t.regionHeight / 2f)
+        s.setSize(size, size)
+        e.add(sprite, s)*/
+        e.add(sprite, Sprite(texName, faceUp))
+    }
+    fun sprite(texName: String, init: Sprite.() -> Unit) {
+        val s = Sprite(texName)
+        s.init()
+        e.add(sprite, s)
     }
 }
 

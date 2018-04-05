@@ -72,6 +72,7 @@ class Context(val level: Level) {
                 cameraSystem,
                 TailRenderSystem(this),
                 SpriteRenderSystem(this),
+                SpriteSystem(this),
                 WorldRenderSystem(this),
                 //RangeDrawSystem(this),
                 DebugRenderSystem(this),

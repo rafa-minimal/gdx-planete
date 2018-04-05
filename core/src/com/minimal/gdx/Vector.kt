@@ -3,7 +3,6 @@ package com.minimal.gdx
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import ktx.collections.gdxArrayOf
 import ktx.math.vec2
 
 object VectorPool {
@@ -39,4 +38,11 @@ fun Vector2.rotateRight(): Vector2 {
     this.x = y
     y = -x
     return this
+}
+
+/**
+ * Kąt według układu Box2d, czyli 0 - góra
+ */
+fun Vector2.boxAngleRad(): Float {
+    return this.angleRad() - MathUtils.PI / 2f
 }

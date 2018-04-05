@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.minimal.arkanoid.game.entity.MyEntity
+import com.minimal.arkanoid.game.system.Sprite
 import com.minimal.ecs.ComponentTag
 import com.minimal.fx.SnakeTail
 import ktx.collections.GdxArray
@@ -64,3 +65,4 @@ val texture = ComponentTag<Texture>(13)
 val parent = ComponentTag<Parent>(14)
 val children = ComponentTag<Children>(15)
 val tail = ComponentTag<SnakeTail>(16)
+val sprite = ComponentTag<Sprite>(17)

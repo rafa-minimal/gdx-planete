@@ -217,11 +217,21 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         // create boxes
         buildBoxes()
 
+        createInvaders()
+
         // create player
         createPlayer(ctx, width, Params.player_y, ctx.heroControl)
 
         // ball
         //createBallHooked(ctx)
+    }
+
+    private fun createInvaders() {
+        for (xi in 1..5) {
+            for (yi in 1..4) {
+                invader(ctx, xi * 1.2f + 0.5f, yi * 1.2f + height/2f, yi)
+            }
+        }
     }
 
     fun buildBoxes() {
