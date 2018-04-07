@@ -23,6 +23,7 @@ object WrapCtx {
     var font: BitmapFont
     var bigFont: BitmapFont
     val atlas: TextureAtlas
+    val gameAtlas: TextureAtlas
     val skin: Skin
 
     init {
@@ -52,6 +53,7 @@ object WrapCtx {
         }
 
         atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
+        gameAtlas = TextureAtlas(Gdx.files.internal("game.atlas"))
 
         skin = Skin(atlas)
         skin.add("small-font", font)
@@ -79,6 +81,7 @@ object WrapCtx {
         font.dispose()
         bigFont.dispose()
         atlas.dispose()
+        gameAtlas.dispose()
         skin.dispose()
     }
 

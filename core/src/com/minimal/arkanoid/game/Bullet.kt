@@ -26,7 +26,8 @@ fun bullet(ctx: Context, pos: Vector2, velx: Float, vely: Float, catBits: Short,
                 }
             }
         })
-        bullet(3f)
+        bullet(10f)
+        sprite("laser-bullet")
     }
 }
 

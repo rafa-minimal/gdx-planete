@@ -9,6 +9,7 @@ import com.minimal.arkanoid.game.script.BulletScript
 import com.minimal.arkanoid.game.script.CrashScript
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.system.Sprite
+import com.minimal.arkanoid.wrap.WrapCtx
 import com.minimal.ecs.Entity
 import com.minimal.fx.SnakeTail
 
@@ -93,10 +94,10 @@ class EntityBuilder() {
         s.setOrigin(t.regionWidth / 2f, t.regionHeight / 2f)
         s.setSize(size, size)
         e.add(sprite, s)*/
-        e.add(sprite, Sprite(texName, faceUp))
+        e.add(sprite, Sprite(WrapCtx.gameAtlas.findRegion(texName), faceUp))
     }
     fun sprite(texName: String, init: Sprite.() -> Unit) {
-        val s = Sprite(texName)
+        val s = Sprite(WrapCtx.gameAtlas.findRegion(texName))
         s.init()
         e.add(sprite, s)
     }

@@ -10,3 +10,4 @@
 time_sec = 180
 box_joint_threshold = 0.02
 lives = 2
+color_bg = 000000

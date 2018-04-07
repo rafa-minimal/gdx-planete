@@ -3,9 +3,10 @@ package com.minimal.planet.desktop
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.minimal.arkanoid.wrap.ArkanoidDebugGame
+import com.minimal.texturePacker
 
 fun main(args: Array<String>) {
-    texturePacker(args)
+    texturePacker(args, "../../graphics/game", "./", "game")
 
     val config = LwjglApplicationConfiguration()
     if (args.contains("16:10")) {

@@ -13,7 +13,7 @@ import com.minimal.gdx.boxAngleRad
 import com.minimal.utils.toDeg
 
 class Sprite(
-        val textureRegion: TextureRegion,
+        var textureRegion: TextureRegion,
         var width: Float = 0f,
         var height: Float = 0f,
         var angleRad: Float = 0f,
@@ -36,7 +36,7 @@ class Sprite(
     var scaleX: Float = 1f
     var scaleY: Float = 1f
 
-    constructor(tex: String, faceUp: Boolean = false) : this(WrapCtx.atlas.findRegion(tex), 0f, 0f, 0f, 0f, 0f, 0f, 0f, faceUp) {
+    constructor(tex: TextureRegion, faceUp: Boolean = false) : this(tex, 0f, 0f, 0f, 0f, 0f, 0f, 0f, faceUp) {
         // przy założeniu, że tekstury generujemy w takiej wielkości, żeby 96 piksli przypadało na metr
         width = textureRegion.regionWidth / 96f
         height = textureRegion.regionHeight / 96f

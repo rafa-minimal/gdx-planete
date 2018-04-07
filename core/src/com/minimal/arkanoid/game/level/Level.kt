@@ -189,7 +189,6 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         val invaderRows = props.getInt("invader_rows", 4)
         val invadersPerRow = props.getInt("invaders_per_row", 5)
 
-        Params.override(props)
         val hue = levelNumber * 10f / 360f
         val c1 = hsv(hue, 1f/3f, 1f)
         val c2 = hsv(hue, 0.5f, 0.83f)
@@ -202,6 +201,8 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         Params.color_tail.set(c2)
         Params.color_box.set(c3)
         Params.color_hud.set(c4)
+
+        Params.override(props)
 
         /*ctx.engine.entity {
             body(ctx.world.body(StaticBody) {
@@ -234,7 +235,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
 
         for (xi in 1..invadersPerRow) {
             for (yi in 1..invaderRows) {
-                invader(ctx, (xi -1) * s + s/2f, yi * s + height/2f, yi)
+                invader(ctx, (xi -1) * s + s/2f, yi * s + height/2f, (yi % 6) + 1)
             }
         }
     }

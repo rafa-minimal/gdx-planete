@@ -97,8 +97,8 @@ fun createHero(ctx: Context, width: Float, playerY: Float, control: HeroControl)
         //sprite("hero-body-1", true)
         script(HeroControlScript(ctx, sensor))
         //texture(ctx.atlas.findRegion("circle"), 1f, 1f, scale = 0f, color = Params.color_ball)
-        sprite("circle")
-        script(DieOnContact(cat.invader or cat.invaderBullet))
+        sprite("hero-body-1")
+        script(DieOnContact(cat.invader))
     }
     return hero
 }

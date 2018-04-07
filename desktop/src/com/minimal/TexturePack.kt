@@ -1,23 +1,22 @@
-package com.minimal.planet.desktop
+package com.minimal
 
 import com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
 import com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearNearest
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import java.io.File
 
-private fun doPack(args: Array<String>): Boolean {
+private fun doPack(args: Array<String>, sourceDir: File, targetDir: File, atlasFileName: String): Boolean {
     if(args.contains("-f")) {
         println("force = true (flaga '-f'), pakujemy")
         return true
     }
-    val target = File("./atlas.atlas")
+    val target = File(targetDir, atlasFileName + ".atlas")
     if (!target.exists()) {
-        println("Nie ma pliku 'atlas.atlas', pakujemy")
+        println("Nie ma pliku '" + target.name + "', pakujemy")
         return true
     }
 
-    val source = File("../../images")
-    if (source.lastModified() > target.lastModified()) {
+    if (sourceDir.lastModified() > target.lastModified()) {
         println("Tekstury są nowsze od atlasu, pakujemy")
         return true
     } else {
@@ -26,11 +25,11 @@ private fun doPack(args: Array<String>): Boolean {
     }
 }
 
-fun texturePacker(args: Array<String>) {
-    if (doPack(args)) {
+fun texturePacker(args: Array<String>, sourceDir: String, targetDir: String, atlasFileName: String) {
+    if (doPack(args, File(sourceDir), File(targetDir), atlasFileName)) {
         val settings = TexturePacker.Settings()
-        settings.maxWidth = 1024
-        settings.maxHeight = 1024
+        settings.maxWidth = 2048
+        settings.maxHeight = 2048
         settings.filterMag = Linear
         // Aka. GL_LINEAR_MIPMAP_NEAREST - Chooses the mipmap that most closely matches the size of the pixel being
         // textured and uses the GL_LINEAR criterion (a weighted average of the four texture elements that are closest
@@ -38,6 +37,6 @@ fun texturePacker(args: Array<String>) {
         settings.filterMin = MipMapLinearNearest
         settings.paddingX = 4
         settings.paddingY = 4
-        TexturePacker.process(settings, "../../images", "./", "atlas")
+        TexturePacker.process(settings, sourceDir, targetDir, atlasFileName)
     }
 }
