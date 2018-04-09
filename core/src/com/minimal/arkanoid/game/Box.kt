@@ -22,7 +22,6 @@ fun box(ctx: Context, x: Float, y: Float): MyEntity {
             }
         })
         energy(40f)
-        //texture(ctx.atlas.findRegion("box"), 1f, 1f, color = Params.color_box)
         script(BoxScript)
         sprite("box-4")
     }
@@ -49,7 +48,6 @@ fun floor(ctx: Context, x: Float, y: Float): MyEntity {
                 }
             }
         })
-        //texture(ctx.atlas.findRegion("box"), 1f, 1f, color = Params.color_box)
         sprite("floor")
     }
 }
@@ -67,7 +65,7 @@ fun house(ctx: Context, x: Float, y: Float): MyEntity {
             }
         })
         energy(30f)
-        box() // house - żeby zliczać, czy wszystkie stoją
+        house()
         sprite("house-3")
         script(DieOnContact(cat.invader))
         script(HouseScript)

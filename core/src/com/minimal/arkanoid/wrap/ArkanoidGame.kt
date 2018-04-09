@@ -36,6 +36,9 @@ open class ArkanoidGame : CompoundScreenGame() {
     override fun render() {
         super.render()
         update()
+        WrapCtx.stage.act(Gdx.graphics.deltaTime)
+        WrapCtx.stage.draw()
+        WrapEvent.clear()
     }
 
     private fun update() {
@@ -87,14 +90,16 @@ open class ArkanoidGame : CompoundScreenGame() {
                         state = State.LevelScreen
                         setScreen(levelScreen)
                     }
-                    Failed -> {
-                        state = State.Menu
-                        setScreen(menuScreen)
-                    }
                 }
                 if (Keys.ESCAPE.justPressed()) {
                     state = State.LevelScreen
                     setScreen(levelScreen)
+                }
+                when (WrapEvent.get()) {
+                    "quit" -> {
+                        state = State.Menu
+                        setScreen(menuScreen)
+                    }
                 }
             }
         }

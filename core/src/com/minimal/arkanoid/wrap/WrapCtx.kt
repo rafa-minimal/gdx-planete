@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -19,6 +20,7 @@ object WrapCtx {
 
     val camera = OrthographicCamera()
     val viewport = ScreenViewport()
+    val stage = Stage(viewport, batch)
 
     var font: BitmapFont
     var bigFont: BitmapFont
@@ -61,6 +63,8 @@ object WrapCtx {
         skin.load(Gdx.files.internal("skin.json"))
 
         addDrawables()
+
+        mux.addProcessor(stage)
     }
 
     private fun addDrawables() {
@@ -77,6 +81,7 @@ object WrapCtx {
     private fun loadFont(size: Int) = BitmapFont(Gdx.files.internal("fonts/century-gothic-$size.fnt"))
 
     fun dispose() {
+        mux.removeProcessor(stage)
         batch.dispose()
         font.dispose()
         bigFont.dispose()

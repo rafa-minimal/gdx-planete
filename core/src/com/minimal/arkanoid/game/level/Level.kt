@@ -1,15 +1,19 @@
 package com.minimal.arkanoid.game.level
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Contact
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.game.*
 import com.minimal.arkanoid.game.entity.MyEntity
 import com.minimal.arkanoid.game.entity.entity
-import com.minimal.arkanoid.game.level.LevelResult.None
+import com.minimal.arkanoid.game.level.LevelResult.*
 import com.minimal.arkanoid.game.script.Script
 import com.minimal.arkanoid.game.script.ShakeScript
+import com.minimal.arkanoid.wrap.LevelFailedActor
+import com.minimal.arkanoid.wrap.WrapCtx
+import com.minimal.gdx.justPressed
 import com.minimal.utils.getInt
 import com.minimal.utils.hsv
 import com.minimal.utils.parseInt
@@ -90,7 +94,7 @@ fun loadLevelInternal(reader: BufferedReader, levelNumber: String): Level {
 
     reader.close()
     if (lines.size < height) {
-        lines = List(height - lines.size){""} + lines
+        lines = List(height - lines.size) { "" } + lines
     }
     lines = lines.subList(0, height)
     lines = lines.map { it.trimEnd() }.reversed()
@@ -144,6 +148,10 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
     val width = map.w.toFloat()
     val height = map.h.toFloat()
 
+    var currentDay = 1
+    val days = 10
+    var build = false
+
     fun edge(from: Vector2, to: Vector2): MyEntity {
         val center = Vector2(to).add(from).scl(0.5f)
         from.sub(center)
@@ -190,11 +198,11 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         val invadersPerRow = props.getInt("invaders_per_row", 5)
 
         val hue = levelNumber * 10f / 360f
-        val c1 = hsv(hue, 1f/3f, 1f)
+        val c1 = hsv(hue, 1f / 3f, 1f)
         val c2 = hsv(hue, 0.5f, 0.83f)
-        val c3 = hsv(hue, 2f/3f, 2f/3f)
+        val c3 = hsv(hue, 2f / 3f, 2f / 3f)
         val c4 = hsv(hue, 0.83f, 0.5f)
-        val c5 = hsv(hue, 1f, 1/3f)
+        val c5 = hsv(hue, 1f, 1 / 3f)
 
         Params.color_bg.set(c5)
         Params.color_ball.set(c1)
@@ -204,23 +212,13 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
 
         Params.override(props)
 
-        /*ctx.engine.entity {
-            body(ctx.world.body(StaticBody) {
-                position.set(width / 2f, Params.player_y)
-                box(width, 2 * Params.player_range) {
-                    isSensor = true
-                }
-            })
-            script(entityCountScript)
-        }*/
-
         // edges (box)
         buildEdges()
 
         // create boxes
         buildBoxes()
 
-        createInvaders(invaderRows,  invadersPerRow)
+        createInvaders(invaderRows, invadersPerRow)
 
         // create player
         createHero(ctx, width, Params.player_y, ctx.heroControl)
@@ -235,7 +233,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
 
         for (xi in 1..invadersPerRow) {
             for (yi in 1..invaderRows) {
-                invader(ctx, (xi -1) * s + s/2f, yi * s + height/2f, (yi % 6) + 1)
+                invader(ctx, (xi - 1) * s + s / 2f, yi * s + height / 2f, (yi % 6) + 1)
             }
         }
     }
@@ -264,35 +262,64 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         top.add(texture, Texture(ctx.atlas.findRegion("fill"), width + 4f, 2f, vec2(0f, 1f)))
     }
 
-    open fun result(): LevelResult {
-        /*var count = 0
-        ctx.engine.family(box).foreach { entity, box -> count++ }
-        if (count == 0) {
-            return Complete
-        }
+    var myResult = LevelResult.None
 
-        if (ctx.levelTimeMs != -1 && ctx.timeMs >= ctx.levelTimeMs) {
-            return TimesUp
+    open fun getResult(): LevelResult {
+        if (myResult != None) {
+            return myResult
+        }
+        if (build) {
+            return None
+        }
+        if (Keys.F.justPressed()) {
+            WrapCtx.stage.addActor(LevelFailedActor())
+            ctx.timeScale = 0.1f
+            myResult = Failed
+            return myResult
+        }
+        var count = 0
+        ctx.engine.family(house).foreach { entity, box -> count++ }
+        if (count == 0) {
+            WrapCtx.stage.addActor(LevelFailedActor())
+            ctx.timeScale = 0.1f
+            myResult = Failed
+            return myResult
         }
 
         if (ctx.lives == 0) {
-            // jeśli liczba piłek w grze = 0
-            var ballCount = 0
-            ctx.engine.family(ball).foreach { entity, ball -> ballCount++ }
-            if (ballCount == 0) {
-                println("Nie ma piłek w grze - Level Failed")
-                return Failed
+            var heroCount = 0
+            ctx.engine.family(hero).foreach { entity, ball -> heroCount++ }
+            if (heroCount == 0) {
+                WrapCtx.stage.addActor(LevelFailedActor())
+                ctx.timeScale = 0.1f
+                myResult = Failed
+                return myResult
             }
+        }
 
-            // jeśli są piłki, ale od czasu Params.level_no_balls_in_range_timeout, żadna nie była w zasięgu
-            if (ballsInRange == 0 && ctx.timeMs > lastBallLeftRangeTime + Params.level_no_balls_in_range_timeout) {
-                println("Nie ma piłek w zasięgu gracza od $Params.level_no_balls_in_range_timeout ms - Level Failed")
-                return Failed
+        var invaderCount = 0
+        ctx.engine.family(invader).foreach { invader -> invaderCount++ }
+        if (invaderCount == 0) {
+            if (isLastDay()) {
+                myResult = Complete
+                return myResult
+            } else {
+                build()
             }
-        }*/
+        }
 
         return None
     }
+
+    private fun build() {
+        build = true
+    }
+
+    private fun play() {
+        build = false
+    }
+
+    private fun isLastDay() = currentDay == days
 }
 
 

@@ -68,8 +68,8 @@ class EntityBuilder() {
         e.add(hero, Hero(control))
     }
 
-    fun box() {
-        e.add(box, Box)
+    fun house() {
+        e.add(house, House)
     }
 
     fun texture(tex: TextureRegion,
@@ -100,6 +100,9 @@ class EntityBuilder() {
         val s = Sprite(WrapCtx.gameAtlas.findRegion(texName))
         s.init()
         e.add(sprite, s)
+    }
+    fun invader() {
+        e.add(invader, Invader)
     }
 }
 

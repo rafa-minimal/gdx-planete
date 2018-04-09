@@ -73,7 +73,7 @@ class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, 
                     controlsHud?.emphasizeEnd()
                     // speed up: setTimeScale(1)
                 }*/
-                if (ctx.engine.family(box).count() != initialBricksCount) {
+                if (ctx.engine.family(house).count() != initialBricksCount) {
                     // print "great!"
                     controlsHud?.emphasizeEnd()
                     state = FINISH_IT
@@ -110,9 +110,9 @@ class Tutorial(map: LevelMap, props: Properties, levelNumber: Int) : Level(map, 
         //playe = createHero(ctx, width, Params.player_y)
     }
 
-    override fun result(): LevelResult =
+    override fun getResult(): LevelResult =
             if (complete) {
-                super.result()
+                super.getResult()
             } else {
                 None
             }

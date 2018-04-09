@@ -28,6 +28,7 @@ fun invader(ctx: Context, posx: Float, posy: Float, type: Int) : MyEntity {
         energy(20f)
         sprite("invader-" + type)
         script(InvaderScript(ctx))
+        invader()
     }
 }
 

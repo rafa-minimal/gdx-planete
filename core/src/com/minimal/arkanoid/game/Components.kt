@@ -24,7 +24,7 @@ class Ball(var priority: Int)
 val NEW_BALL_PRIORITY = 2
 val BALL_PRIORITY = 0
 val BOX_PRIORITY = 1
-object Box
+object House
 
 class Lifetime(var lifetime: Float)
 
@@ -49,6 +49,7 @@ class Texture(val texture: TextureRegion,
 open class PowerUp
 object Diamond : PowerUp()
 object ExtraTime : PowerUp()
+object Invader
 
 val body = ComponentTag<Body>(0)
 val energy = ComponentTag<Energy>(1)
@@ -57,7 +58,7 @@ val lifetime = ComponentTag<Lifetime>(4)
 val gravity = ComponentTag<Float>(5)
 val crash = ComponentTag<Crash>(6)
 val cameraMagnet = ComponentTag<Float>(7)
-val box = ComponentTag<Box>(8)
+val house = ComponentTag<House>(8)
 val hero = ComponentTag<Hero>(10)
 val ball = ComponentTag<Ball>(11)
 val pup = ComponentTag<PowerUp>(12)
@@ -66,3 +67,4 @@ val parent = ComponentTag<Parent>(14)
 val children = ComponentTag<Children>(15)
 val tail = ComponentTag<SnakeTail>(16)
 val sprite = ComponentTag<Sprite>(17)
+val invader = ComponentTag<Invader>(18)

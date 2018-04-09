@@ -43,6 +43,7 @@ class Context(val level: Level) {
 
     val heroControl = SinglePlayerHeroControl()
     var lives: Int = 0
+    var timeScale: Float = 1f
 
     fun displayWorldHeight(levelWidth: Float, levelHeight: Float): Float {
         // Preferowana wysokość, która pasuje do aspect ratio urządzenia

@@ -52,29 +52,40 @@ class GameScreen(val level: String) : ScreenAdapter() {
             ctx.batch.draw(bg, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         }*/
 
-        if(Keys.R.justPressed()) {
+        when (WrapEvent.get()) {
+            "retry" -> {
+                hide()
+                ctx = Context(loadLevel(level))
+                show()
+                resize(Gdx.graphics.width, Gdx.graphics.height)
+            }
+        }
+        if (Keys.R.justPressed()) {
             hide()
             ctx = Context(loadLevel(level))
             show()
             resize(Gdx.graphics.width, Gdx.graphics.height)
         }
-        if(Keys.P.justPressed()) {
+        if (Keys.PLUS.justPressed()) {
             ctx.worldCamera.zoom *= 2f
             ctx.worldCamera.update()
         }
-        if(Keys.O.justPressed()) {
+        if (Keys.MINUS.justPressed()) {
             ctx.worldCamera.zoom /= 2f
             ctx.worldCamera.update()
         }
-        if(Keys.K.justPressed()) {
+        if (Keys.K.justPressed()) {
             ctx.cameraSystem.shake(vec2(0.5f, 0f))
         }
         var step = 0f
-        if(running || Keys.S.justPressed()) {
+        if (running || Keys.S.justPressed()) {
             step = delta
         }
-        if(Keys.SPACE.justPressed()) {
+        if (Keys.SPACE.justPressed()) {
             running = !running
+        }
+        if (Keys.P.justPressed()) {
+            WrapCtx.stage.addActor(LevelFailedActor())
         }
         ctx.engine.update(step)
         stage.act(delta)
@@ -87,6 +98,6 @@ class GameScreen(val level: String) : ScreenAdapter() {
     }
 
     fun result(): LevelResult {
-        return ctx.level.result()
+        return ctx.level.getResult()
     }
 }
