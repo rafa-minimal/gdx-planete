@@ -15,7 +15,6 @@ import com.minimal.arkanoid.wrap.LevelFailedActor
 import com.minimal.arkanoid.wrap.WrapCtx
 import com.minimal.gdx.justPressed
 import com.minimal.utils.getInt
-import com.minimal.utils.hsv
 import com.minimal.utils.parseInt
 import com.minimal.utils.rnd
 import ktx.box2d.body
@@ -198,17 +197,17 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
         val invadersPerRow = props.getInt("invaders_per_row", 5)
 
         val hue = levelNumber * 10f / 360f
-        val c1 = hsv(hue, 1f / 3f, 1f)
+        /*val c1 = hsv(hue, 1f / 3f, 1f)
         val c2 = hsv(hue, 0.5f, 0.83f)
         val c3 = hsv(hue, 2f / 3f, 2f / 3f)
         val c4 = hsv(hue, 0.83f, 0.5f)
-        val c5 = hsv(hue, 1f, 1 / 3f)
+        val c5 = hsv(hue, 1f, 1 / 3f)*/
 
-        Params.color_bg.set(c5)
+        /*Params.color_bg.set(c5)
         Params.color_ball.set(c1)
         Params.color_tail.set(c2)
         Params.color_box.set(c3)
-        Params.color_hud.set(c4)
+        Params.color_hud.set(c4)*/
 
         Params.override(props)
 
@@ -244,7 +243,7 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
             for (x in 0 until map.w) {
                 //print(map[x, y])
                 when (map[x, y]) {
-                    '#' -> box(ctx, x + 0.5f, y + 0.5f)
+                    '#' -> createBox(ctx, x + 0.5f, y + 0.5f)
                     '=' -> floor(ctx, x + 0.5f, y + 0.5f)
                     'A' -> house(ctx, x + 0.5f, y + 0.5f)
                 }
@@ -313,10 +312,13 @@ open class Level(val map: LevelMap, val props: Properties = Properties(), val le
 
     private fun build() {
         build = true
+        ctx.buildHud.activate(WrapCtx.stage, 5)
     }
 
-    private fun play() {
+    fun play() {
         build = false
+        currentDay++
+        createInvaders(4, 5)
     }
 
     private fun isLastDay() = currentDay == days

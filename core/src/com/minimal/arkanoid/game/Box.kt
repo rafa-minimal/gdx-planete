@@ -9,7 +9,7 @@ import com.minimal.arkanoid.wrap.WrapCtx
 import ktx.box2d.body
 import ktx.box2d.filter
 
-fun box(ctx: Context, x: Float, y: Float): MyEntity {
+fun createBox(ctx: Context, x: Float, y: Float): MyEntity {
     return ctx.engine.entity {
         body(ctx.world.body(StaticBody) {
             position.set(x, y)

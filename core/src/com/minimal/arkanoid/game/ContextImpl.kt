@@ -6,15 +6,20 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.minimal.arkanoid.Params
 import com.minimal.arkanoid.ParamsDefaults
 import com.minimal.arkanoid.game.entity.MyEntity
+import com.minimal.arkanoid.game.hud.BuildHud
 import com.minimal.arkanoid.game.level.Level
 import com.minimal.arkanoid.game.system.*
+import com.minimal.arkanoid.wrap.WrapCtx
 import com.minimal.ecs.Engine
+import com.minimal.gdx.project
+import com.minimal.gdx.unproject
 import ktx.box2d.body
 import ktx.math.vec2
 
@@ -44,6 +49,8 @@ class Context(val level: Level) {
     val heroControl = SinglePlayerHeroControl()
     var lives: Int = 0
     var timeScale: Float = 1f
+
+    val buildHud = BuildHud(this)
 
     fun displayWorldHeight(levelWidth: Float, levelHeight: Float): Float {
         // Preferowana wysokość, która pasuje do aspect ratio urządzenia
@@ -96,6 +103,29 @@ class Context(val level: Level) {
             return true
         }
         return false
+    }
+
+    val tmp = Vector2()
+
+    fun worldToStage(worldLen: Float): Float {
+        tmp.set(worldLen, 0f)
+        return worldToStage(tmp).x
+    }
+
+    fun stageToWorld(stagePos: Vector2): Vector2 {
+        val screenPos = WrapCtx.stage.stageToScreenCoordinates(stagePos)
+        //val screenPos = WrapCtx.stage.viewport.project(stagePos)
+        val worldPos = worldCamera.unproject(screenPos)
+        return worldPos
+    }
+
+    fun worldToStage(worldPos: Vector2): Vector2 {
+        val screenPos = worldCamera.project(worldPos)
+
+        val stagePos = WrapCtx.stage.screenToStageCoordinates(screenPos)
+        stagePos.y = WrapCtx.stage.viewport.getScreenHeight() - stagePos.y
+        //val stagePos = WrapCtx.stage.viewport.unproject(screenPos)
+        return stagePos
     }
 }
 

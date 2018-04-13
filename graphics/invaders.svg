@@ -78,11 +78,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="612.10289"
-     inkscape:cy="396.46151"
+     inkscape:zoom="1"
+     inkscape:cx="1353.2188"
+     inkscape:cy="235.79925"
      inkscape:document-units="in"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      units="px"
      inkscape:snap-page="false"
@@ -7964,5 +7964,23 @@
          x="281.7811"
          y="216.32526"
          style="font-size:4.23333359px;fill:#ff0000;stroke-width:0.26458335">house-1</tspan></text>
+    <path
+       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.50000024;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+       d="m 361.15626,217.40536 h -2.4071 c -3.62522,0 -6.54378,2.91855 -6.54378,6.54379 v 2.40709 m 32.71843,0 v -2.40709 c 0,-3.62524 -2.91857,-6.54379 -6.54378,-6.54379 h -2.4071 m -23.76755,23.76755 v 2.40708 c 0,3.62524 2.91856,6.54379 6.54378,6.54379 h 2.4071 m 14.81667,0 h 2.4071 c 3.62521,0 6.54378,-2.91855 6.54378,-6.54379 v -2.40708"
+       id="square-target"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssccssccssccssc"
+       inkscape:label="#rect6904" />
+    <text
+       id="text6925"
+       y="212.88567"
+       x="353.74774"
+       style="font-style:normal;font-weight:normal;font-size:50.80000305px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335"
+       xml:space="preserve"><tspan
+         style="font-size:4.23333359px;fill:#ff0000;stroke-width:0.26458335"
+         y="212.88567"
+         x="353.74774"
+         sodipodi:role="line"
+         id="tspan6923">square-target</tspan></text>
   </g>
 </svg>

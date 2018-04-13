@@ -38,6 +38,7 @@ class GameScreen(val level: String) : ScreenAdapter() {
 
     override fun hide() {
         WrapCtx.mux.removeProcessor(stage)
+        ctx.buildHud.deactivate()
         ctx.dispose()
     }
 
@@ -100,4 +101,6 @@ class GameScreen(val level: String) : ScreenAdapter() {
     fun result(): LevelResult {
         return ctx.level.getResult()
     }
+
+
 }
