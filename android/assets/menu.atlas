@@ -1,0 +1,34 @@
+
+menu.png
+size: 1024,512
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+bricks
+  rotate: false
+  xy: 4, 133
+  size: 546, 314
+  orig: 546, 314
+  offset: 0, 0
+  index: -1
+info
+  rotate: false
+  xy: 4, 4
+  size: 125, 125
+  orig: 125, 125
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 554, 212
+  size: 216, 235
+  orig: 216, 235
+  offset: 0, 0
+  index: -1
+rate
+  rotate: false
+  xy: 774, 322
+  size: 125, 125
+  orig: 125, 125
+  offset: 0, 0
+  index: -1

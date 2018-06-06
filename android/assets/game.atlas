@@ -1,0 +1,111 @@
+
+game.png
+size: 2048,256
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+bullet
+  rotate: false
+  xy: 4, 37
+  size: 19, 19
+  orig: 19, 19
+  offset: 0, 0
+  index: -1
+fire
+  rotate: false
+  xy: 584, 148
+  size: 104, 104
+  orig: 104, 104
+  offset: 0, 0
+  index: -1
+hero-body-1
+  rotate: false
+  xy: 692, 156
+  size: 109, 96
+  orig: 109, 96
+  offset: 0, 0
+  index: -1
+invader-1
+  rotate: false
+  xy: 1286, 188
+  size: 88, 64
+  orig: 88, 64
+  offset: 0, 0
+  index: -1
+invader-2
+  rotate: false
+  xy: 584, 64
+  size: 88, 80
+  orig: 88, 80
+  offset: 0, 0
+  index: -1
+invader-3
+  rotate: false
+  xy: 1378, 188
+  size: 88, 64
+  orig: 88, 64
+  offset: 0, 0
+  index: -1
+invader-4
+  rotate: false
+  xy: 584, 4
+  size: 88, 56
+  orig: 88, 56
+  offset: 0, 0
+  index: -1
+invader-5
+  rotate: false
+  xy: 1470, 180
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+invader-6
+  rotate: false
+  xy: 1194, 180
+  size: 88, 72
+  orig: 88, 72
+  offset: 0, 0
+  index: -1
+jump
+  rotate: false
+  xy: 1005, 165
+  size: 104, 87
+  orig: 104, 87
+  offset: 0, 0
+  index: -1
+pistol
+  rotate: false
+  xy: 805, 144
+  size: 96, 108
+  orig: 96, 108
+  offset: 0, 0
+  index: -1
+planet
+  rotate: false
+  xy: 4, 60
+  size: 576, 192
+  orig: 576, 192
+  offset: 0, 0
+  index: -1
+right
+  rotate: false
+  xy: 1113, 148
+  size: 77, 104
+  orig: 77, 104
+  offset: 0, 0
+  index: -1
+star-1
+  rotate: false
+  xy: 1194, 157
+  size: 19, 19
+  orig: 19, 19
+  offset: 0, 0
+  index: -1
+star-2
+  rotate: false
+  xy: 905, 156
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1

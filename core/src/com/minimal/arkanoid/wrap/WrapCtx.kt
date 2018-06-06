@@ -23,6 +23,7 @@ object WrapCtx {
     var font: BitmapFont
     var bigFont: BitmapFont
     val atlas: TextureAtlas
+    val menu: TextureAtlas
     val skin: Skin
 
     init {
@@ -52,8 +53,10 @@ object WrapCtx {
         }
 
         atlas = TextureAtlas(Gdx.files.internal("atlas.atlas"))
+        menu = TextureAtlas(Gdx.files.internal("menu.atlas"))
 
         skin = Skin(atlas)
+        skin.addRegions(menu)
         skin.add("small-font", font)
         skin.add("default-font", bigFont)
         skin.load(Gdx.files.internal("skin.json"))

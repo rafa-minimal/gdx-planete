@@ -12,6 +12,7 @@ import com.minimal.arkanoid.game.hud.GameHud
 import com.minimal.arkanoid.game.level.LevelResult
 import com.minimal.arkanoid.game.level.Tutorial
 import com.minimal.arkanoid.game.level.loadLevel
+import com.minimal.fx.ShadowRenderer
 import com.minimal.gdx.glClear
 import com.minimal.gdx.justPressed
 import ktx.math.vec2
@@ -21,6 +22,7 @@ class GameScreen(val level: String) : ScreenAdapter() {
     val bg = Texture("bg2.png")
     var ctx = Context(loadLevel(level))
     val stage = Stage(WrapCtx.viewport, ctx.batch)
+    val shadow = ShadowRenderer(WrapCtx.batch)
 
     lateinit var controlsHud: ControlsHud
     lateinit var gameHud: GameHud
@@ -40,6 +42,7 @@ class GameScreen(val level: String) : ScreenAdapter() {
     override fun hide() {
         WrapCtx.mux.removeProcessor(stage)
         ctx.dispose()
+        shadow.dispose()
     }
 
     override fun render(delta: Float) {
@@ -77,9 +80,12 @@ class GameScreen(val level: String) : ScreenAdapter() {
         if(Keys.SPACE.justPressed()) {
             running = !running
         }
+
+        shadow.begin()
         ctx.engine.update(step)
         stage.act(delta)
         stage.draw()
+        shadow.end()
     }
 
     override fun resize(width: Int, height: Int) {

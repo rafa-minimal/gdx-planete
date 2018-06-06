@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.minimal.arkanoid.wrap.ArkanoidDebugGame
 
 fun main(args: Array<String>) {
-    texturePacker(args)
+    texturePacker(args, "../../graphics/menu", "./", "menu")
 
     val config = LwjglApplicationConfiguration()
     if (args.contains("16:10")) {
